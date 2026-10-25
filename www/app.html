@@ -8944,13 +8944,19 @@ function wbUtf8ToBase64(str){
 </div>
 <script>
 // ── Busy/Progress Overlay helpers — संपूर्ण अ‍ॅपमध्ये कुठूनही वापरता येतात ──
-var _gpBusyTimer=null;
+var _gpBusyTimer=null, _gpBusyEsc=null;
 function gpBusyShow(msg){
-  clearInterval(_gpBusyTimer);
+  clearInterval(_gpBusyTimer); clearTimeout(_gpBusyEsc);
   var ovl=document.getElementById('gp-busy-ovl');
   document.getElementById('gp-busy-msg').textContent=msg||'काम चालू आहे…';
   gpBusySet(0);
   ovl.style.display='flex';
+  ovl.onclick=null;
+  // १५ सेकंदांनंतरही काम संपले नसेल तर स्क्रीन अडकू नये — पट्टीला स्पर्श करून बंद करता येते
+  _gpBusyEsc=setTimeout(function(){
+    var m=document.getElementById('gp-busy-msg'); if(m) m.textContent=(msg||'काम चालू आहे…')+'  —  (थांबले असल्यास येथे स्पर्श करून बंद करा)';
+    ovl.onclick=function(){ gpBusyFail('रद्द केले'); };
+  },15000);
   // प्रत्यक्ष टक्केवारी कळायला मार्ग नसेल (उदा. PDF तयार होताना) तेव्हाही स्क्रीन रिकामी दिसू नये
   // म्हणून हळूहळू ९०% पर्यंत आपोआप पुढे सरकतो — काम पूर्ण झाल्यावर gpBusyDone() लगेच १००% करतो.
   var p=0;
@@ -8965,7 +8971,7 @@ function gpBusySet(pct){
   document.getElementById('gp-busy-pct').textContent=pct+'%';
 }
 function gpBusyDone(okMsg){
-  clearInterval(_gpBusyTimer);
+  clearInterval(_gpBusyTimer); clearTimeout(_gpBusyEsc);
   gpBusySet(100);
   setTimeout(function(){
     document.getElementById('gp-busy-ovl').style.display='none';
@@ -8973,7 +8979,7 @@ function gpBusyDone(okMsg){
   },350);
 }
 function gpBusyFail(errMsg){
-  clearInterval(_gpBusyTimer);
+  clearInterval(_gpBusyTimer); clearTimeout(_gpBusyEsc);
   document.getElementById('gp-busy-ovl').style.display='none';
   showToast('❌ '+(errMsg||'काम पूर्ण होऊ शकले नाही, पुन्हा प्रयत्न करा'),5000);
 }

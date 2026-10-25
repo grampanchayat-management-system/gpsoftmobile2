@@ -89,7 +89,11 @@
         else if (ch === 'print-html') webPrint(arg || {});
         else if (ch === 'capture-html-jpg') webCapture(arg || {});
         else if (ch === 'get-license-info') { /* मोबाईलवर लायसन्स नाही — काही पाठवत नाही */ }
-      } catch (e) { console.error(e); }
+      } catch (e) {
+        console.error(e);
+        if (ch === 'print-html') ipc.emit('print-error', { message: 'प्रिंट सुरू करता आले नाही: ' + (e && e.message || e) });
+        else if (ch === 'capture-html-jpg') ipc.emit('capture-html-jpg-done', { ok: false });
+      }
     }
   };
 
@@ -98,8 +102,12 @@
     var html = String(p.html || '');
     var gp = P('GPPrint');
     if (gp) {                                      // Android APK: नेटिव्ह PrintManager ("Save as PDF" / प्रिंटर)
+      var settled = false;
+      function fin(ev, payload) { if (settled) return; settled = true; clearTimeout(tm); ipc.emit(ev, payload); }
+      // नेटिव्हकडून उत्तर आलेच नाही तरी "PDF तयार होत आहे" पट्टी कायमची अडकू नये
+      var tm = setTimeout(function () { fin('print-error', { message: 'प्रिंट डायलॉग उघडला नाही — पुन्हा प्रयत्न करा (किंवा ॲप अपडेट करा)' }); }, 8000);
       gp.printHtml({ html: html, name: String(p.fileName || 'document').replace(/[^\w\u0900-\u097F.-]+/g, '_'), landscape: !!p.landscape, pageSize: p.pageSize || 'A4' })
-        .then(function () { ipc.emit('print-done', {}); }, function (e) { ipc.emit('print-error', { message: 'प्रिंट सुरू झाले नाही: ' + (e && e.message || e) }); });
+        .then(function () { fin('print-done', {}); }, function (e) { fin('print-error', { message: 'प्रिंट सुरू झाले नाही: ' + (e && e.message || e) }); });
       return;
     }
     var auto = '<script>window.addEventListener("load",function(){setTimeout(function(){try{window.focus();window.print();}catch(e){}},600);});<\/script>';
