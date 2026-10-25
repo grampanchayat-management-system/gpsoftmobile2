@@ -1,0 +1,6 @@
+{
+  "appId": "in.grampanchayat.app",
+  "appName": "ग्रामपंचायत",
+  "webDir": "www",
+  "server": { "androidScheme": "https" }
+}

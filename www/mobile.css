@@ -1,0 +1,21 @@
+/* मोबाईल/छोट्या स्क्रीनसाठी अतिरिक्त सुधारणा (फक्त web आवृत्तीत जोडली जाते) */
+html{-webkit-text-size-adjust:100%}
+body{padding-bottom:env(safe-area-inset-bottom)}
+@media(max-width:700px){
+  .hdr-top{padding:6px 10px;gap:8px}
+  .hdr-info h1{font-size:13.5px}.hdr-info p{font-size:10px}.hdr-gp{font-size:11.5px}
+  .hdr-right{gap:6px}
+  .nav{padding:3px 6px}
+  .nav button,.nav a,.nav .nb{white-space:nowrap}
+  .main{padding:8px}
+  .card{padding:12px;border-radius:10px}
+  .card-title{font-size:14px;flex-wrap:wrap;gap:6px}
+  input,select,textarea{font-size:16px!important}
+  .btn{min-height:38px}
+  .tabs .tab{padding:8px 12px;font-size:13px}
+  .tbl-wrap,.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{font-size:12px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .fgrid{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+  #gpLicenseWatermark{display:none}
+}
