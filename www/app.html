@@ -22,9 +22,9 @@ body{font-family:'Mangal','Noto Sans Devanagari',Arial,sans-serif;background:#ee
 .nb{background:none;border:none;color:rgba(255,255,255,.8);padding:7px 12px;border-radius:7px;cursor:pointer;white-space:nowrap;font-family:inherit;font-size:12px;font-weight:500;transition:all .2s}
 .nb:hover{background:rgba(255,255,255,.2);color:#fff}
 .nb.active{background:var(--sf);color:#fff}
-.main{padding:14px;max-width:1400px;margin:0 auto}
+.main{padding:5px 4px 12px;max-width:none;margin:0}
 .pg{display:none}.pg.active{display:block}
-.card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:14px;border:1px solid var(--g2)}
+.card{background:#fff;border-radius:12px;padding:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:10px;border:1px solid var(--g2)}
 .card-title{font-size:15px;font-weight:700;color:var(--nv);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--sf);display:flex;align-items:center;justify-content:space-between}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:14px}
 .stat{background:#fff;border-radius:10px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08)}
@@ -118,7 +118,7 @@ body{font-family:'Mangal','Noto Sans Devanagari',Arial,sans-serif;background:#ee
 .section-hdr{font-weight:700;color:var(--nv);font-size:13px;margin:10px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--g2);display:flex;align-items:center;gap:8px}
 
 /* ===== Namuna 8 — professional entry form ===== */
-.n8pro{max-width:1100px;margin:0 auto}
+.n8pro{max-width:none;margin:0}
 .n8pro .rq{color:#D32F2F;font-weight:800;text-transform:none}
 .n8-hero{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:linear-gradient(135deg,var(--nv),var(--nvl) 60%,var(--gnm));color:#fff;border-radius:12px;padding:11px 16px;margin-bottom:10px;box-shadow:0 4px 14px rgba(13,43,94,.25)}
 .n8-hero-l{display:flex;align-items:center;gap:12px}
@@ -156,6 +156,20 @@ body{font-family:'Mangal','Noto Sans Devanagari',Arial,sans-serif;background:#ee
 .n8-actions{position:sticky;bottom:0;z-index:20;display:flex;align-items:center;justify-content:flex-end;gap:10px;background:rgba(255,255,255,.96);backdrop-filter:blur(4px);border:1px solid var(--g2);border-radius:12px;padding:8px 14px;box-shadow:0 -4px 14px rgba(0,0,0,.08);margin-top:9px}
 .n8-actions .btn{padding:9px 22px;font-size:13px}
 .n8-hint{margin-right:auto;font-size:11.5px;color:var(--g4)}
+/* ===== प्रमाणपत्र/दाखला एंट्री फॉर्म (नमुना ८ प्रमाणेच professional) ===== */
+.n8-g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.n8-ga{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.n8-pcards{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px}
+.n8-pcards .n8-sec{margin-bottom:0}
+.n8-psec-h{border-left:4px solid #f0b429}.n8-psec-w{border-left:4px solid #43a047}
+.n8-sec-h span.n8-num:empty{display:none}
+.n8pro .fg input[type=file]{padding:6px;background:#fff}
+.n8pro .gp-dp-disp{border:1.5px solid #D5D9E0;border-radius:8px;background:#FAFBFC;padding:0 11px;box-sizing:border-box;font-size:12.5px}
+.n8pro .gp-dp-disp:hover{border-color:#aab3c2}
+.n8pro .fg>span{display:block!important}
+.n8pro .fg select{min-height:36px}
+@media(max-width:900px){.n8-pcards{grid-template-columns:1fr}}
+@media(max-width:600px){.n8-g2{grid-template-columns:1fr}}
 @media(max-width:900px){.n8-g4,.n8-cs{grid-template-columns:repeat(2,minmax(0,1fr))}.n8-own{grid-template-columns:1fr 1fr}.n8-own-main{grid-column:1/-1}#n8-rows .prop-row .fgrid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){.n8-hint{display:none}.n8-actions{flex-wrap:nowrap}.n8-actions .btn{flex:1;justify-content:center;padding:10px 8px}.n8-g3,.n8-g4,.n8-own{grid-template-columns:1fr}#n8-rows .prop-row .fgrid{grid-template-columns:repeat(2,1fr)}}
 /* DOCUMENT */
@@ -590,52 +604,16 @@ try{
     </div>
   </div>
 
-  <div id="n9-entry">
-    <div class="fgrid">
-      <div class="fg"><label>अ.क्र. *</label>
+  <div id="n9-entry" class="n8pro">
+    <div class="n8-hero"><div class="n8-hero-l"><div class="n8-hero-ic">📄</div><div><div class="n8-hero-t">नमुना ९ — कर मागणी नोंद</div><div class="n8-hero-s">चालू वर्षाचे कर + मागील वर्षाची थकबाकी</div></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">१</span>मालमत्ता तपशील</div><div class="n8-grid n8-g4"><div class="fg"><label>अ.क्र. *</label>
         <input id="n9-ano" type="number" placeholder="1" oninput="loadN9FromN8Debounced()">
-      </div>
-      <div class="fg"><label>मालमत्ता धारकाचे नाव</label><input id="n9-owner" class="ro" readonly></div>
-      <div class="fg"><label>मिळकत नंबर</label><input id="n9-pno" class="ro" readonly></div>
-      <div class="fg"><label>कर देणाऱ्याचे नाव</label><input id="n9-payer" placeholder="स्वतः"></div>
-    </div>
-
-    <div class="section-hdr">💰 चालू वर्षाचे कर (Namuna 8 मधून — Read Only)</div>
-    <div class="fgrid">
-      <div class="fg"><label>घरपट्टी कर (चालू)</label><input id="n9-gh-c" class="ro" readonly value="0"></div>
-      <div class="fg"><label>आरोग्य कर (चालू)</label><input id="n9-ar-c" class="ro" readonly value="0"></div>
-      <div class="fg"><label>दिवाबत्ती कर (चालू)</label><input id="n9-dv-c" class="ro" readonly value="0"></div>
-      <div class="fg"><label>पाणीपट्टी (चालू)</label><input id="n9-pa-c" class="ro" readonly value="0"></div>
-      <div class="fg"><label>पडसर जमीन (चालू)</label><input id="n9-pd-c" class="ro" readonly value="0"></div>
-      <div class="fg"><label>दंड (चालू)</label><input id="n9-fine-c" value="0" type="number" oninput="calcN9()"></div>
-      <div class="fg"><label>नोटीस फी (चालू)</label><input id="n9-notice-c" value="0" type="number" oninput="calcN9()"></div>
-    </div>
-
-    <div class="section-hdr">⚠️ मागील वर्षाची थकबाकी</div>
-    <div class="fgrid">
-      <div class="fg"><label>घरपट्टी (मागील)</label><input id="n9-gh-p" type="number" value="0" oninput="calcN9()"></div>
-      <div class="fg"><label>आरोग्य (मागील)</label><input id="n9-ar-p" type="number" value="0" oninput="calcN9()"></div>
-      <div class="fg"><label>दिवाबत्ती (मागील)</label><input id="n9-dv-p" type="number" value="0" oninput="calcN9()"></div>
-      <div class="fg"><label>पाणीपट्टी (मागील)</label><input id="n9-pa-p" type="number" value="0" oninput="calcN9()"></div>
-      <div class="fg"><label>पडसर जमीन (मागील)</label><input id="n9-pd-p" type="number" value="0" oninput="calcN9()"></div>
-      <div class="fg"><label>दंड (मागील)</label><input id="n9-fine-p" type="number" value="0" oninput="calcN9()"></div>
-      <div class="fg"><label>नोटीस फी (मागील)</label><input id="n9-notice-p" type="number" value="0" oninput="calcN9()"></div>
-    </div>
-
-    <div class="calc" style="margin-top:8px">
+      </div><div class="fg n8-own-main"><label>मालमत्ता धारकाचे नाव</label><input id="n9-owner" class="ro" readonly></div><div class="fg"><label>मिळकत नंबर</label><input id="n9-pno" class="ro" readonly></div><div class="fg"><label>कर देणाऱ्याचे नाव</label><input id="n9-payer" placeholder="स्वतः"></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">२</span>💰 चालू वर्षाचे कर <span style="font-weight:600;font-size:11.5px;color:#667">(नमुना ८ मधून — दंड व नोटीस फी बदलता येते)</span></div><div class="n8-grid n8-g4"><div class="fg"><label>घरपट्टी कर (चालू)</label><input id="n9-gh-c" class="ro" readonly value="0"></div><div class="fg"><label>आरोग्य कर (चालू)</label><input id="n9-ar-c" class="ro" readonly value="0"></div><div class="fg"><label>दिवाबत्ती कर (चालू)</label><input id="n9-dv-c" class="ro" readonly value="0"></div><div class="fg"><label>पाणीपट्टी (चालू)</label><input id="n9-pa-c" class="ro" readonly value="0"></div><div class="fg"><label>पडसर जमीन (चालू)</label><input id="n9-pd-c" class="ro" readonly value="0"></div><div class="fg"><label>दंड (चालू)</label><input id="n9-fine-c" value="0" type="number" oninput="calcN9()"></div><div class="fg"><label>नोटीस फी (चालू)</label><input id="n9-notice-c" value="0" type="number" oninput="calcN9()"></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">३</span>⚠️ मागील वर्षाची थकबाकी</div><div class="n8-grid n8-g4"><div class="fg"><label>घरपट्टी (मागील)</label><input id="n9-gh-p" type="number" value="0" oninput="calcN9()"></div><div class="fg"><label>आरोग्य (मागील)</label><input id="n9-ar-p" type="number" value="0" oninput="calcN9()"></div><div class="fg"><label>दिवाबत्ती (मागील)</label><input id="n9-dv-p" type="number" value="0" oninput="calcN9()"></div><div class="fg"><label>पाणीपट्टी (मागील)</label><input id="n9-pa-p" type="number" value="0" oninput="calcN9()"></div><div class="fg"><label>पडसर जमीन (मागील)</label><input id="n9-pd-p" type="number" value="0" oninput="calcN9()"></div><div class="fg"><label>दंड (मागील)</label><input id="n9-fine-p" type="number" value="0" oninput="calcN9()"></div><div class="fg"><label>नोटीस फी (मागील)</label><input id="n9-notice-p" type="number" value="0" oninput="calcN9()"></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">४</span>एकूण मागणी व नोंद दिनांक</div><div class="n8-grid n8-g2" style="align-items:start"><div class="calc">
       <div class="cr"><span class="cl">चालू एकूण</span><span class="cv" id="n9-tot-c">₹ 0</span></div>
       <div class="cr"><span class="cl">मागील एकूण</span><span class="cv" id="n9-tot-p">₹ 0</span></div>
       <div class="cr"><span>एकूण मागणी</span><span id="n9-tot-all">₹ 0</span></div>
-    </div>
-
-    <div class="fgrid" style="margin-top:8px">
-      <div class="fg"><label>नोंद दिनांक</label><input id="n9-dt" type="date"></div>
-    </div>
-
-    <div class="bgrp">
-      <button class="btn btn-gn" onclick="saveN9()">💾 जतन करा</button>
-      <button class="btn btn-sf" onclick="genN9k()">🧾 नमुना ९क तयार करा</button>
-    </div>
+    </div><div class="fg"><label>नोंद दिनांक</label><input id="n9-dt" type="date"></div></div></div>
+    <div class="bgrp n8-actions"><span class="n8-hint">अ.क्र. टाकल्यावर नमुना ८ मधील माहिती आपोआप येते</span><button class="btn btn-gn" onclick="saveN9()">💾 जतन करा</button>
+      <button class="btn btn-sf" onclick="genN9k()">🧾 नमुना ९क तयार करा</button></div>
   </div>
 
   <div id="n9-list" style="display:none">
@@ -708,41 +686,25 @@ try{
     </div>
   </div>
 
-  <div id="n10-entry">
-    <div class="fgrid">
-      <div class="fg"><label>अ.क्र. *</label><input id="n10-ano" type="number" placeholder="1" oninput="loadN10FromN9()"></div>
-      <div class="fg"><label>मालमत्ता धारकाचे नाव</label><input id="n10-owner" class="ro" readonly></div>
-      <div class="fg"><label>घर क्रमांक</label><input id="n10-pno" class="ro" readonly></div>
-      <div class="fg"><label>कर देणाऱ्याचे नाव</label><input id="n10-payer" placeholder="स्वतः"></div>
-      <div class="fg"><label>वसूल दिनांक</label><input id="n10-dt" type="date"></div>
-      <div class="fg"><label>पुस्तक क्रमांक (Auto)</label><input id="n10-bk" class="ro" readonly></div>
-      <div class="fg"><label>पावती क्रमांक (Auto)</label><input id="n10-rcpt" class="ro" readonly></div>
-    </div>
-
-    <div style="overflow-x:auto;margin-top:10px">
+  <div id="n10-entry" class="n8pro">
+    <div class="n8-hero"><div class="n8-hero-l"><div class="n8-hero-ic">💰</div><div><div class="n8-hero-t">नमुना १० — कर वसूल पावती</div><div class="n8-hero-s">वसूल केलेल्या रकमांची नोंद</div></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">१</span>पावती तपशील</div><div class="n8-grid n8-g4"><div class="fg"><label>अ.क्र. *</label><input id="n10-ano" type="number" placeholder="1" oninput="loadN10FromN9()"></div><div class="fg n8-own-main"><label>मालमत्ता धारकाचे नाव</label><input id="n10-owner" class="ro" readonly></div><div class="fg"><label>घर क्रमांक</label><input id="n10-pno" class="ro" readonly></div><div class="fg"><label>कर देणाऱ्याचे नाव</label><input id="n10-payer" placeholder="स्वतः"></div><div class="fg"><label>वसूल दिनांक</label><input id="n10-dt" type="date"></div><div class="fg"><label>पुस्तक क्रमांक (Auto)</label><input id="n10-bk" class="ro" readonly></div><div class="fg"><label>पावती क्रमांक (Auto)</label><input id="n10-rcpt" class="ro" readonly></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">२</span>💰 कर वसूल</div><div style="overflow-x:auto">
     <table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed">
-      <colgroup>
-        <col style="width:9%">
-        <col style="width:5.5%"><col style="width:5.5%"><col style="width:5.5%">
-        <col style="width:5.5%"><col style="width:5.5%"><col style="width:5.5%">
-        <col style="width:5.5%"><col style="width:5.5%"><col style="width:5.5%">
-        <col style="width:12%"><col style="width:12%"><col style="width:12%">
-      </colgroup>
+      <colgroup><col style="width:22%"><col style="width:11%"><col style="width:11%"><col style="width:11%"><col style="width:15%"><col style="width:15%"><col style="width:15%"></colgroup>
       <tr style="background:#0D2B5E;color:#fff">
         <th style="padding:6px 4px;border:1px solid #ddd;text-align:left;font-size:11.5px">कराची नावे</th>
-        <th style="padding:6px 2px;border:1px solid #ddd;font-size:11px" colspan="3">मागणी कर (Read Only)</th>
-        <th style="padding:6px 2px;border:1px solid #ddd;font-size:9.5px" colspan="3">चालू वर्षात अगोदर वसूल केलेली रक्कम (Read Only)</th>
-        <th style="padding:6px 2px;border:1px solid #ddd;font-size:10.5px" colspan="3">बाकी (Read Only)</th>
+        <th class="n10-hid" style="display:none;padding:6px 2px;border:1px solid #ddd;font-size:11px" colspan="3">मागणी कर (Read Only)</th>
+        <th class="n10-hid" style="display:none;padding:6px 2px;border:1px solid #ddd;font-size:9.5px" colspan="3">चालू वर्षात अगोदर वसूल केलेली रक्कम (Read Only)</th>
+        <th style="padding:6px 4px;border:1px solid #ddd;font-size:13px;font-weight:800" colspan="3">वसूल करण्यायोग्य रक्कम</th>
         <th style="padding:6px 4px;border:1px solid #ddd;font-size:13px;background:#e65100" colspan="3">✏️ वसूल केलेल्या रकमा (इथे भरा)</th>
       </tr>
       <tr style="background:#e3f2fd;font-weight:700">
         <td style="padding:4px;border:1px solid #ddd;font-size:10.5px"></td>
-        <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;font-size:10.5px">मागील</td>
-        <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;font-size:10.5px">चालू</td>
-        <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;font-size:10.5px">एकूण</td>
-        <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:10.5px">मागील</td>
-        <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:10.5px">चालू</td>
-        <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:10.5px">एकूण</td>
+        <td class="n10-hid" style="display:none;padding:4px 2px;border:1px solid #ddd;text-align:center;font-size:10.5px">मागील</td>
+        <td class="n10-hid" style="display:none;padding:4px 2px;border:1px solid #ddd;text-align:center;font-size:10.5px">चालू</td>
+        <td class="n10-hid" style="display:none;padding:4px 2px;border:1px solid #ddd;text-align:center;font-size:10.5px">एकूण</td>
+        <td class="n10-hid" style="display:none;padding:4px 2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:10.5px">मागील</td>
+        <td class="n10-hid" style="display:none;padding:4px 2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:10.5px">चालू</td>
+        <td class="n10-hid" style="display:none;padding:4px 2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:10.5px">एकूण</td>
         <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:10.5px">मागील</td>
         <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:10.5px">चालू</td>
         <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:10.5px">एकूण</td>
@@ -752,12 +714,12 @@ try{
       </tr>
       <tr>
         <td style="padding:5px 4px;border:1px solid #ddd;font-size:11.5px">इमारत कर</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-gh-p">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-gh-c">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px;font-weight:700" id="n10-m-gh-t">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-gh-p">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-gh-c">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#fce4ec;font-size:12px" id="n10-pv-gh-t">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-gh-p">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-gh-c">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px;font-weight:700" id="n10-m-gh-t">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-gh-p">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-gh-c">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#fce4ec;font-size:12px" id="n10-pv-gh-t">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:12px" id="n10-bk-gh-p">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:12px" id="n10-bk-gh-c">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#dcedc8;font-size:12px" id="n10-bk-gh-t">0</td>
@@ -767,12 +729,12 @@ try{
       </tr>
       <tr>
         <td style="padding:5px 4px;border:1px solid #ddd;font-size:11.5px">दिवाबत्ती कर</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-dv-p">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-dv-c">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px;font-weight:700" id="n10-m-dv-t">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-dv-p">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-dv-c">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#fce4ec;font-size:12px" id="n10-pv-dv-t">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-dv-p">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-dv-c">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px;font-weight:700" id="n10-m-dv-t">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-dv-p">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-dv-c">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#fce4ec;font-size:12px" id="n10-pv-dv-t">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:12px" id="n10-bk-dv-p">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:12px" id="n10-bk-dv-c">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#dcedc8;font-size:12px" id="n10-bk-dv-t">0</td>
@@ -782,12 +744,12 @@ try{
       </tr>
       <tr>
         <td style="padding:5px 4px;border:1px solid #ddd;font-size:11.5px">आरोग्य कर</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-ar-p">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-ar-c">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px;font-weight:700" id="n10-m-ar-t">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-ar-p">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-ar-c">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#fce4ec;font-size:12px" id="n10-pv-ar-t">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-ar-p">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-ar-c">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px;font-weight:700" id="n10-m-ar-t">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-ar-p">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-ar-c">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#fce4ec;font-size:12px" id="n10-pv-ar-t">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:12px" id="n10-bk-ar-p">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:12px" id="n10-bk-ar-c">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#dcedc8;font-size:12px" id="n10-bk-ar-t">0</td>
@@ -797,12 +759,12 @@ try{
       </tr>
       <tr>
         <td style="padding:5px 4px;border:1px solid #ddd;font-size:11.5px">पाणीपट्टी कर</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-pa-p">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-pa-c">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px;font-weight:700" id="n10-m-pa-t">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-pa-p">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-pa-c">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#fce4ec;font-size:12px" id="n10-pv-pa-t">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-pa-p">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-pa-c">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px;font-weight:700" id="n10-m-pa-t">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-pa-p">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-pa-c">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#fce4ec;font-size:12px" id="n10-pv-pa-t">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:12px" id="n10-bk-pa-p">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:12px" id="n10-bk-pa-c">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#dcedc8;font-size:12px" id="n10-bk-pa-t">0</td>
@@ -812,12 +774,12 @@ try{
       </tr>
       <tr>
         <td style="padding:5px 4px;border:1px solid #ddd;font-size:11.5px">पडसर जमीन</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-pd-p">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-pd-c">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px;font-weight:700" id="n10-m-pd-t">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-pd-p">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-pd-c">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#fce4ec;font-size:12px" id="n10-pv-pd-t">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-pd-p">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-pd-c">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px;font-weight:700" id="n10-m-pd-t">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-pd-p">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-pd-c">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#fce4ec;font-size:12px" id="n10-pv-pd-t">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:12px" id="n10-bk-pd-p">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:12px" id="n10-bk-pd-c">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#dcedc8;font-size:12px" id="n10-bk-pd-t">0</td>
@@ -827,12 +789,12 @@ try{
       </tr>
       <tr>
         <td style="padding:5px 4px;border:1px solid #ddd;font-size:11.5px">दंड रक्कम</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-fine-p">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-fine-c">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-size:12px;font-weight:700" id="n10-m-fine-t">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-fine-p">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-fine-c">0</td>
-        <td style="padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#fce4ec;font-size:12px" id="n10-pv-fine-t">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-fine-p">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px" id="n10-m-fine-c">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-size:12px;font-weight:700" id="n10-m-fine-t">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-fine-p">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;background:#fce4ec;font-size:12px" id="n10-pv-fine-c">0</td>
+        <td class="n10-hid" style="display:none;padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#fce4ec;font-size:12px" id="n10-pv-fine-t">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:12px" id="n10-bk-fine-p">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;background:#dcedc8;font-size:12px" id="n10-bk-fine-c">0</td>
         <td style="padding:2px;border:1px solid #ddd;text-align:center;font-weight:700;background:#dcedc8;font-size:12px" id="n10-bk-fine-t">0</td>
@@ -842,12 +804,12 @@ try{
       </tr>
       <tr style="background:#fff3cd;font-weight:700">
         <td style="padding:5px 4px;border:1px solid #ddd;font-size:11.5px">एकूण</td>
-        <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;font-size:12.5px" id="n10-tot-mp">0</td>
-        <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;font-size:12.5px" id="n10-tot-mc">0</td>
-        <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;font-size:12.5px" id="n10-tot-mt">0</td>
-        <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;background:#f8bbd0;font-size:12.5px" id="n10-tot-pvp">0</td>
-        <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;background:#f8bbd0;font-size:12.5px" id="n10-tot-pvc">0</td>
-        <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;background:#f8bbd0;font-size:12.5px" id="n10-tot-pvt">0</td>
+        <td class="n10-hid" style="display:none;padding:4px 2px;border:1px solid #ddd;text-align:center;font-size:12.5px" id="n10-tot-mp">0</td>
+        <td class="n10-hid" style="display:none;padding:4px 2px;border:1px solid #ddd;text-align:center;font-size:12.5px" id="n10-tot-mc">0</td>
+        <td class="n10-hid" style="display:none;padding:4px 2px;border:1px solid #ddd;text-align:center;font-size:12.5px" id="n10-tot-mt">0</td>
+        <td class="n10-hid" style="display:none;padding:4px 2px;border:1px solid #ddd;text-align:center;background:#f8bbd0;font-size:12.5px" id="n10-tot-pvp">0</td>
+        <td class="n10-hid" style="display:none;padding:4px 2px;border:1px solid #ddd;text-align:center;background:#f8bbd0;font-size:12.5px" id="n10-tot-pvc">0</td>
+        <td class="n10-hid" style="display:none;padding:4px 2px;border:1px solid #ddd;text-align:center;background:#f8bbd0;font-size:12.5px" id="n10-tot-pvt">0</td>
         <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;background:#c5e1a5;font-size:12.5px" id="n10-tot-bkp">0</td>
         <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;background:#c5e1a5;font-size:12.5px" id="n10-tot-bkc">0</td>
         <td style="padding:4px 2px;border:1px solid #ddd;text-align:center;background:#c5e1a5;font-size:12.5px" id="n10-tot-bkt">0</td>
@@ -856,15 +818,9 @@ try{
         <td style="padding:5px;border:1px solid #ddd;text-align:center;background:#ffb74d;font-size:16px;font-weight:800;color:#8a3d00" id="n10-tot-vt">0</td>
       </tr>
     </table>
-    </div>
-    <div class="fgrid" style="margin-top:8px">
-      <div class="fg"><label>सूट (Discount)</label><input type="number" id="n10-sut" value="0" oninput="calcN10()"></div>
-      <div class="fg"><label>बाकी</label><input id="n10-baki" class="ro" readonly value="0" style="color:#c00;font-weight:800;font-size:16px;background:#fff3f0;border:1px solid #e0a;border-color:#e57373"></div>
-    </div>
-    <div class="bgrp">
-      <button class="btn btn-gn" onclick="saveN10()">💾 जतन करा</button>
-      <button class="btn btn-sf" onclick="clearN10()">🧹 साफ</button>
-    </div>
+    </div><div style="height:8px"></div><div class="n8-grid n8-g2"><div class="fg"><label>सूट (Discount)</label><input type="number" id="n10-sut" value="0" oninput="calcN10()"></div><div class="fg"><label>बाकी</label><input id="n10-baki" class="ro" readonly value="0" style="color:#c00;font-weight:800;font-size:16px;background:#fff3f0;border:1px solid #e0a;border-color:#e57373"></div></div></div>
+    <div class="bgrp n8-actions"><span class="n8-hint">अ.क्र. टाकल्यावर नमुना ९ मधील माहिती आपोआप येते</span><button class="btn btn-gn" onclick="saveN10()">💾 जतन करा</button>
+      <button class="btn btn-sf" onclick="clearN10()">🧹 साफ</button></div>
   </div>
 
   <div id="n10-pre" style="display:none">
@@ -900,39 +856,11 @@ try{
     <div class="tab" onclick="switchTab(this,'birth-pre')">👁️ दाखला</div>
     <div class="tab" onclick="switchTab(this,'birth-list')">📋 यादी</div>
   </div>
-  <div id="birth-form">
-    <div class="fgrid">
-      <div class="fg"><label>अ.क्र.</label><input id="b-id" readonly class="ro"></div>
-      <div class="fg"><label>लिंग</label><select id="b-sex"><option value="पुरुष|Male">पुरुष / Male</option><option value="स्त्री|Female">स्त्री / Female</option></select></div>
-      <div class="fg"><label>जन्म तारीख</label><input id="b-dob" type="date"></div>
-      <div class="fg"><label>नोंदणी क्र.</label><input id="b-regno" placeholder="1"></div>
-      <div class="fg"><label>नोंदणी दिनांक</label><input id="b-regdt" type="date"></div>
-      <div class="fg"><label>ईआयडी / EID</label><input id="b-eid" placeholder="EID (असल्यास)"></div>
-      <div class="fg"><label>आईचा आधार क्र.</label><input id="b-mother-aadhaar" inputmode="numeric" maxlength="12" placeholder="12 अंकी (असल्यास)" oninput="this.value=toEnDigits(this.value).replace(/\D/g,'').slice(0,12)"></div>
-      <div class="fg"><label>वडिलांचा आधार क्र.</label><input id="b-father-aadhaar" inputmode="numeric" maxlength="12" placeholder="12 अंकी (असल्यास)" oninput="this.value=toEnDigits(this.value).replace(/\D/g,'').slice(0,12)"></div>
-      <input type="hidden" id="b-upd">
-      <!-- आधी मराठी-इंग्रजी रकाने एकत्र-मिसळलेले होते, त्यामुळे रांगा नीट जुळत नव्हत्या (एक इंग्रजी रकाना
-           मध्येच येऊन बाकीचे मराठी रकाने पुढे ढकलले जायचे). आता आधी सगळे मराठी रकाने (एका रांगेत),
-           मग तंतोतंत त्याच क्रमाने सगळे इंग्रजी रकाने (त्याखालच्या रांगेत) — दोन्ही रांगा नीट जुळून
-           प्रत्येक मराठी रकान्याखाली बरोबर त्याचा इंग्रजी जोडीदार दिसेल. -->
-      <div class="fg" style="grid-column:1"><label>बाळाचे नाव (मराठी)</label><input id="b-name" placeholder="नाव"></div>
-      <div class="fg"><label>जन्म ठिकाण (मराठी)</label><input id="b-place" placeholder="ठिकाण"></div>
-      <div class="fg"><label>आईचे पूर्ण नाव (मराठी)</label><input id="b-mother" placeholder="नाव"></div>
-      <div class="fg"><label>वडिलांचे पूर्ण नाव (मराठी)</label><input id="b-father" placeholder="नाव"></div>
-      <div class="fg"><label>जन्माच्या वेळी पत्ता (मराठी)</label><input id="b-addr" placeholder="पत्ता"></div>
-      <div class="fg"><label>कायमचा पत्ता (मराठी)</label><input id="b-paddr" placeholder="कायमचा पत्ता"></div>
-      <div class="fg" style="grid-column:1"><label>Name of Child (English)</label><input id="b-name-e" placeholder="Name"></div>
-      <div class="fg"><label>Place of Birth (English)</label><input id="b-place-e" placeholder="Place"></div>
-      <div class="fg"><label>Full Name of Mother (English)</label><input id="b-mother-e" placeholder="Name"></div>
-      <div class="fg"><label>Full Name of Father (English)</label><input id="b-father-e" placeholder="Name"></div>
-      <div class="fg"><label>Address at Birth (English)</label><input id="b-addr-e" placeholder="Address"></div>
-      <div class="fg"><label>Permanent Address (English)</label><input id="b-paddr-e" placeholder="Permanent Address"></div>
-      <div class="fg"><label>शेरा / Remarks</label><input id="b-note" placeholder=""></div>
-    </div>
-    <div class="bgrp">
-      <button class="btn btn-nv" onclick="saveBirth()">💾 जतन करा</button>
-      <button class="btn btn-out" onclick="clearBirthForm()">🗑️ साफ</button>
-    </div>
+  <div id="birth-form" class="n8pro">
+    <input type="hidden" id="b-upd"><div class="n8-hero"><div class="n8-hero-l"><div class="n8-hero-ic">👶</div><div><div class="n8-hero-t">जन्म नोंद — नवीन दाखला</div><div class="n8-hero-s">जन्म व मृत्यू नोंदणी — जन्म</div></div></div><div class="n8-ano-box"><label>अनुक्रमांक</label><input id="b-id" readonly class="ro"></div></div>
+    <div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">१</span>नोंदणी तपशील</div><div class="n8-grid n8-ga"><div class="fg"><label>लिंग</label><select id="b-sex"><option value="पुरुष|Male">पुरुष / Male</option><option value="स्त्री|Female">स्त्री / Female</option></select></div><div class="fg"><label>जन्म तारीख</label><input id="b-dob" type="date"></div><div class="fg"><label>नोंदणी क्र.</label><input id="b-regno" placeholder="1"></div><div class="fg"><label>नोंदणी दिनांक</label><input id="b-regdt" type="date"></div><div class="fg"><label>ईआयडी / EID</label><input id="b-eid" placeholder="EID (असल्यास)"></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">२</span>आधार क्रमांक (असल्यास)</div><div class="n8-grid n8-g2"><div class="fg"><label>आईचा आधार क्र.</label><input id="b-mother-aadhaar" inputmode="numeric" maxlength="12" placeholder="12 अंकी (असल्यास)" oninput="this.value=toEnDigits(this.value).replace(/\D/g,'').slice(0,12)"></div><div class="fg"><label>वडिलांचा आधार क्र.</label><input id="b-father-aadhaar" inputmode="numeric" maxlength="12" placeholder="12 अंकी (असल्यास)" oninput="this.value=toEnDigits(this.value).replace(/\D/g,'').slice(0,12)"></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">३</span>मराठी माहिती</div><div class="n8-grid n8-g1"><div class="fg n8-own-main"><label>बाळाचे नाव (मराठी)</label><input id="b-name" placeholder="नाव"></div></div><div style="height:8px"></div><div class="n8-grid n8-g3"><div class="fg"><label>जन्म ठिकाण (मराठी)</label><input id="b-place" placeholder="ठिकाण"></div><div class="fg"><label>आईचे पूर्ण नाव (मराठी)</label><input id="b-mother" placeholder="नाव"></div><div class="fg"><label>वडिलांचे पूर्ण नाव (मराठी)</label><input id="b-father" placeholder="नाव"></div><div class="fg"><label>जन्माच्या वेळी पत्ता (मराठी)</label><input id="b-addr" placeholder="पत्ता"></div><div class="fg"><label>कायमचा पत्ता (मराठी)</label><input id="b-paddr" placeholder="कायमचा पत्ता"></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">४</span>English Information</div><div class="n8-grid n8-g1"><div class="fg n8-own-main"><label>Name of Child (English)</label><input id="b-name-e" placeholder="Name"></div></div><div style="height:8px"></div><div class="n8-grid n8-g3"><div class="fg"><label>Place of Birth (English)</label><input id="b-place-e" placeholder="Place"></div><div class="fg"><label>Full Name of Mother (English)</label><input id="b-mother-e" placeholder="Name"></div><div class="fg"><label>Full Name of Father (English)</label><input id="b-father-e" placeholder="Name"></div><div class="fg"><label>Address at Birth (English)</label><input id="b-addr-e" placeholder="Address"></div><div class="fg"><label>Permanent Address (English)</label><input id="b-paddr-e" placeholder="Permanent Address"></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">५</span>शेरा</div><div class="n8-grid n8-g1"><div class="fg"><label>शेरा / Remarks</label><input id="b-note" placeholder=""></div></div></div>
+    <div class="bgrp n8-actions"><span class="n8-hint">अ.क्र. आपोआप येतो</span><button class="btn btn-nv" onclick="saveBirth()">💾 जतन करा</button>
+      <button class="btn btn-out" onclick="clearBirthForm()">🗑️ साफ</button></div>
   </div>
   <div id="birth-pre" style="display:none">
     <div class="preview"><div id="birth-doc"><div class="alert al-info">यादीमधून "दाखला" बटण वापरा.</div></div></div>
@@ -957,40 +885,11 @@ try{
     <div class="tab" onclick="switchTab(this,'death-pre')">👁️ दाखला</div>
     <div class="tab" onclick="switchTab(this,'death-list')">📋 यादी</div>
   </div>
-  <div id="death-form">
-    <div class="fgrid">
-      <div class="fg"><label>अ.क्र.</label><input id="d-id" readonly class="ro"></div>
-      <div class="fg"><label>लिंग</label><select id="d-sex"><option value="पुरुष|Male">पुरुष / Male</option><option value="स्त्री|Female">स्त्री / Female</option></select></div>
-      <div class="fg"><label>मृत्यू दिनांक</label><input id="d-dod" type="date"></div>
-      <div class="fg"><label>नोंदणी क्र.</label><input id="d-regno" placeholder="1"></div>
-      <div class="fg"><label>नोंदणी दिनांक</label><input id="d-regdt" type="date"></div>
-      <div class="fg"><label>मृत व्यक्तीचा आधार क्र.</label><input id="d-aadhaar" inputmode="numeric" maxlength="12" placeholder="12 अंकी (असल्यास)" oninput="this.value=toEnDigits(this.value).replace(/\D/g,'').slice(0,12)"></div>
-      <div class="fg"><label>मृत व्यक्तीचे वय</label><div style="display:flex;gap:6px"><input id="d-age" type="number" min="0" max="130" placeholder="वय" style="flex:1;min-width:0"><select id="d-age-unit" style="flex:1;min-width:0"><option value="वर्षे|YEARS">वर्षे / Years</option><option value="महिने|MONTHS">महिने / Months</option><option value="दिवस|DAYS">दिवस / Days</option><option value="तास|HOURS">तास / Hours</option></select></div></div>
-      <div class="fg"><label>पती/पत्नीचा आधार क्र.</label><input id="d-spouse-aadhaar" inputmode="numeric" maxlength="12" placeholder="12 अंकी (असल्यास)" oninput="this.value=toEnDigits(this.value).replace(/\D/g,'').slice(0,12)"></div>
-      <div class="fg"><label>आईचा आधार क्र.</label><input id="d-mother-aadhaar" inputmode="numeric" maxlength="12" placeholder="12 अंकी (असल्यास)" oninput="this.value=toEnDigits(this.value).replace(/\D/g,'').slice(0,12)"></div>
-      <div class="fg"><label>वडिलांचा आधार क्र.</label><input id="d-father-aadhaar" inputmode="numeric" maxlength="12" placeholder="12 अंकी (असल्यास)" oninput="this.value=toEnDigits(this.value).replace(/\D/g,'').slice(0,12)"></div>
-      <input type="hidden" id="d-upd">
-      <!-- जन्म नोंदणी फॉर्म प्रमाणेच — आधी सगळे मराठी रकाने, मग तंतोतंत त्याच क्रमाने सगळे इंग्रजी रकाने -->
-      <div class="fg" style="grid-column:1"><label>मृताचे नाव (मराठी)</label><input id="d-name" placeholder="नाव"></div>
-      <div class="fg"><label>मृत्यू ठिकाण (मराठी)</label><input id="d-place" placeholder="ठिकाण"></div>
-      <div class="fg"><label>आईचे नाव (मराठी)</label><input id="d-mother" placeholder="नाव"></div>
-      <div class="fg"><label>वडिलांचे नाव (मराठी)</label><input id="d-father" placeholder="नाव"></div>
-      <div class="fg"><label>पती / पत्नीचे नाव (मराठी)</label><input id="d-spouse" placeholder="नाव"></div>
-      <div class="fg"><label>मृत्यू समयीचा पत्ता (मराठी)</label><input id="d-addr" placeholder="पत्ता"></div>
-      <div class="fg"><label>कायमचा पत्ता (मराठी)</label><input id="d-paddr" placeholder="पत्ता"></div>
-      <div class="fg" style="grid-column:1"><label>Name (English)</label><input id="d-name-e" placeholder="Name"></div>
-      <div class="fg"><label>Place of Death (English)</label><input id="d-place-e" placeholder="Place"></div>
-      <div class="fg"><label>Mother's Name (English)</label><input id="d-mother-e" placeholder="Name"></div>
-      <div class="fg"><label>Father's Name (English)</label><input id="d-father-e" placeholder="Name"></div>
-      <div class="fg"><label>Husband / Wife Name (English)</label><input id="d-spouse-e" placeholder="Name"></div>
-      <div class="fg"><label>Address at Death (English)</label><input id="d-addr-e" placeholder="Address"></div>
-      <div class="fg"><label>Permanent Address (English)</label><input id="d-paddr-e" placeholder="Address"></div>
-      <div class="fg"><label>शेरा / Remarks</label><input id="d-note" placeholder=""></div>
-    </div>
-    <div class="bgrp">
-      <button class="btn btn-nv" onclick="saveDeath()">💾 जतन करा</button>
-      <button class="btn btn-out" onclick="clearDeathForm()">🗑️ साफ</button>
-    </div>
+  <div id="death-form" class="n8pro">
+    <input type="hidden" id="d-upd"><div class="n8-hero"><div class="n8-hero-l"><div class="n8-hero-ic">🕊️</div><div><div class="n8-hero-t">मृत्यू नोंद — नवीन दाखला</div><div class="n8-hero-s">जन्म व मृत्यू नोंदणी — मृत्यू</div></div></div><div class="n8-ano-box"><label>अनुक्रमांक</label><input id="d-id" readonly class="ro"></div></div>
+    <div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">१</span>नोंदणी तपशील</div><div class="n8-grid n8-ga"><div class="fg"><label>लिंग</label><select id="d-sex"><option value="पुरुष|Male">पुरुष / Male</option><option value="स्त्री|Female">स्त्री / Female</option></select></div><div class="fg"><label>मृत्यू दिनांक</label><input id="d-dod" type="date"></div><div class="fg"><label>नोंदणी क्र.</label><input id="d-regno" placeholder="1"></div><div class="fg"><label>नोंदणी दिनांक</label><input id="d-regdt" type="date"></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">२</span>आधार क्रमांक व वय</div><div class="n8-grid n8-ga"><div class="fg"><label>मृत व्यक्तीचा आधार क्र.</label><input id="d-aadhaar" inputmode="numeric" maxlength="12" placeholder="12 अंकी (असल्यास)" oninput="this.value=toEnDigits(this.value).replace(/\D/g,'').slice(0,12)"></div><div class="fg"><label>मृत व्यक्तीचे वय</label><div style="display:flex;gap:6px"><input id="d-age" type="number" min="0" max="130" placeholder="वय" style="flex:1;min-width:0"><select id="d-age-unit" style="flex:1;min-width:0"><option value="वर्षे|YEARS">वर्षे / Years</option><option value="महिने|MONTHS">महिने / Months</option><option value="दिवस|DAYS">दिवस / Days</option><option value="तास|HOURS">तास / Hours</option></select></div></div><div class="fg"><label>पती/पत्नीचा आधार क्र.</label><input id="d-spouse-aadhaar" inputmode="numeric" maxlength="12" placeholder="12 अंकी (असल्यास)" oninput="this.value=toEnDigits(this.value).replace(/\D/g,'').slice(0,12)"></div><div class="fg"><label>आईचा आधार क्र.</label><input id="d-mother-aadhaar" inputmode="numeric" maxlength="12" placeholder="12 अंकी (असल्यास)" oninput="this.value=toEnDigits(this.value).replace(/\D/g,'').slice(0,12)"></div><div class="fg"><label>वडिलांचा आधार क्र.</label><input id="d-father-aadhaar" inputmode="numeric" maxlength="12" placeholder="12 अंकी (असल्यास)" oninput="this.value=toEnDigits(this.value).replace(/\D/g,'').slice(0,12)"></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">३</span>मराठी माहिती</div><div class="n8-grid n8-g1"><div class="fg n8-own-main"><label>मृताचे नाव (मराठी)</label><input id="d-name" placeholder="नाव"></div></div><div style="height:8px"></div><div class="n8-grid n8-g3"><div class="fg"><label>मृत्यू ठिकाण (मराठी)</label><input id="d-place" placeholder="ठिकाण"></div><div class="fg"><label>आईचे नाव (मराठी)</label><input id="d-mother" placeholder="नाव"></div><div class="fg"><label>वडिलांचे नाव (मराठी)</label><input id="d-father" placeholder="नाव"></div><div class="fg"><label>पती / पत्नीचे नाव (मराठी)</label><input id="d-spouse" placeholder="नाव"></div><div class="fg"><label>मृत्यू समयीचा पत्ता (मराठी)</label><input id="d-addr" placeholder="पत्ता"></div><div class="fg"><label>कायमचा पत्ता (मराठी)</label><input id="d-paddr" placeholder="पत्ता"></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">४</span>English Information</div><div class="n8-grid n8-g1"><div class="fg n8-own-main"><label>Name (English)</label><input id="d-name-e" placeholder="Name"></div></div><div style="height:8px"></div><div class="n8-grid n8-g3"><div class="fg"><label>Place of Death (English)</label><input id="d-place-e" placeholder="Place"></div><div class="fg"><label>Mother's Name (English)</label><input id="d-mother-e" placeholder="Name"></div><div class="fg"><label>Father's Name (English)</label><input id="d-father-e" placeholder="Name"></div><div class="fg"><label>Husband / Wife Name (English)</label><input id="d-spouse-e" placeholder="Name"></div><div class="fg"><label>Address at Death (English)</label><input id="d-addr-e" placeholder="Address"></div><div class="fg"><label>Permanent Address (English)</label><input id="d-paddr-e" placeholder="Address"></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">५</span>शेरा</div><div class="n8-grid n8-g1"><div class="fg"><label>शेरा / Remarks</label><input id="d-note" placeholder=""></div></div></div>
+    <div class="bgrp n8-actions"><span class="n8-hint">अ.क्र. आपोआप येतो</span><button class="btn btn-nv" onclick="saveDeath()">💾 जतन करा</button>
+      <button class="btn btn-out" onclick="clearDeathForm()">🗑️ साफ</button></div>
   </div>
   <div id="death-pre" style="display:none">
     <div class="preview"><div id="death-doc"><div class="alert al-info">यादीमधून "दाखला" बटण वापरा.</div></div></div>
@@ -1015,41 +914,11 @@ try{
     <div class="tab" onclick="switchTab(this,'vivah-pre')">👁️ दाखला</div>
     <div class="tab" onclick="switchTab(this,'vivah-list')">📋 यादी</div>
   </div>
-  <div id="vivah-form">
-    <div class="fgrid">
-      <div class="fg"><label>अ.क्र.</label><input id="v-id" readonly class="ro"></div>
-      <input id="v-h-photo" type="hidden" class="ro">
-      <input id="v-w-photo" type="hidden" class="ro">
-      <div class="fg"><label>खंड क्र. (Volume)</label><input id="v-vol" placeholder="2025"></div>
-      <div class="fg"><label>नोंदणी क्र.</label><input id="v-sno" placeholder="1"></div>
-      <div class="fg"><label>विवाह दिनांक</label><input id="v-date" type="date"></div>
-      <div class="fg"><label>विवाह ठिकाण (मराठी)</label><input id="v-place" placeholder="ठिकाण"></div>
-      <div class="fg"><label>Place (English)</label><input id="v-place-e" placeholder="Place"></div>
-      <div class="fg"><label>नोंदणी दिनांक</label><input id="v-regdt" type="date"></div>
-      <div class="fg"><label>शेरा / Remark</label><input id="v-note" placeholder=""></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px">
-      <div style="background:#fff8e1;padding:12px;border-radius:8px">
-        <div class="section-hdr">👨 पती</div>
-        <div class="fg" style="margin-bottom:8px"><label>पतीचे नाव (मराठी)</label><input id="v-h-name" placeholder="नाव"></div>
-        <div class="fg" style="margin-bottom:8px"><label>Husband Name</label><input id="v-h-name-e" placeholder="Name"></div>
-        <div class="fg" style="margin-bottom:8px"><label>पत्ता</label><input id="v-h-addr" placeholder="पत्ता"></div>
-        <div class="fg" style="margin-bottom:8px"><label>Address</label><input id="v-h-addr-e" placeholder="Address"></div>
-        <div class="fg"><label>पतीचे छायाचित्र</label><input id="v-h-photo-file" type="file" accept="image/*" onchange="loadVivahPhoto(this,'v-h-photo')"><img id="v-h-photo-preview" src="" style="display:none;max-width:100px;max-height:100px;margin-top:6px;border:1px solid #ccc;border-radius:4px"></div>
-      </div>
-      <div style="background:#e8f5e9;padding:12px;border-radius:8px">
-        <div class="section-hdr">👰 पत्नी</div>
-        <div class="fg" style="margin-bottom:8px"><label>पत्नीचे नाव (मराठी)</label><input id="v-w-name" placeholder="नाव"></div>
-        <div class="fg" style="margin-bottom:8px"><label>Wife Name</label><input id="v-w-name-e" placeholder="Name"></div>
-        <div class="fg" style="margin-bottom:8px"><label>पत्ता</label><input id="v-w-addr" placeholder="पत्ता"></div>
-        <div class="fg" style="margin-bottom:8px"><label>Address</label><input id="v-w-addr-e" placeholder="Address"></div>
-        <div class="fg"><label>पत्नीचे छायाचित्र</label><input id="v-w-photo-file" type="file" accept="image/*" onchange="loadVivahPhoto(this,'v-w-photo')"><img id="v-w-photo-preview" src="" style="display:none;max-width:100px;max-height:100px;margin-top:6px;border:1px solid #ccc;border-radius:4px"></div>
-      </div>
-    </div>
-    <div class="bgrp">
-      <button class="btn btn-gn" onclick="saveVivah()">💾 जतन करा</button>
-      <button class="btn btn-out" onclick="clearVivahForm()">🗑️ साफ</button>
-    </div>
+  <div id="vivah-form" class="n8pro">
+    <input id="v-h-photo" type="hidden" class="ro"><input id="v-w-photo" type="hidden" class="ro"><div class="n8-hero"><div class="n8-hero-l"><div class="n8-hero-ic">💍</div><div><div class="n8-hero-t">विवाह नोंद — नवीन दाखला</div><div class="n8-hero-s">विवाह नोंदणी</div></div></div><div class="n8-ano-box"><label>अनुक्रमांक</label><input id="v-id" readonly class="ro"></div></div>
+    <div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">१</span>विवाह नोंदणी तपशील</div><div class="n8-grid n8-g4"><div class="fg"><label>खंड क्र. (Volume)</label><input id="v-vol" placeholder="2025"></div><div class="fg"><label>नोंदणी क्र.</label><input id="v-sno" placeholder="1"></div><div class="fg"><label>विवाह दिनांक</label><input id="v-date" type="date"></div><div class="fg"><label>नोंदणी दिनांक</label><input id="v-regdt" type="date"></div></div><div style="height:8px"></div><div class="n8-grid n8-g3"><div class="fg"><label>विवाह ठिकाण (मराठी)</label><input id="v-place" placeholder="ठिकाण"></div><div class="fg"><label>Place (English)</label><input id="v-place-e" placeholder="Place"></div><div class="fg"><label>शेरा / Remark</label><input id="v-note" placeholder=""></div></div></div><div class="n8-pcards"><div class="n8-sec n8-psec-h"><div class="n8-sec-h"><span class="n8-num">२</span>👨 पती</div><div class="n8-grid n8-g2"><div class="fg n8-own-main"><label>पतीचे नाव (मराठी)</label><input id="v-h-name" placeholder="नाव"></div><div class="fg"><label>Husband Name</label><input id="v-h-name-e" placeholder="Name"></div><div class="fg"><label>पत्ता</label><input id="v-h-addr" placeholder="पत्ता"></div><div class="fg"><label>Address</label><input id="v-h-addr-e" placeholder="Address"></div></div><div style="height:8px"></div><div class="n8-grid n8-g1"><div class="fg"><label>पतीचे छायाचित्र</label><input id="v-h-photo-file" type="file" accept="image/*" onchange="loadVivahPhoto(this,'v-h-photo')"><img id="v-h-photo-preview" src="" style="display:none;max-width:100px;max-height:100px;margin-top:6px;border:1px solid #ccc;border-radius:4px"></div></div></div><div class="n8-sec n8-psec-w"><div class="n8-sec-h"><span class="n8-num">३</span>👰 पत्नी</div><div class="n8-grid n8-g2"><div class="fg n8-own-main"><label>पत्नीचे नाव (मराठी)</label><input id="v-w-name" placeholder="नाव"></div><div class="fg"><label>Wife Name</label><input id="v-w-name-e" placeholder="Name"></div><div class="fg"><label>पत्ता</label><input id="v-w-addr" placeholder="पत्ता"></div><div class="fg"><label>Address</label><input id="v-w-addr-e" placeholder="Address"></div></div><div style="height:8px"></div><div class="n8-grid n8-g1"><div class="fg"><label>पत्नीचे छायाचित्र</label><input id="v-w-photo-file" type="file" accept="image/*" onchange="loadVivahPhoto(this,'v-w-photo')"><img id="v-w-photo-preview" src="" style="display:none;max-width:100px;max-height:100px;margin-top:6px;border:1px solid #ccc;border-radius:4px"></div></div></div></div>
+    <div class="bgrp n8-actions"><span class="n8-hint">अ.क्र. आपोआप येतो</span><button class="btn btn-gn" onclick="saveVivah()">💾 जतन करा</button>
+      <button class="btn btn-out" onclick="clearVivahForm()">🗑️ साफ</button></div>
   </div>
   <div id="vivah-pre" style="display:none">
     <div class="preview"><div id="vivah-doc"><div class="alert al-info">यादीमधून "दाखला" बटण वापरा.</div></div></div>
@@ -1074,19 +943,11 @@ try{
     <div class="tab" onclick="switchTab(this,'bpl-pre')">👁️ दाखला</div>
     <div class="tab" onclick="switchTab(this,'bpl-list')">📋 यादी</div>
   </div>
-  <div id="bpl-form">
-    <div class="fgrid">
-      <div class="fg"><label>अ.क्र.</label><input id="bpl-id" readonly class="ro"></div>
-      <div class="fg"><label>नाव (मराठी)</label><input id="bpl-name" placeholder="नाव"></div>
-      <div class="fg"><label>Name (English)</label><input id="bpl-name-e" placeholder="Name"></div>
-      <div class="fg"><label>दा.रे.यादी क्रमांक</label><input id="bpl-no" placeholder="69"></div>
-      <div class="fg"><label>BPL कालावधी</label><input id="bpl-period" readonly class="ro"></div>
-      <div class="fg"><label>दिनांक</label><input id="bpl-dt" type="date"></div>
-    </div>
-    <div class="bgrp">
-      <button class="btn btn-nv" onclick="saveBPL()">💾 जतन करा</button>
-      <button class="btn btn-out" onclick="clearBPLForm()">🗑️ साफ</button>
-    </div>
+  <div id="bpl-form" class="n8pro">
+    <div class="n8-hero"><div class="n8-hero-l"><div class="n8-hero-ic">🏠</div><div><div class="n8-hero-t">BPL दाखला — नवीन एंट्री</div><div class="n8-hero-s">दारिद्र्यरेषेखालील यादी</div></div></div><div class="n8-ano-box"><label>अनुक्रमांक</label><input id="bpl-id" readonly class="ro"></div></div>
+    <div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">१</span>अर्जदार व BPL तपशील</div><div class="n8-grid n8-g1"><div class="fg n8-own-main"><label>नाव (मराठी)</label><input id="bpl-name" placeholder="नाव"></div></div><div style="height:8px"></div><div class="n8-grid n8-g4"><div class="fg"><label>Name (English)</label><input id="bpl-name-e" placeholder="Name"></div><div class="fg"><label>दा.रे.यादी क्रमांक</label><input id="bpl-no" placeholder="69"></div><div class="fg"><label>BPL कालावधी</label><input id="bpl-period" readonly class="ro"></div><div class="fg"><label>दिनांक</label><input id="bpl-dt" type="date"></div></div></div>
+    <div class="bgrp n8-actions"><span class="n8-hint">अ.क्र. आपोआप येतो</span><button class="btn btn-nv" onclick="saveBPL()">💾 जतन करा</button>
+      <button class="btn btn-out" onclick="clearBPLForm()">🗑️ साफ</button></div>
   </div>
   <div id="bpl-pre" style="display:none">
     <div class="preview"><div id="bpl-doc"><div class="alert al-info">यादीमधून "दाखला" बटण वापरा.</div></div></div>
@@ -1111,17 +972,11 @@ try{
     <div class="tab" onclick="switchTab(this,'nd-pre')">👁️ दाखला</div>
     <div class="tab" onclick="switchTab(this,'nd-list')">📋 यादी</div>
   </div>
-  <div id="nd-form">
-    <div class="fgrid">
-      <div class="fg"><label>अ.क्र.</label><input id="nd-id" readonly class="ro"></div>
-      <div class="fg"><label>नाव (मराठी)</label><input id="nd-name" placeholder="नाव"></div>
-      <div class="fg"><label>Name (English)</label><input id="nd-name-e" placeholder="Name"></div>
-      <div class="fg"><label>दिनांक</label><input id="nd-dt" type="date"></div>
-    </div>
-    <div class="bgrp">
-      <button class="btn btn-nv" onclick="saveNoDue()">💾 जतन करा</button>
-      <button class="btn btn-out" onclick="clearNoDueForm()">🗑️ साफ</button>
-    </div>
+  <div id="nd-form" class="n8pro">
+    <div class="n8-hero"><div class="n8-hero-l"><div class="n8-hero-ic">✅</div><div><div class="n8-hero-t">येणे बाकी नाही दाखला — नवीन एंट्री</div><div class="n8-hero-s">ग्रामपंचायत कर/पाणीपट्टी — येणे बाकी नाही</div></div></div><div class="n8-ano-box"><label>अनुक्रमांक</label><input id="nd-id" readonly class="ro"></div></div>
+    <div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">१</span>अर्जदार तपशील</div><div class="n8-grid n8-g1"><div class="fg n8-own-main"><label>नाव (मराठी)</label><input id="nd-name" placeholder="नाव"></div></div><div style="height:8px"></div><div class="n8-grid n8-g2"><div class="fg"><label>Name (English)</label><input id="nd-name-e" placeholder="Name"></div><div class="fg"><label>दिनांक</label><input id="nd-dt" type="date"></div></div></div>
+    <div class="bgrp n8-actions"><span class="n8-hint">अ.क्र. आपोआप येतो</span><button class="btn btn-nv" onclick="saveNoDue()">💾 जतन करा</button>
+      <button class="btn btn-out" onclick="clearNoDueForm()">🗑️ साफ</button></div>
   </div>
   <div id="nd-pre" style="display:none">
     <div class="preview"><div id="nd-doc"><div class="alert al-info">यादीमधून "दाखला" बटण वापरा.</div></div></div>
@@ -1146,17 +1001,10 @@ try{
     <div class="tab" onclick="switchTab(this,'nr-pre')">👁️ दाखला</div>
     <div class="tab" onclick="switchTab(this,'nr-list');loadNiradharList()">📋 यादी</div>
   </div>
-  <div id="nr-form">
-    <div class="fgrid">
-      <div class="fg"><label>अ.क्र.</label><input id="nr-id" readonly class="ro"></div>
-      <div class="fg"><label>नाव (मराठी)</label><input id="nr-name" placeholder="नाव"></div>
-      <div class="fg"><label>Name (English)</label><input id="nr-name-e" placeholder="Name"></div>
-      <div class="fg"><label>वय (Age)</label><input id="nr-age" type="number" placeholder="60"></div>
-      <div class="fg"><label>दिनांक</label><input id="nr-dt" type="date"></div>
-    </div>
-    <div class="bgrp">
-      <button class="btn btn-nv" id="nr-gen-btn" onclick="genNiradhar()">👴 दाखला तयार करा</button>
-    </div>
+  <div id="nr-form" class="n8pro">
+    <div class="n8-hero"><div class="n8-hero-l"><div class="n8-hero-ic">👴</div><div><div class="n8-hero-t">निराधार दाखला — नवीन एंट्री</div><div class="n8-hero-s">निराधार व्यक्ती दाखला</div></div></div><div class="n8-ano-box"><label>अनुक्रमांक</label><input id="nr-id" readonly class="ro"></div></div>
+    <div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">१</span>अर्जदार तपशील</div><div class="n8-grid n8-g1"><div class="fg n8-own-main"><label>नाव (मराठी)</label><input id="nr-name" placeholder="नाव"></div></div><div style="height:8px"></div><div class="n8-grid n8-g3"><div class="fg"><label>Name (English)</label><input id="nr-name-e" placeholder="Name"></div><div class="fg"><label>वय (Age)</label><input id="nr-age" type="number" placeholder="60"></div><div class="fg"><label>दिनांक</label><input id="nr-dt" type="date"></div></div></div>
+    <div class="bgrp n8-actions"><span class="n8-hint">अ.क्र. आपोआप येतो</span><button class="btn btn-nv" id="nr-gen-btn" onclick="genNiradhar()">👴 दाखला तयार करा</button></div>
   </div>
   <div id="nr-pre" style="display:none">
     <div class="preview"><div id="nr-doc"></div></div>
@@ -1180,29 +1028,17 @@ try{
     <div class="tab active" onclick="switchTab(this,'n12-form')">📝 नवीन</div>
     <div class="tab" onclick="switchTab(this,'n12-pre')">👁️ पावती</div>
   </div>
-  <div id="n12-form">
-    <div class="fgrid">
-      <div class="fg"><label>आर्थिक वर्ष</label>
+  <div id="n12-form" class="n8pro">
+    <div class="n8-hero"><div class="n8-hero-l"><div class="n8-hero-ic">🧾</div><div><div class="n8-hero-t">नमुना १२ — खर्च पावती (देयक)</div><div class="n8-hero-s">नवीन व्हौचर नोंद</div></div></div><div class="n8-ano-box"><label>व्हौचर क्रमांक</label><input id="n12-id" readonly class="ro"></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">१</span>व्हौचर तपशील</div><div class="n8-grid n8-g3"><div class="fg"><label>आर्थिक वर्ष</label>
         <select id="n12-year" onchange="if(this.value==='__add__'){addN12Year();}else{updateN12IdPreview();loadN12List();}">
         </select>
-      </div>
-      <div class="fg"><label>लेखाशीर्ष (हेड)</label>
+      </div><div class="fg"><label>लेखाशीर्ष (हेड)</label>
         <select id="n12-dept" onchange="if(this.value==='__add__'){addN12Dept();}else{updateN12IdPreview();loadN12List();}">
         </select>
-      </div>
-      <div class="fg"><label>व्हौचर क्रमांक</label><input id="n12-id" readonly class="ro"></div>
-      <div class="fg"><label>दिनांक</label><input id="n12-dt" type="date"></div>
-      <div class="fg"><label>नाव</label><input id="n12-payee" placeholder="ज्याला रक्कम दिली त्याचे नाव"></div>
-      <div class="fg"><label>कश्याकरिता दिले</label><input id="n12-item" placeholder="उदा. सदस्य मानधन"></div>
-      <div class="fg"><label>चेक क्रमांक</label><input id="n12-cheque" placeholder="उदा. 123456"></div>
-      <div class="fg"><label>रक्कम (₹)</label><input id="n12-amount" type="number"></div>
-    </div>
-    <div class="bgrp">
-      <button class="btn btn-nv" onclick="saveN12()">💾 जतन करा</button>
-      <button class="btn btn-out" onclick="clearN12Form()">🗑️ साफ</button>
-    </div>
-    <hr class="doc-div" style="margin:16px 0">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      </div><div class="fg"><label>दिनांक</label><input id="n12-dt" type="date"></div></div></div><div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">२</span>देयक तपशील</div><div class="n8-grid n8-g1"><div class="fg n8-own-main"><label>नाव</label><input id="n12-payee" placeholder="ज्याला रक्कम दिली त्याचे नाव"></div></div><div style="height:8px"></div><div class="n8-grid n8-g3"><div class="fg"><label>कश्याकरिता दिले</label><input id="n12-item" placeholder="उदा. सदस्य मानधन"></div><div class="fg"><label>चेक क्रमांक</label><input id="n12-cheque" placeholder="उदा. 123456"></div><div class="fg"><label>रक्कम (₹)</label><input id="n12-amount" type="number"></div></div></div>
+    <div class="bgrp n8-actions"><span class="n8-hint">व्हौचर क्रमांक आपोआप येतो</span><button class="btn btn-nv" onclick="saveN12()">💾 जतन करा</button>
+      <button class="btn btn-out" onclick="clearN12Form()">🗑️ साफ</button></div>
+    <div class="n8-sec" style="margin-top:9px"><div class="n8-sec-h"><span class="n8-num">३</span>खर्चाची यादी</div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <b id="n12-list-title" style="font-size:14px">यादी</b>
       <button class="btn btn-sf btn-sm" onclick="printN12Year()">🖨️ संपूर्ण वर्षाच्या पावत्या प्रिंट</button>
     </div>
@@ -1210,6 +1046,7 @@ try{
       <thead><tr><th>व्हौचर क्र.</th><th>दिनांक</th><th>नाव</th><th>चेक क्र.</th><th>रक्कम</th><th>कृती</th></tr></thead>
       <tbody id="n12-tbl"><tr><td colspan="6" style="text-align:center;color:#9E9E9E;padding:14px">नोंदी नाहीत</td></tr></tbody>
     </table></div>
+  </div>
   </div>
   <div id="n12-pre" style="display:none">
     <div class="preview"><div id="n12-doc"><div class="alert al-info">यादीमधून "पावती" बटण वापरा.</div></div></div>
@@ -1317,24 +1154,87 @@ try{
         <div class="fg" style="margin-bottom:6px"><label>BPL कालावधी</label><input id="s-bpl" value="2002 - 2007" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;font-family:inherit"></div>
         <div class="fg"><label>QR Verify URL</label><input id="s-url" value="https://grampanchayat-management-system.github.io/qr.verify/" placeholder="https://site.github.io/verify.html" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;font-family:inherit"></div>
 
-        <div class="section-hdr" style="margin-top:16px">☁️ QR ऑनलाइन तपासणी (ऐच्छिक — CRS सारखी)</div>
-        <div style="font-size:12px;color:#555;margin-bottom:8px;line-height:1.6">खालचे दोन रकाने <b>रिकामे ठेवले तर QR जसा आत्ता आहे तसाच चालेल</b>. भरले तर QR छोटा होतो आणि स्कॅन केल्यावर दाखल्याची माहिती दिसते. हे मोफत आहे (Google Firebase), पण एकदा सेटअप करावे लागते — खाली पायऱ्या दिल्या आहेत.</div>
+        <div class="section-hdr" style="margin-top:16px">📱 मोबाईल ॲप — लायसन्स (Software Key + Mobile Code)</div>
+        <div id="mb-desktop">
+          <div style="font-size:12px;color:#555;line-height:1.75;margin-bottom:8px">मोबाईल ॲप <b>फक्त या software चे लायसन्स असलेल्यांसाठीच</b> उघडते. प्रत्येक फोनसाठी वेगळा <b>Mobile Code</b> बनतो — तो <b>फक्त त्याच फोनवर</b> चालतो (दुसऱ्याला दिला तर चालत नाही), आणि एका लायसन्सवर <b>जास्तीत जास्त <span id="mb-max">३</span> फोन</b>.<br>
+          कोड खालच्या <b>Firebase Project ID</b> शी बांधलेला असतो — फोनवर दिसणारा डेटा <b>याच software चा</b> (Cloud Sync मधून) असतो.</div>
+          <div style="background:#fff8e1;border:1px solid #f0d58a;border-radius:6px;padding:8px 10px;font-size:12.5px;line-height:1.8;margin-bottom:8px"><b>कसे करायचे:</b> ① फोनवर ॲप उघडा → "सक्रिय करा" स्क्रीनवर <b>Device ID</b> दिसतो → ② तो इथे टाका → ③ <b>Mobile Code तयार करा</b> → ④ <b>Software Key</b> आणि <b>Mobile Code</b> फोनवर टाका.</div>
+          <div class="fg" style="margin-bottom:6px"><label>Software Key (या कॉम्प्युटरची License Key)</label><input id="mb-key" readonly placeholder="—" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;font-family:inherit;background:#f7f7f7"></div>
+          <div class="fg" style="margin-bottom:6px"><label>फोनचा Device ID (फोनच्या स्क्रीनवरून)</label><input id="mb-dev" placeholder="उदा. ABCDE-FGHJK" autocomplete="off" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:14px;font-family:inherit;text-transform:uppercase;letter-spacing:1px"></div>
+          <div class="fg" style="margin-bottom:6px"><label>फोनचे नाव (ऐच्छिक — उदा. सरपंच, ग्रामसेवक)</label><input id="mb-name" placeholder="कोणाचा फोन" autocomplete="off" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;font-family:inherit"></div>
+          <div class="bgrp"><button class="btn btn-gn" type="button" onclick="mbMake()">🔑 Mobile Code तयार करा</button></div>
+          <div class="fg" style="margin:8px 0 6px"><label>Mobile Code (फोनवर टाकण्यासाठी)</label><textarea id="mb-code" readonly rows="3" placeholder="वरचे बटण दाबून तयार करा" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:12px;font-family:inherit;background:#f7f7f7"></textarea></div>
+          <div class="bgrp"><button class="btn btn-sm btn-out" type="button" onclick="mbCopy('mb-key')">📋 Key कॉपी</button><button class="btn btn-sm btn-out" type="button" onclick="mbCopy('mb-code')">📋 Code कॉपी</button></div>
+          <div id="mb-msg" style="font-size:12.5px;margin-top:6px;min-height:18px"></div>
+          <div style="margin-top:10px"><b style="font-size:12.5px">नोंदवलेले फोन (<span id="mb-cnt">0</span> / <span id="mb-max2">३</span>)</b><div id="mb-list" style="font-size:12.5px;line-height:1.9;margin-top:4px"></div>
+          <div style="font-size:11.5px;color:#777;margin-top:4px">फोन बदलला किंवा गेला तर त्याची नोंद "काढा" ने काढा म्हणजे जागा मोकळी होते. ⚠️ काढल्याने त्या फोनचे ॲप आपोआप बंद होत नाही — तो पूर्ण थांबवायला Firebase मध्ये Sync चा Password बदला.</div></div>
+        </div>
+        <div id="mb-web" style="display:none">
+          <div id="mb-web-st" style="font-size:13px;line-height:1.9"></div>
+          <div class="bgrp" style="margin-top:6px"><button class="btn btn-sm btn-out" type="button" onclick="mbDeactivate()">🔓 या फोनवरची सक्रियता काढा</button></div>
+        </div>
+
+        <div class="section-hdr" style="margin-top:16px">☁️ Google Firebase — एकच सेटिंग (QR तपासणी + फोन ↔ कॉम्प्युटर Sync)</div>
+
+        <div style="font-size:12px;color:#555;margin-bottom:8px;line-height:1.7">हे <b>एकच ठिकाण</b> आहे. खालचा Project ID व API key दोन्ही सुविधांसाठी वापरला जातो: <b>(१) QR ऑनलाइन तपासणी</b> — हे रकाने रिकामे ठेवले तर QR जसा आत्ता आहे तसाच चालेल; <b>(२) फोन ↔ कॉम्प्युटर Sync</b> — फोनवरही हाच डेटा. Google Firebase चा मोफत (Spark) प्लॅन पुरेसा आहे.</div>
+
         <details style="background:#f5f9ff;border:1px solid #c5d5ee;border-radius:8px;padding:10px 12px;margin-bottom:10px">
-          <summary style="cursor:pointer;font-weight:700;color:#0D2B5E;font-size:13px">📖 सेटअप कसा करायचा — पायरी-पायरीने (फक्त एकदाच)</summary>
-          <div style="font-size:12.5px;line-height:1.8;margin-top:8px;color:#222">
-            <div><b>पायरी १ — Firebase उघडा</b><br>खालचे बटण दाबा. Google (Gmail) खात्याने login करा.<br><button class="btn btn-sm btn-nv" type="button" onclick="fbOpenConsole()">🌐 Firebase उघडा</button></div>
-            <div style="margin-top:8px"><b>पायरी २ — नवीन project बनवा</b><br>• <b>"Create a project"</b> (किंवा "Add project") वर क्लिक करा.<br>• नाव: ग्रामपंचायतीचे नाव <b>इंग्रजीत</b>, उदा. <code>warawade-gp</code> → <b>Continue</b>.<br>• "Google Analytics" चा स्विच <b>बंद (OFF)</b> करा → <b>Create project</b>. थोडा वेळ थांबा, मग <b>Continue</b>.</div>
-            <div style="margin-top:8px"><b>पायरी ३ — Firestore सुरू करा</b><br>• डावीकडच्या मेनूत <b>Build</b> → <b>Firestore Database</b> → <b>Create database</b>.<br>• Edition: <b>Standard</b> निवडा.<br>• Location: <b>asia-south1 (Mumbai)</b> निवडा.<br>• <b>"Start in production mode"</b> निवडा → <b>Create</b> (किंवा Enable).</div>
-            <div style="margin-top:8px"><b>पायरी ४ — नियम (Rules) टाका</b><br>• Firestore मध्ये वरती <b>Rules</b> टॅब उघडा. आतला सगळा मजकूर पुसा (Ctrl+A, Delete).<br>• खालचे बटण दाबा, मग तिथे पेस्ट करा (Ctrl+V) → <b>Publish</b>.<br><button class="btn btn-sm btn-nv" type="button" onclick="fbCopyRules()">📋 Rules कॉपी करा</button></div>
-            <div style="margin-top:8px"><b>पायरी ५ — दोन गोष्टी कॉपी करा</b><br>• डावीकडे वरती <b>⚙️ (Project settings)</b> उघडा → <b>General</b> टॅब → <b>Project ID</b> कॉपी करा.<br>• त्याच पानावर खाली "Your apps" मध्ये <b>&lt;/&gt; (Web)</b> चिन्हावर क्लिक करा → कोणतेही नाव द्या → <b>Register app</b>. तिथे दिसणाऱ्या मजकुरात <code>apiKey: "AIza..."</code> आहे — फक्त अवतरणांतील भाग कॉपी करा.</div>
-            <div style="margin-top:8px"><b>पायरी ६ — इथे पेस्ट करा</b><br>खालच्या दोन रकान्यांत Project ID आणि API key पेस्ट करा → <b>Masters जतन करा</b> → <b>चाचणी करा</b>. "✅ जोडणी यशस्वी" दिसले की काम झाले.</div>
-            <div style="margin-top:8px;color:#8a5a00">टीप: Firebase च्या बटणांची नावे/जागा काळानुसार थोडी वेगळी दिसू शकतात — अडचण आल्यास सॉफ्टवेअर विक्रेत्याला स्क्रीन दाखवा.</div>
+          <summary style="cursor:pointer;font-weight:700;color:#0D2B5E;font-size:13px">📖 सेटअप कसा करायचा — पायरी-पायरीने (नवीन ग्रामपंचायतीसाठी, फक्त एकदाच)</summary>
+          <div style="font-size:12.5px;line-height:1.85;margin-top:8px;color:#222">
+
+            <div style="background:#fff8e1;border:1px solid #f0d58a;border-radius:6px;padding:8px 10px"><b>दोन पर्याय — आधी निवडा</b><br>
+              <b>पर्याय अ — स्वतःचा Firebase project</b> (पूर्ण स्वतंत्र): खालच्या पायऱ्या १ ते ८ कराव्या लागतात.<br>
+              <b>पर्याय ब — सर्वात सोपा:</b> विक्रेत्याच्या/आधीच्या ग्रामपंचायतीच्या project मध्ये फक्त <u>तुमच्यासाठी एक नवा Email/Password</u> बनवून घ्या (पायरी ४ चा "Add user"). मग त्यांच्याकडून <b>Project ID, API key, Email, Password</b> घ्या आणि थेट <b>पायरी ८</b> वर जा — Firebase मध्ये तुम्हाला काहीच बनवायचे नाही. प्रत्येक ग्रामपंचायतीचा डेटा वेगळा राहतो; एका Email ला फक्त त्याचाच डेटा दिसतो.</div>
+
+            <div style="margin-top:8px"><b>पायरी १ — Firebase उघडा</b><br>खालचे बटण दाबा. Google (Gmail) खात्याने login करा.<br><button class="btn btn-sm btn-nv" type="button" onclick="fbOpenConsole()">🌐 Firebase उघडा</button></div>
+
+            <div style="margin-top:8px"><b>पायरी २ — नवीन project बनवा</b><br>• <b>"Create a project"</b> (किंवा "Add project") दाबा.<br>• नाव: ग्रामपंचायतीचे नाव <b>इंग्रजीत</b>, उदा. <code>warawade-gp</code> → <b>Continue</b>.<br>• "Google Analytics" चा स्विच <b>बंद (OFF)</b> → <b>Create project</b> → थोडा वेळ थांबून <b>Continue</b>.</div>
+
+            <div style="margin-top:8px"><b>पायरी ३ — Firestore (डेटा ठेवण्याची जागा)</b><br>• डावीकडच्या मेनूत <b>Databases &amp; Storage → Firestore</b> (जुन्या console मध्ये <i>Build → Firestore Database</i>) → <b>Create database</b>.<br>• <b>Standard edition</b> निवडा. ⚠️ <b>Enterprise edition निवडू नका</b> — त्यात (default) database बनत नाही आणि ॲप चालत नाही.<br>• Location: <b>asia-south1 (Mumbai)</b>. • Mode: <b>Production mode</b> → <b>Create</b>.</div>
+
+            <div style="margin-top:8px"><b>पायरी ४ — Authentication (Sync चे खाते)</b><br>• डावीकडे <b>Security → Authentication</b> (जुन्या console मध्ये <i>Build → Authentication</i>) → <b>Get started</b>.<br>• <b>Sign-in method</b> टॅब → <b>Email/Password</b> → पहिला स्विच <b>Enable</b> → <b>Save</b>.<br>• <b>Users</b> टॅब → <b>Add user</b> → Email (खरा असण्याची गरज नाही, उदा. <code>gp@गावाचे-नाव.in</code>) आणि Password (किमान ८ अक्षरे). <b>हे दोन्ही लिहून ठेवा</b> — कॉम्प्युटर व फोन दोन्हीकडे हेच एक खाते वापरायचे.<br>• (ऐच्छिक) Authentication → <b>Settings → User actions</b> मध्ये बाहेरून नवी खाती बनवण्याची सोय बंद ठेवा.</div>
+
+            <div style="margin-top:8px"><b>पायरी ५ — सगळे नियम (Rules) एकाच वेळी</b><br>• <b>Databases &amp; Storage → Firestore</b> → वरती <b>Rules</b> टॅब. आतला सगळा मजकूर पुसा (Ctrl+A, Delete).<br>• खालचे बटण दाबा → तिथे पेस्ट (Ctrl+V) → <b>Publish</b>.<br>• ✅ यात <b>QR चे आणि Sync चे दोन्ही नियम</b> एकत्र आहेत — जुने नियम पुसले तरी QR बंद पडत नाही.<br><button class="btn btn-sm btn-nv" type="button" onclick="fbCopyRules()">📋 Rules कॉपी करा (QR + Sync)</button></div>
+
+            <div style="margin-top:8px"><b>पायरी ६ — Project ID व API key कॉपी करा</b><br>• वरती डावीकडे <b>⚙️ (Settings) → Project settings → General</b>: <b>Project ID</b> कॉपी करा.<br>• त्याच पानावर खाली "Your apps" मध्ये <b>&lt;/&gt; (Web)</b> → कोणतेही नाव → <b>Register app</b> (आधी केले असेल तर तीच app उघडा). तिथे <code>apiKey: "AIza..."</code> दिसतो — फक्त अवतरणांतील भाग कॉपी करा.</div>
+
+            <div style="margin-top:8px"><b>पायरी ७ — इथे पेस्ट करा</b><br>खालच्या दोन रकान्यांत Project ID आणि API key पेस्ट करा → <b>Masters जतन करा</b> → <b>चाचणी करा</b>. "✅ जोडणी यशस्वी" दिसले की QR तयार.</div>
+
+            <div style="margin-top:8px"><b>पायरी ८ — Sync जोडा</b><br>• <b>पहिल्या कॉम्प्युटरवर</b> (जिथे आधीचा डेटा आहे): 🔴 आधी Backup घ्या → खाली Email व Password भरा → <b>"हे पहिले कॉम्प्युटर"</b> निवडून <b>जोडा</b>.<br>• <b>फोनवर / दुसऱ्या कॉम्प्युटरवर</b>: कॉम्प्युटरवर <b>"Setup Code कॉपी करा"</b> दाबून तो कोड WhatsApp ने फोनवर पाठवा → फोनवर इथेच <b>"Setup Code पेस्ट करा"</b> → Password भरा → <b>"नवीन फोन"</b> निवडून <b>जोडा</b>.</div>
+
+            <div style="margin-top:8px;color:#8a5a00">टीप: Firebase च्या मेनूची नावे काळानुसार बदलतात. वरची नावे सध्याच्या नव्या console ची आहेत; सापडले नाही तर डावीकडे "Search for products" मध्ये <i>Firestore</i> किंवा <i>Authentication</i> शोधा.</div>
           </div>
         </details>
+
         <div class="fg" style="margin-bottom:6px"><label>Firebase Project ID</label><input id="s-fb-project" placeholder="उदा. warawade-gp" autocomplete="off" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;font-family:inherit"></div>
         <div class="fg" style="margin-bottom:6px"><label>Firebase API key</label><input id="s-fb-key" placeholder="AIza..." autocomplete="off" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;font-family:inherit"></div>
-        <div class="bgrp"><button class="btn btn-out" type="button" onclick="fbTest()">🔌 चाचणी करा</button></div>
+        <div class="bgrp"><button class="btn btn-out" type="button" onclick="fbTest()">🔌 चाचणी करा (QR)</button></div>
         <div id="fb-test-res" style="font-size:12.5px;margin-top:6px"></div>
+
+        <div class="section-hdr" style="margin-top:16px">📱↔💻 फोन ↔ कॉम्प्युटर Sync</div>
+        <div id="sy-off">
+          <div style="font-size:12px;color:#555;margin-bottom:8px;line-height:1.7">वरचे Project ID व API key भरल्यानंतर, Firebase मध्ये बनवलेला Email/Password इथे भरा. कॉम्प्युटर आणि फोन दोन्हीकडे <b>एकच</b> Email/Password.</div>
+          <div class="fg" style="margin-bottom:6px"><label>Sync Email</label><input id="sy-email" type="email" autocomplete="off" placeholder="उदा. gp@gaav.in" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;font-family:inherit"></div>
+          <div class="fg" style="margin-bottom:6px"><label>Sync Password</label><input id="sy-pass" type="password" autocomplete="new-password" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:13px;font-family:inherit"></div>
+          <div style="font-size:13px;margin:6px 0 8px;line-height:1.9">
+            <label><input type="radio" name="sy-first" value="up" checked> हे <b>पहिले कॉम्प्युटर</b> आहे (इथे आधीचा डेटा आहे) — इथला डेटा क्लाउडवर पाठवा</label><br>
+            <label><input type="radio" name="sy-first" value="down"> हा <b>नवीन फोन / दुसरे कॉम्प्युटर</b> आहे — क्लाउडवरचा डेटा घ्या</label>
+          </div>
+          <div class="bgrp"><button class="btn btn-gn" type="button" id="sy-go" onclick="syConnect()">☁️ जोडा व Sync सुरू करा</button></div>
+          <div id="sy-msg" style="font-size:12.5px;margin-top:6px;min-height:18px"></div>
+          <div style="font-size:11.5px;color:#a33;margin-top:4px">⚠️ पहिल्यांदा जोडण्याआधी Backup घ्या.</div>
+          <div style="margin-top:12px;padding-top:10px;border-top:1px dashed #cdd">
+            <b style="font-size:12.5px">📋 Setup Code (नवीन फोनसाठी सोपा मार्ग)</b>
+            <div style="font-size:12px;color:#555;margin:4px 0 6px">कॉम्प्युटरवर "कॉपी करा" दाबा → कोड WhatsApp ने फोनवर पाठवा → फोनवर इथे "पेस्ट करा". यात Project ID, API key व Email असतात — <u>Password नाही</u>.</div>
+            <input id="sy-code" placeholder="GPSYNC1:..." autocomplete="off" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:12px;font-family:inherit">
+            <div class="bgrp" style="margin-top:6px"><button class="btn btn-sm btn-nv" type="button" onclick="syCopyCode()">📋 Setup Code कॉपी करा</button><button class="btn btn-sm btn-out" type="button" onclick="syApplyCode()">⬇️ Setup Code पेस्ट करा</button></div>
+          </div>
+        </div>
+        <div id="sy-on" style="display:none">
+          <div id="sy-status" style="font-size:13px;line-height:1.9"></div>
+          <div class="bgrp" style="margin-top:8px"><button class="btn btn-gn" type="button" onclick="syNow()">🔄 आता Sync करा</button><button class="btn btn-out" type="button" onclick="syOut()">🚪 Sync बंद करा</button></div>
+          <div style="font-size:11.5px;color:#666;margin-top:8px">नेट असताना दर १० सेकंदांनी आपोआप Sync होतो. नेट नसताना केलेल्या नोंदी नेट आल्यावर आपोआप जातात.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -2172,8 +2072,9 @@ function fbOpenConsole(){
   try{require('electron').shell.openExternal(u);}catch(e){window.open(u,'_blank');}
 }
 function fbCopyRules(){
-  try{require('electron').clipboard.writeText(FB_RULES_TEXT);showToast('✅ Rules कॉपी झाले — आता Firebase मध्ये Ctrl+V करा');}
-  catch(e){try{navigator.clipboard.writeText(FB_RULES_TEXT);showToast('✅ Rules कॉपी झाले — आता Firebase मध्ये Ctrl+V करा');}catch(e2){showToast('⚠️ कॉपी झाले नाही');}}
+  var okMsg=function(){showToast('✅ Rules कॉपी झाले — आता Firebase मध्ये Ctrl+V करा');},bad=function(){showToast('⚠️ कॉपी झाले नाही');};
+  try{require('electron').clipboard.writeText(FB_RULES_TEXT);okMsg();}
+  catch(e){try{navigator.clipboard.writeText(FB_RULES_TEXT).then(okMsg,bad);}catch(e2){bad();}}
 }
 function fbTest(){
   var p=gv('s-fb-project'),k=gv('s-fb-key'),out=document.getElementById('fb-test-res');
@@ -2187,6 +2088,135 @@ function fbTest(){
      else out.innerHTML='<span style="color:#c62828">❌ जोडणी झाली नाही (कोड '+r.status+').</span>';
    }).catch(function(){out.innerHTML='<span style="color:#c62828">❌ इंटरनेट चालू आहे का ते पाहा.</span>';});
 }
+// ── 📱 मोबाईल ॲप लायसन्स (Masters) ──
+function mbMsg(h){var e=document.getElementById('mb-msg');if(e)e.innerHTML=h;}
+function mbEsc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function mbReasonText(r,max){
+  return {no_license:'⚠️ या कॉम्प्युटरवर वैध लायसन्स आढळले नाही.',
+          no_project:'⚠️ आधी खाली Firebase Project ID भरून Masters जतन करा, मग Mobile Code तयार करा.',
+          bad_project:'⚠️ Project ID बरोबर नाही (फक्त लहान इंग्रजी अक्षरे, अंक आणि -; ४ ते ४० अक्षरे).',
+          no_device:'⚠️ फोनचा Device ID टाका (फोनवर ॲप उघडल्यावर "सक्रिय करा" स्क्रीनवर दिसतो).',
+          bad_device:'⚠️ Device ID बरोबर नाही — १० अक्षरे असतात (उदा. ABCDE-FGHJK). फोनवरून पुन्हा कॉपी करा.',
+          limit:'⛔ या लायसन्सवर जास्तीत जास्त '+(max||'३')+' फोन चालतात — मर्यादा पूर्ण झाली. जुना/नको असलेला फोन खालच्या यादीतून "काढा" आणि पुन्हा प्रयत्न करा.'}[r]||'⚠️ कोड तयार झाला नाही';
+}
+function mbIpc(){try{return require('electron').ipcRenderer;}catch(e){return null;}}
+function mbRender(r){
+  if(!r)return;
+  if(r.key)sv('mb-key',r.key);
+  var mx=r.max||3,list=r.devices||[];
+  ['mb-max','mb-max2'].forEach(function(i){var e=document.getElementById(i);if(e)e.textContent=mx;});
+  var c=document.getElementById('mb-cnt');if(c)c.textContent=list.length;
+  var l=document.getElementById('mb-list');if(!l)return;
+  l.innerHTML=list.length?list.map(function(d){
+    var id=d.id.slice(0,5)+'-'+d.id.slice(5),dt=(d.at||'').slice(0,10);
+    return '<div style="display:flex;gap:8px;align-items:center;border-bottom:1px solid #eee;padding:2px 0"><span style="flex:1"><b>'+mbEsc(d.name||'(नाव नाही)')+'</b> · <code>'+id+'</code> · '+mbEsc(dt)+'</span><button class="btn btn-sm btn-out" type="button" onclick="mbRemove(\''+d.id+'\')">✖ काढा</button></div>';
+  }).join(''):'<span style="color:#777">अजून एकही फोन नोंदवलेला नाही.</span>';
+}
+var _mbReady=false;
+function mbInit(){
+  if(window.__GP_WEB){
+    var d=document.getElementById('mb-desktop'),w=document.getElementById('mb-web');if(!d||!w)return;
+    d.style.display='none';w.style.display='block';
+    var a=window.GPWeb&&window.GPWeb.activation&&window.GPWeb.activation();
+    document.getElementById('mb-web-st').innerHTML=a?'✅ <b>मोबाईल ॲप सक्रिय आहे</b><br>Software Key: <b>'+mbEsc(a.key)+'</b><br>या फोनचा Device ID: <b>'+mbEsc(window.GPWeb.deviceIdPretty())+'</b><br>Firebase Project: <b>'+mbEsc(a.project)+'</b><br><span style="font-size:12px;color:#666">Cloud Sync फक्त याच Project शी जोडता येतो.</span>':'—';
+    return;
+  }
+  var ipc=mbIpc();if(!ipc)return;
+  if(!_mbReady){_mbReady=true;
+    ipc.on('mobile-devices',function(e,r){mbRender(r);});
+    ipc.on('mobile-code',function(e,r){
+      mbRender(r);
+      if(r&&r.ok){sv('mb-code',r.code);mbMsg('<span style="color:#2e7d32">✅ Mobile Code तयार — Software Key आणि हा कोड त्या फोनवर टाका.</span>');}
+      else mbMsg('<span style="color:#c62828">'+mbReasonText(r&&r.reason,r&&r.max)+'</span>');
+    });
+  }
+  ipc.send('get-mobile-devices');
+}
+function mbMake(){
+  var ipc=mbIpc();if(!ipc){mbMsg('<span style="color:#c62828">हे फक्त कॉम्प्युटरवरील software मध्ये चालते.</span>');return;}
+  sv('mb-code','');mbMsg('⏳…');
+  ipc.send('get-mobile-code',{projectId:gv('s-fb-project'),deviceId:gv('mb-dev'),name:gv('mb-name')});
+}
+function mbRemove(id){
+  var ipc=mbIpc();if(!ipc)return;
+  if(!confirm('या फोनची नोंद काढायची का? (त्यामुळे नव्या फोनसाठी जागा मोकळी होईल)'))return;
+  ipc.send('remove-mobile-device',id);
+}
+function mbCopy(id){
+  var v=gv(id);if(!v){showToast('⚠️ आधी कोड तयार करा');return;}
+  var ok=function(){showToast('✅ कॉपी झाले');},bad=function(){showToast('वरचा मजकूर हाताने कॉपी करा');};
+  try{require('electron').clipboard.writeText(v);ok();}catch(e){try{navigator.clipboard.writeText(v).then(ok,bad);}catch(e2){bad();}}
+}
+function mbDeactivate(){
+  if(!confirm('या फोनवरची सक्रियता काढायची का? पुन्हा ॲप उघडताना Software Key + Mobile Code लागेल. (डेटा तसाच राहील)'))return;
+  try{window.GPWeb.deactivate();}catch(e){}
+  location.href='index.html';
+}
+setTimeout(function(){try{mbInit();}catch(e){}},900);
+// ── ☁️ Sync (Masters मधून) — Project ID/API key वरचेच (एकच सेटिंग) ──
+function syBusy(on){var b=document.getElementById('sy-go');if(b)b.disabled=!!on;}
+function syConnect(){
+  var p=gv('s-fb-project'),k=gv('s-fb-key'),em=gv('sy-email'),pw=(document.getElementById('sy-pass')||{}).value||'';
+  var msg=document.getElementById('sy-msg');
+  if(!p||!k){msg.innerHTML='<span style="color:#c62828">⚠️ आधी वर Project ID आणि API key भरा.</span>';return;}
+  if(!em||!pw){msg.innerHTML='<span style="color:#c62828">⚠️ Sync Email आणि Password भरा.</span>';return;}
+  var first=(document.querySelector('input[name=sy-first]:checked')||{}).value||'down';
+  if(first==='down'&&!confirm('हा "नवीन फोन / दुसरे कॉम्प्युटर" म्हणून जोडायचा आहे — या डिव्हाइसवरील नोंदी आणि क्लाउडवरील नोंदी एकाच ठिकाणी जुळल्या तर क्लाउडवरच्या नोंदी ठेवल्या जातील. पुढे जायचे का?'))return;
+  msg.innerHTML='⏳ जोडत आहे…';syBusy(true);
+  window.GPSync.signIn(p,k,em,pw,first).then(function(){
+    syBusy(false);document.getElementById('sy-pass').value='';msg.innerHTML='';
+    // Project ID/API key Masters मध्येही जतन (QR साठी) — storage मधली ताजी (Sync ने आणलेली) आवृत्ती वाचून, फक्त हे दोन रकाने बदलतो
+    try{var cur=JSON.parse(localStorage.getItem('GP_MASTERS')||'{}');
+      if(cur['s-fb-project']!==p||cur['s-fb-key']!==k){cur['s-fb-project']=p;cur['s-fb-key']=k;localStorage.setItem('GP_MASTERS',JSON.stringify(cur));GP=cur;}}catch(e){}
+    showToast('✅ Cloud Sync सुरू झाला');syPaint();
+  }).catch(function(e){
+    syBusy(false);
+    var m=(window.GPSync&&window.GPSync.errText)?window.GPSync.errText(e):(e&&e.message)||'त्रुटी';
+    msg.innerHTML='<span style="color:#c62828">❌ '+m+'</span>';
+  });
+}
+function syPaint(){
+  var off=document.getElementById('sy-off'),on=document.getElementById('sy-on');
+  if(!off||!on||!window.GPSync)return;
+  var st=window.GPSync.status();
+  if(window.GPSync.isOn()){
+    off.style.display='none';on.style.display='block';
+    var s=st.s==='ok'?'<span style="color:#2e7d32">✅ अद्ययावत</span>':st.s==='wait'?'<span style="color:#e6a100">⏳ चालू…</span>':'<span style="color:#c62828">⚠️ '+(st.m||'त्रुटी')+'</span>';
+    var ago='—';if(st.last){var sec=Math.round((Date.now()-st.last)/1000);ago=sec<60?'आत्ताच':Math.round(sec/60)+' मिनिटांपूर्वी';}
+    document.getElementById('sy-status').innerHTML='स्थिती: '+s+'<br>खाते: <b>'+((st.cfg&&st.cfg.email)||'')+'</b><br>शेवटचा Sync: '+ago+'<br>पाठवायचे बाकी: <b>'+st.pending+'</b>'+(st.conflicts?'<br>⚠️ conflict नोंदी: <b>'+st.conflicts+'</b> (हरलेल्या प्रती जपल्या आहेत)':'');
+  }else{off.style.display='block';on.style.display='none';}
+}
+function syNow(){window.GPSync.syncNow().then(syPaint,syPaint);}
+function syOut(){if(confirm('Sync बंद करायचा का? (या डिव्हाइसवरील डेटा तसाच राहील)')){window.GPSync.signOut();syPaint();}}
+function syCode(){
+  var o={p:gv('s-fb-project'),k:gv('s-fb-key'),e:gv('sy-email')||((window.GPSync&&window.GPSync.status().cfg||{}).email)||''};
+  return 'GPSYNC1:'+btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function syCopyCode(){
+  if(!gv('s-fb-project')||!gv('s-fb-key')){showToast('⚠️ आधी Project ID व API key भरा');return;}
+  var c=syCode();document.getElementById('sy-code').value=c;
+  var okMsg=function(){showToast('✅ Setup Code कॉपी झाला — फोनवर पाठवा');},manual=function(){showToast('वरील रकान्यातला कोड हाताने कॉपी करा');};
+  try{require('electron').clipboard.writeText(c);okMsg();}
+  catch(e){try{navigator.clipboard.writeText(c).then(okMsg,manual);}catch(e2){manual();}}
+}
+function syApplyCode(){
+  var c=gv('sy-code');
+  function done(txt){
+    try{
+      var m=/GPSYNC1:([A-Za-z0-9_-]+)/.exec(txt||'');if(!m)throw 0;
+      var b=m[1].replace(/-/g,'+').replace(/_/g,'/');while(b.length%4)b+='=';
+      var o=JSON.parse(decodeURIComponent(escape(atob(b))));
+      sv('s-fb-project',o.p||'');sv('s-fb-key',o.k||'');if(o.e)sv('sy-email',o.e);
+      document.getElementById('sy-code').value='';
+      var r=document.querySelector('input[name=sy-first][value=down]');if(r)r.checked=true;
+      showToast('✅ Project ID, API key, Email भरले — आता Password भरून "जोडा" दाबा');
+    }catch(e){showToast('⚠️ Setup Code बरोबर नाही — पूर्ण कोड पेस्ट करा');}
+  }
+  if(c)return done(c);
+  try{navigator.clipboard.readText().then(done,function(){showToast('⚠️ आधी वरच्या रकान्यात कोड पेस्ट करा');});}catch(e){showToast('⚠️ आधी वरच्या रकान्यात कोड पेस्ट करा');}
+}
+window.addEventListener('gpsync-status',function(){try{syPaint();}catch(e){}});
+setTimeout(function(){try{syPaint();}catch(e){}},800);
 function hcNewId(){
   var a='abcdefghijkmnpqrstuvwxyz23456789',o='',b=new Uint8Array(14);
   (window.crypto||window.msCrypto).getRandomValues(b);
@@ -2489,6 +2519,9 @@ function logCertPrint(type,name,id){
 }
 
 // ── FULL DATA BACKUP / RESTORE ──
+// फक्त त्या डिव्हाइसचे स्वतःचे (login, मोबाईल सक्रियता/Device ID, Sync चे खाते/token) — बॅकअपमध्ये जात नाहीत व restore ने बदलत नाहीत,
+// नाहीतर बॅकअप फाईल दुसऱ्या फोनवर टाकून सक्रियता/Sync-login कॉपी करता आली असती.
+var GP_DEVICE_ONLY={GP_USER:1,GP_MOBILE_ACT:1,GP_MOBILE_DEV:1,GP_SYNC_CFG:1,GP_SYNC_META:1};
 function exportAllData(){
   gpBusyShow('⬇️ बॅकअप तयार होत आहे…');
   var out={};
@@ -2496,7 +2529,7 @@ function exportAllData(){
     var k=localStorage.key(i);
     // GP_USER (लॉगिन ईमेल + पासवर्ड) मुद्दामून वगळतो — बॅकअप फाईल कुणाला शेअर/मेल केली तर
     // त्यातून लॉगिन उघड होऊ नये, आणि जुना बॅकअप परत लोड केल्यावर सध्याचा पासवर्ड न कळत बदलू नये.
-    if(k && k.indexOf('GP_')===0 && k!=='GP_USER') out[k]=localStorage.getItem(k);
+    if(k && k.indexOf('GP_')===0 && !GP_DEVICE_ONLY[k]) out[k]=localStorage.getItem(k);
   }
   var blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
   var a=document.createElement('a');
@@ -2518,7 +2551,7 @@ function importAllData(file){
     }catch(err){ gpBusyFail('बॅकअप फाईल वाचता आली नाही: '+err.message); return; }
     // ही निवडलेली फाईल खरंच GP बॅकअप आहे का, हे आधीच तपासतो — चुकीची/असंबंधित JSON फाईल निवडली गेली
     // तर काहीही न बदलता उगाच "✅ यशस्वी" असा फसवा संदेश दाखवला जायचा; आता तसं होणार नाही.
-    var gpKeys=Object.keys(data).filter(function(k){ return k.indexOf('GP_')===0 && k!=='GP_USER'; });
+    var gpKeys=Object.keys(data).filter(function(k){ return k.indexOf('GP_')===0 && !GP_DEVICE_ONLY[k]; });
     if(gpKeys.length===0){ gpBusyFail('ही फाईल वैध GP बॅकअप वाटत नाही (यात कोणताही GP डेटा सापडला नाही). कृपया योग्य बॅकअप फाईल निवडा.'); return; }
     document.getElementById('gp-busy-ovl').style.display='none'; // पुढचा confirm प्रश्न स्पष्ट दिसावा म्हणून overlay तात्पुरता लपवतो
     gpConfirm('सध्याचा सर्व डेटा या बॅकअपने बदलला जाईल. पुढे जायचे का?',function(){

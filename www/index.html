@@ -16,15 +16,46 @@
 <script src="lib/xlsx.core.min.js"></script>
 <script src="qrcode.bundle.js"></script>
 <script src="html2canvas.bundle.js"></script>
+<script src="nacl.bundle.js"></script>
 <script src="platform-web.js"></script>
 <script src="cloud-sync.js"></script>
 <script>
 (function(){
   /* APK: service worker नको */
-  GPWeb.boot().then(function(){ return fetch('app.html'); })
-    .then(function(r){ if(!r.ok) throw new Error('app.html '+r.status); return r.text(); })
-    .then(function(html){ document.open(); document.write(html); document.close(); })
-    .catch(function(e){ document.getElementById('gps').innerHTML='⚠️ सुरू करता आले नाही: '+e.message+'<br><button onclick="location.reload()" style="padding:10px 18px;border-radius:8px;border:0">पुन्हा प्रयत्न</button>'; });
+  function launch(){
+    fetch('app.html')
+      .then(function(r){ if(!r.ok) throw new Error('app.html '+r.status); return r.text(); })
+      .then(function(html){ document.open(); document.write(html); document.close(); })
+      .catch(function(e){ document.getElementById('gps').innerHTML='⚠️ सुरू करता आले नाही: '+e.message+'<br><button onclick="location.reload()" style="padding:10px 18px;border-radius:8px;border:0">पुन्हा प्रयत्न</button>'; });
+  }
+  var MSG={
+    format:'Mobile Code चा फॉरमॅट बरोबर नाही — पूर्ण कोड पेस्ट करा (तो GPM2. ने सुरू होतो; जुना GPM1 कोड आता चालत नाही — कॉम्प्युटरवर नवा कोड तयार करा).',
+    other_device:'हा Mobile Code दुसऱ्या फोनसाठी बनवलेला आहे. या फोनचा Device ID कॉम्प्युटरवरील Masters मध्ये टाकून या फोनसाठी नवा कोड तयार करा.',
+    key_format:'Software Key चा फॉरमॅट बरोबर नाही (XXXX-XXXXXX-XXXX-XXXX).',
+    bad:'Software Key किंवा Mobile Code बरोबर नाही. कॉम्प्युटरवरील software मध्ये Masters → "मोबाईल ॲप लायसन्स" मधून दोन्ही पुन्हा कॉपी करा.',
+    lib:'तपासणी लोड झाली नाही — ॲप बंद करून पुन्हा उघडा.'
+  };
+  function showLock(){
+    var g=document.getElementById('gps');
+    var inp='width:100%;box-sizing:border-box;padding:11px;border:1.5px solid #c9d1e0;border-radius:9px;font-size:16px;margin:3px 0 10px;font-family:inherit;color:#111';
+    g.style.cssText='height:auto;min-height:100%;padding:16px;box-sizing:border-box;justify-content:center';
+    g.innerHTML='<div style="max-width:430px;width:100%;background:#fff;color:#222;border-radius:16px;padding:20px;text-align:left;box-shadow:0 10px 40px rgba(0,0,0,.35)">'+
+      '<div style="text-align:center"><img src="icons/icon-192.png" alt="" style="width:64px;height:64px;border-radius:16px"><h2 style="margin:8px 0 2px;color:#0D2B5E;font-size:19px">🔐 मोबाईल ॲप सक्रिय करा</h2></div>'+
+      '<p style="font-size:13px;line-height:1.7;color:#444;margin:8px 0 8px">हे ॲप फक्त <b>ग्रामपंचायत सॉफ्टवेअर खरेदी केलेल्यांसाठी</b> आहे.<br><b>१)</b> खालचा <b>या फोनचा Device ID</b> कॉम्प्युटरवरील software मध्ये <b>Masters → 📱 मोबाईल ॲप लायसन्स</b> मध्ये टाका.<br><b>२)</b> तिथे मिळणारा <b>Software Key</b> आणि <b>Mobile Code</b> इथे टाका.</p>'+
+      '<div style="background:#eef4ff;border:1.5px dashed #6d8fd1;border-radius:10px;padding:10px;margin-bottom:12px;text-align:center"><div style="font-size:11.5px;color:#456">या फोनचा Device ID</div><div id="gp-dev" style="font-size:22px;font-weight:800;letter-spacing:2px;color:#0D2B5E;user-select:all">'+GPWeb.deviceIdPretty()+'</div><button id="gp-devcp" type="button" style="margin-top:6px;padding:6px 14px;border:1px solid #6d8fd1;background:#fff;border-radius:8px;font-size:13px">📋 कॉपी करा</button></div>'+
+      '<label style="font-size:12.5px;font-weight:700">Software Key</label><input id="gp-lk" autocomplete="off" autocapitalize="characters" placeholder="XXXX-XXXXXX-XXXX-XXXX" style="'+inp+'">'+
+      '<label style="font-size:12.5px;font-weight:700">Mobile Code</label><textarea id="gp-lc" rows="3" autocomplete="off" placeholder="GPM2...." style="'+inp+';font-size:13px"></textarea>'+
+      '<div id="gp-lm" style="color:#c62828;font-size:13px;min-height:20px;margin-bottom:8px"></div>'+
+      '<button id="gp-lgo" style="width:100%;padding:13px;border:0;border-radius:10px;background:#1b5e20;color:#fff;font-size:16px;font-weight:700">✅ सक्रिय करा</button>'+
+      '<div style="font-size:11.5px;color:#777;margin-top:10px;line-height:1.6">Mobile Code फक्त <b>याच फोनसाठी</b> आणि तुमच्या software च्या Firebase Project साठी बनतो; एका license वर मर्यादित फोनच चालतात. फोनवर दिसणारा डेटा त्याच software चा (Cloud Sync मधून) असतो — दुसऱ्याचा कोड चालणार नाही.</div></div>';
+    document.getElementById('gp-devcp').onclick=function(){ try{ navigator.clipboard.writeText(GPWeb.deviceIdPretty()); this.textContent='✅ कॉपी झाले'; }catch(e){} };
+    document.getElementById('gp-lgo').onclick=function(){
+      var r=GPWeb.activate(document.getElementById('gp-lk').value, document.getElementById('gp-lc').value);
+      if(!r.ok){ document.getElementById('gp-lm').textContent='❌ '+(MSG[r.reason]||MSG.bad); return; }
+      g.style.cssText=''; g.innerHTML='<img src="icons/icon-192.png" alt=""><div>⏳ लोड होत आहे…</div>'; launch();
+    };
+  }
+  GPWeb.boot().then(function(){ if(GPWeb.isActivated()) launch(); else showLock(); });
 })();
 </script>
 </body>

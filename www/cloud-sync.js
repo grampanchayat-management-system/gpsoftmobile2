@@ -11,10 +11,12 @@
   'use strict';
   if (window.GPSync) return;
 
-  var SKIP = { GP_USER: 1, GP_CLOUD_Q: 1, GP_LAST_BACKUP: 1, GP_CERT_CACHE: 1, GP_WEBSITE: 1,
-               GP_SYNC_CFG: 1, GP_SYNC_META: 1, GP_printlog: 1, GP_printlog_seeded: 1 };
+  var SKIP = { GP_USER: 1, GP_CLOUD_Q: 1, GP_LAST_BACKUP: 1, GP_CERT_CACHE: 1,
+               GP_SYNC_CFG: 1, GP_SYNC_META: 1, GP_printlog_seeded: 1, GP_MOBILE_ACT: 1, GP_MOBILE_DEV: 1 };
   var RECMAP = { GP_n8: 1, GP_n9: 1, GP_n10: 1, GP_birth: 1, GP_death: 1, GP_vivah: 1,
-                 GP_bpl: 1, GP_nodue: 1, GP_niradhar: 1 };
+                 GP_bpl: 1, GP_nodue: 1, GP_niradhar: 1,
+                 GP_printlog: 1,
+                 GP_WEBSITE: 1 };       // वेबसाईट-मजकूर + GitHub user/repo/token: प्रत्येक विभाग (github, home, gallery...) वेगळी नोंद म्हणून      // प्रिंट-नोंद ("दिलेले दाखले" संख्या) — प्रत्येक नोंदीचा स्वतःचा अद्वितीय ID, म्हणून दोन्हीकडच्या नोंदी बेमालूम एकत्र होतात
   var WHOLE = '~';
   var CHUNK = 700000;
   var COMMIT_MAX = 150;
@@ -41,7 +43,7 @@
     if (loaded) return; loaded = true;
     cfg = loadJ('GP_SYNC_CFG') || {};
     meta = loadJ('GP_SYNC_META') || {};
-    meta.t = meta.t || {}; meta.out = meta.out || {}; meta.cur = meta.cur || ''; meta.conf = meta.conf || []; meta.rv = meta.rv || {};
+    meta.t = meta.t || {}; meta.out = meta.out || {}; meta.cur = meta.cur || ''; meta.conf = meta.conf || []; meta.rv = meta.rv || {}; meta.v = meta.v || 1;
   }
   var applying = false, busy = false, status = { s: 'off', m: '' }, lastOk = 0;
   var saveTimer = null, pushTimer = null, ui = {};
@@ -79,7 +81,7 @@
     return b;
   }
   function toast(m) { try { if (window.showToast) window.showToast(m, 3500); } catch (e) {} }
-  function setStatus(s, m) { status = { s: s, m: m || '' }; paint(); }
+  function setStatus(s, m) { status = { s: s, m: m || '' }; paint(); emitStatus(); }
   function errMsg(e) {
     var c = (e && (e.code || e.message)) || 'ERROR';
     c = String(c).split(' : ')[0];
@@ -109,6 +111,11 @@
   }
   function signIn(p, k, email, pw, first, customUrls) {
     ensureLoaded();
+    // मोबाईल ॲप: Mobile Code ज्या Firebase Project साठी बनला त्याच Project शीच Sync जोडता येतो
+    if (window.GPWeb && window.GPWeb.projectAllowed && !window.GPWeb.projectAllowed(p)) {
+      var pe = Object.assign(new Error('हा Mobile Code दुसऱ्या Firebase Project साठी आहे — तुमच्या software मधील Project ID च वापरा'), { code: 'PROJECT_MISMATCH' });
+      setStatus('err', pe.message); return Promise.reject(pe);
+    }
     var c = { p: String(p || '').trim(), k: String(k || '').trim(), urls: customUrls || cfg.urls };
     var U = { idt: (c.urls && c.urls.idt) || DEF_URLS.idt };
     setStatus('wait', 'Sign in होत आहे…');
@@ -177,11 +184,11 @@
         Object.keys(m).forEach(function (id) { if (meta.t[k + '|' + id] === undefined) mark(k, id, now, !localWins); });
       } else if (meta.t[k + '|' + WHOLE] === undefined) mark(k, WHOLE, now, !localWins);
     });
-    meta.scanned = true;
+    meta.scanned = true; meta.v = 3;
   }
 
   /* ---------- push ---------- */
-  function schedulePush() { clearTimeout(pushTimer); pushTimer = setTimeout(function () { cycle(); }, 1500); }
+  function schedulePush() { clearTimeout(pushTimer); pushTimer = setTimeout(function () { cycle().catch(function () {}); }, 1500); }   // नेट नसेल तर शांतपणे थांबतो
   function docWrites(e, dk) {
     var val = readLocal(e.k, e.i), t = meta.t[dk] || Date.now(), name = parent() + '/rec/' + b64u(dk);
     var del = val == null, v = del ? '' : val, parts = [];
@@ -197,8 +204,14 @@
   function push(attempt) {
     attempt = attempt || 0;
     var dks = Object.keys(meta.out); if (!dks.length) return Promise.resolve(0);
-    var batch = dks.slice(0, COMMIT_MAX), writes = [], sent = {}, heads = [];
-    batch.forEach(function (dk) { var e = meta.out[dk]; sent[dk] = e.r; heads.push({ dk: dk, idx: writes.length }); writes = writes.concat(docWrites(e, dk)); });
+    // एका commit मध्ये जास्तीत जास्त ~३०० writes आणि ~५MB (Firestore मर्यादा: ५०० writes, १०MB) — मोठे फोटो/PDF असलेल्या नोंदींसाठी
+    var batch = [], writes = [], sent = {}, heads = [], bytes = 0, i;
+    for (i = 0; i < dks.length && batch.length < COMMIT_MAX; i++) {
+      var dk = dks[i], e = meta.out[dk], ws = docWrites(e, dk), sz = 0;
+      ws.forEach(function (w) { sz += JSON.stringify(w).length; });
+      if (batch.length && (writes.length + ws.length > 300 || bytes + sz > 5000000)) break;
+      batch.push(dk); sent[dk] = e.r; heads.push({ dk: dk, idx: writes.length }); writes = writes.concat(ws); bytes += sz;
+    }
     return fsCall(root() + ':commit', { writes: writes }).then(function (resp) {
       var wr = (resp && resp.writeResults) || [];
       heads.forEach(function (h) { if (wr[h.idx] && wr[h.idx].updateTime) meta.rv[h.dk] = wr[h.idx].updateTime; });
@@ -324,12 +337,27 @@
     }
     return recs.length;
   }
+  // आता स्क्रीनवर दिसत असलेली यादी असेल तरच ती पुन्हा भरतो (फॉर्म/टाईप करत असलेले काहीही बदलत नाही)
+  function refreshVisibleLists() {
+    var map = [['pg-n8-list-pg', 'loadN8List'], ['n9-list', 'loadN9List'], ['n10-list', 'loadN10List'], ['birth-list', 'loadBirthList'],
+               ['death-list', 'loadDeathList'], ['vivah-list', 'loadVivahList'], ['bpl-list', 'loadBPLList'], ['nd-list', 'loadNoDueList'],
+               ['nr-list', 'loadNiradharList'], ['n12-tbl', 'loadN12List']];
+    map.forEach(function (m) {
+      try { var el = document.getElementById(m[0]); if (el && el.offsetParent !== null && window[m[1]]) window[m[1]](); } catch (e) {}
+    });
+  }
   function afterApply(keys, count) {
     toast('☁️ क्लाउडवरून ' + count + ' नवे बदल आले');
     try { window.dispatchEvent(new CustomEvent('gpsync-applied', { detail: { keys: keys, count: count } })); } catch (e) {}
     try {
       if (keys.indexOf('GP_COUNTERS') >= 0 && window.refreshIds && !window.n8EditMode && !window.n10EditMode) window.refreshIds();
+      if (keys.indexOf('GP_WEBSITE') >= 0 && window.loadWebsiteForm) {                     // Website tab मधील GitHub user/repo/token व मजकूर
+        var ae = document.activeElement; if (!(ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName))) window.loadWebsiteForm();
+      }
+      if (keys.indexOf('GP_MASTERS') >= 0 && window.loadMasters) window.loadMasters();     // नवीन फोनवर ग्रामपंचायतीचे नाव, दर, लोगो लगेच दिसावेत
       if (window.loadAllStats) window.loadAllStats();
+      refreshVisibleLists();                                             // उघडी असलेली यादी (नोंदवही) नवीन नोंदींसह आपोआप ताजी
+      if (keys.indexOf('GP_printlog') >= 0 && window.renderDashMonthCerts) window.renderDashMonthCerts();   // "या वर्षात दिलेले दाखले" संख्या
     } catch (e) {}
   }
 
@@ -339,6 +367,7 @@
     if (busy) return Promise.resolve();
     if (navigator.onLine === false) { setStatus('off', 'ऑफलाईन — नेट आल्यावर आपोआप होईल'); return Promise.resolve(); }
     busy = true; setStatus('wait', 'Sync चालू…');
+    if ((meta.v || 1) < 3) { scanLocal(true); saveMeta(true); }   // आधी Sync न होणारी की (उदा. प्रिंट-नोंद) असेल तर तिच्या जुन्या नोंदी एकदा पाठवतो
     return pull().then(function () { return push(); }).then(function () {
       lastOk = Date.now(); busy = false; setStatus('ok', '');
     }).catch(function (e) {
@@ -374,6 +403,7 @@
     ui.btn.title = isOn() ? ('Cloud Sync — ' + (status.s === 'ok' ? 'अद्ययावत' : (status.m || status.s))) : 'Cloud Sync चालू करा';
     if (ui.panel && ui.panel.style.display !== 'none') renderPanel();
   }
+  function emitStatus() { try { window.dispatchEvent(new Event('gpsync-status')); } catch (e) {} }
   function fmtAgo() { if (!lastOk) return '—'; var s = Math.round((Date.now() - lastOk) / 1000); return s < 60 ? 'आत्ताच' : Math.round(s / 60) + ' मिनिटांपूर्वी'; }
   function openPanel() { if (!ui.panel) return; ui.panel.style.display = 'flex'; renderPanel(); }
   function closePanel() { if (ui.panel) ui.panel.style.display = 'none'; }
@@ -388,32 +418,15 @@
            '<button id="gps-out" class="btn btn-out">🚪 Sync बंद करा</button></div>' +
            '<div style="font-size:11.5px;color:#666;margin-top:10px">नेट असताना दर १० सेकंदांनी आपोआप Sync होतो. नेट नसताना केलेल्या नोंदी नेट आल्यावर पाठवल्या जातात.</div>';
     } else {
-      var pj0 = (document.getElementById('s-fb-project') || {}).value || cfg.p || '', pk0 = (document.getElementById('s-fb-key') || {}).value || cfg.k || '';
-      var inp = 'width:100%;box-sizing:border-box;padding:9px;border:1.5px solid #ccd;border-radius:8px;margin:2px 0 8px;font-size:14px';
-      h += '<div style="font-size:12px;color:#555;margin-bottom:8px">आधी Firebase सेटअप करा (FIREBASE-SYNC-SETUP.md). मग इथे तेच Project ID, Web API key आणि Firebase मध्ये बनवलेला Email/Password भरा. कॉम्प्युटर आणि फोन — दोन्हीकडे एकच खाते वापरा.</div>' +
-           '<label style="font-size:12px;font-weight:700">Project ID</label><input id="gps-p" style="' + inp + '" value="' + pj0 + '">' +
-           '<label style="font-size:12px;font-weight:700">Web API key</label><input id="gps-k" style="' + inp + '" value="' + pk0 + '">' +
-           '<label style="font-size:12px;font-weight:700">Sync Email</label><input id="gps-e" type="email" style="' + inp + '" value="' + (cfg.email || '') + '">' +
-           '<label style="font-size:12px;font-weight:700">Password</label><input id="gps-w" type="password" style="' + inp + '">' +
-           '<div style="font-size:13px;margin:4px 0 10px"><label><input type="radio" name="gps-f" value="down" checked> हे <b>नवीन फोन/कॉम्प्युटर</b> आहे — क्लाउडवरचा डेटा घ्या</label><br>' +
-           '<label><input type="radio" name="gps-f" value="up"> हे <b>पहिले कॉम्प्युटर</b> आहे — इथला डेटा क्लाउडवर पाठवा</label></div>' +
-           '<div id="gps-msg" style="color:#c62828;font-size:13px;min-height:18px"></div>' +
-           '<button id="gps-go" class="btn btn-gn" style="width:100%;justify-content:center">☁️ जोडा व Sync सुरू करा</button>' +
-           '<div style="font-size:11.5px;color:#a33;margin-top:8px">⚠️ पहिल्यांदा जोडण्याआधी Backup घ्या.</div>';
+      h += '<div style="font-size:13.5px;line-height:1.8;color:#333">Cloud Sync अजून जोडलेला नाही.<br>सेटिंग <b>फक्त एकाच ठिकाणी</b> आहे: <b>⚙️ Masters → Google Firebase</b>. तिथे पायरी-पायरीने मार्गदर्शन, Project ID/API key, Email/Password आणि "Setup Code" आहे.</div>' +
+           '<button id="gps-masters" class="btn btn-gn" style="width:100%;justify-content:center;margin-top:14px">⚙️ Masters मध्ये Sync सेटअप करा</button>';
     }
     box.innerHTML = h;
     var x = box.querySelector('#gps-x'); if (x) x.onclick = closePanel;
     var now = box.querySelector('#gps-now'); if (now) now.onclick = function () { cycle().catch(function () {}); };
     var out = box.querySelector('#gps-out'); if (out) out.onclick = function () { if (confirm('Sync बंद करायचा का? (या डिव्हाइसवरील डेटा तसाच राहील)')) signOut(); };
-    var go = box.querySelector('#gps-go');
-    if (go) go.onclick = function () {
-      var g = function (id) { return (box.querySelector(id) || {}).value || ''; };
-      var first = (box.querySelector('input[name=gps-f]:checked') || {}).value || 'down';
-      if (!g('#gps-p') || !g('#gps-k') || !g('#gps-e') || !g('#gps-w')) { box.querySelector('#gps-msg').textContent = 'सर्व चार माहिती भरा'; return; }
-      go.disabled = true; box.querySelector('#gps-msg').textContent = '⏳ जोडत आहे…';
-      signIn(g('#gps-p'), g('#gps-k'), g('#gps-e'), g('#gps-w'), first).then(function () { renderPanel(); toast('✅ Cloud Sync सुरू झाला'); })
-        .catch(function (e) { go.disabled = false; var m = box.querySelector('#gps-msg'); if (m) m.textContent = '❌ ' + errMsg(e); });
-    };
+    var gm = box.querySelector('#gps-masters');
+    if (gm) gm.onclick = function () { closePanel(); try { window.showPg('masters'); window.scrollTo(0, 0); } catch (e) {} };
   }
   function buildUi() {
     if (ui.btn || !document.body) return;
@@ -435,7 +448,7 @@
 
   window.GPSync = { onSet: onSet, onRemove: onRemove, onClear: onClear, signIn: signIn, signOut: signOut,
                     syncNow: function () { return cycle(); }, openPanel: openPanel, init: init,
-                    isOn: isOn, status: function () { return { s: status.s, m: status.m, pending: Object.keys(meta.out).length, conflicts: meta.conf.length, cfg: cfg }; },
+                    isOn: isOn, errText: errMsg, status: function () { return { s: status.s, m: status.m, last: lastOk, pending: Object.keys(meta.out).length, conflicts: meta.conf.length, cfg: cfg }; },
                     _meta: function () { return meta; } };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else setTimeout(init, 0);
   window.addEventListener('load', init);
