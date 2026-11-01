@@ -109,24 +109,55 @@
     }
   };
 
-  /* ----- प्रिंट: नवीन टॅबमध्ये उघडतो व आपोआप Print डायलॉग (Android: "Save as PDF") ----- */
+  /* ----- प्रिंट -----
+     संगणकावर main.js (printToPDF) पान-आकार/मार्जिन ठरवतो, दाखला एका पानात बसवतो (zoom कमी करून) आणि नोंदवहीची पाने तळापर्यंत भरतो.
+     फोनवर तेच काम इथे: छपाईच्या पानात एक स्क्रिप्ट जोडतो जी (१) @page चे आकार/मार्जिन संगणकाइतकेच ठेवते,
+     (२) दाखला एका पानात बसेपर्यंत .doc/.cert-box चा zoom कमी करते, (३) नोंदवहीत रिकाम्या ओळी भरून प्रत्येक पान तळापर्यंत पूर्ण करते
+     (src/reg-fill.js मधलेच gpRegFillPage वापरतो), (४) "पृष्ठ क्र. n / m" वरच्या कोपऱ्यात टाकते. */
+  var REGFILL_SRC = "function gpRegFillPage(P) {\n  var wrap = document.getElementById('gp-reg-wrap');\n  if (!wrap) return { ok: false, why: 'no-wrap' };\n  var table = wrap.querySelector('table.reg-tbl');\n  if (!table) return { ok: false, why: 'no-table' };\n  var i;\n  // जुने भरणे (असल्यास) काढतो\n  var old = table.querySelectorAll('tbody.gp-fill');\n  for (i = 0; i < old.length; i++) old[i].parentNode.removeChild(old[i]);\n\n  // मुख्य टेबलनंतरचा सर्व भाग (बेरीज-टेबल, टीपा) एकाच अखंड ब्लॉकमध्ये ठेवतो — तो पानात मावला नाही तर\n  // संपूर्ण पुढच्या पानावर जातो (मध्येच तुटत नाही).\n  var tail = document.getElementById('gp-reg-tail');\n  if (!tail) {\n    var sibs = [];\n    for (var n = table.nextSibling; n; n = n.nextSibling) sibs.push(n);\n    if (sibs.length) {\n      tail = document.createElement('div');\n      tail.id = 'gp-reg-tail';\n      tail.style.cssText = 'display:flow-root;break-inside:avoid;page-break-inside:avoid';\n      table.parentNode.insertBefore(tail, table.nextSibling);\n      for (i = 0; i < sibs.length; i++) tail.appendChild(sibs[i]);\n    }\n  }\n  if (P.mode === 'clear') return { ok: true };\n\n  document.body.style.width = P.W + 'px'; // प्रत्यक्ष छपाईच्या रुंदीएवढ्या रुंदीवर मोजतो\n  try {\n    var thead = table.tHead;\n    function layout() {\n      var wr = wrap.getBoundingClientRect(), tr = table.getBoundingClientRect();\n      var items = [];\n      for (var k = 0; k < table.tBodies.length; k++) {\n        var b = table.tBodies[k];\n        items.push({ el: b, h: b.getBoundingClientRect().height, pin: b.classList.contains('reg-pin') });\n      }\n      return {\n        top: tr.top - wr.top,\n        thH: thead ? thead.getBoundingClientRect().height : 0,\n        items: items,\n        tailH: tail ? tail.getBoundingClientRect().height : 0,\n      };\n    }\n    // पान-विभागणीची नक्कल: प्रत्येक tbody (break-inside:avoid) बसत नसेल तर पुढच्या पानावर; heading प्रत्येक पानावर\n    function simulate(L, Hs) {\n      var y = L.top + L.thH, pageTop = y, pages = 1, gaps = [], firstPin = -1;\n      for (var k = 0; k < L.items.length; k++) {\n        var it = L.items[k];\n        if (y + it.h > Hs && y > pageTop + 0.5) {\n          gaps.push({ idx: k, gap: Hs - y });\n          pages++;\n          y = L.thH;\n          pageTop = L.thH;\n        }\n        if (it.pin && firstPin < 0) firstPin = k;\n        it.page = pages;\n        y += it.h;\n      }\n      var lastIdx = firstPin >= 0 ? firstPin : L.items.length;\n      var lastGap, tailPushed = false;\n      if (L.tailH > 0 && y + L.tailH > Hs) { tailPushed = true; lastGap = Hs - y; pages++; }\n      else lastGap = Hs - y - L.tailH;\n      return { pages: pages, gaps: gaps, last: { idx: lastIdx, gap: lastGap }, tailPushed: tailPushed, lastItemPage: L.items.length ? L.items[L.items.length - 1].page : 1 };\n    }\n\n    var L0 = layout();\n    var S0 = simulate(L0, P.H);\n    if (P.mode === 'prep') return { ok: true, p0: S0.pages };\n\n    // ── जागा वाटून देणे ──\n    // रिकाम्या ओळी न टाकता, प्रत्येक पानावरील नोंदींच्या (tbody) ओळींची उंची वाढवतो — म्हणजे त्या नोंदींचे border\n    // पानाच्या तळापर्यंत पोहोचतात. पानावर शिल्लक राहिलेली जागा त्या पानावरच्या नोंदींत समान वाटली जाते.\n    var Hs = P.H - P.safety;\n    var S = simulate(L0, Hs);\n    var pageGap = {};\n    for (i = 0; i < S.gaps.length; i++) {\n      // gaps[i] हे i-व्या पानाच्या (१-पासून) शेवटी उरलेली जागा\n      pageGap[i + 1] = S.gaps[i].gap;\n    }\n    // शेवटच्या पानावरच्या नोंदी आहेत तशाच (नैसर्गिक उंचीच्या) ठेवतो — फक्त आधीची पाने तळापर्यंत भरतो\n    var byPage = {};\n    for (i = 0; i < L0.items.length; i++) {\n      if (L0.items[i].pin) continue;\n      (byPage[L0.items[i].page] = byPage[L0.items[i].page] || []).push(L0.items[i]);\n    }\n    var jobs = [];\n    for (var pgNo in byPage) {\n      var gp = pageGap[pgNo];\n      if (!(gp >= P.minGap)) continue;\n      var list = byPage[pgNo], each = gp / list.length;\n      for (i = 0; i < list.length; i++) jobs.push({ it: list[i], target: list[i].h + each });\n    }\n    function setRows(tb, add) {\n      var rs = tb.rows, hs = [];\n      for (var a = 0; a < rs.length; a++) hs.push(rs[a].getBoundingClientRect().height);\n      for (a = 0; a < rs.length; a++) rs[a].style.height = (hs[a] + add / rs.length) + 'px';\n    }\n    for (i = 0; i < jobs.length; i++) setRows(jobs[i].it.el, jobs[i].target - jobs[i].it.h);\n    // प्रत्यक्ष उंची मोजून उरलेला फरक (border-collapse मुळे) पुन्हा समायोजित करतो\n    for (i = 0; i < jobs.length; i++) {\n      var d = jobs[i].target - jobs[i].it.el.getBoundingClientRect().height;\n      if (Math.abs(d) > 0.4) setRows(jobs[i].it.el, d);\n    }\n    var made = jobs;\n    var S2 = simulate(layout(), P.H);\n    return { ok: true, p0: S0.pages, p1: S2.pages, fills: made.length, tailPushed: S2.tailPushed,\n      dbg: P.debug ? { Hs: Hs, S: S, S2: S2 } : undefined };\n  } finally {\n    document.body.style.width = '';\n  }\n}";
+  var PAGE_IN = { A4: [8.27, 11.69], Legal: [8.5, 14] };
+  function printMargins(p) { return p.showPageNum ? { top: 0.45, bottom: 0.08, left: 0.04, right: 0.04 } : (p.fitOnePage ? { top: 0.03, bottom: 0.03, left: 0.03, right: 0.03 } : { top: 0.1, bottom: 0.1, left: 0.1, right: 0.1 }); }
+  function printArea(p) {
+    var d = PAGE_IN[p.pageSize] || PAGE_IN.A4, m = printMargins(p), pw = p.landscape ? d[1] : d[0], ph = p.landscape ? d[0] : d[1];
+    return { W: (pw - m.left - m.right) * 96, H: (ph - m.top - m.bottom) * 96, m: m, pw: pw, ph: ph };
+  }
+  function printPageScript(p) {
+    var A = printArea(p), m = A.m;
+    var css = '@page{size:' + (p.pageSize || 'A4') + (p.landscape ? ' landscape' : '') + ';margin:' + m.top + 'in ' + m.right + 'in ' + m.bottom + 'in ' + m.left + 'in;' +
+      (p.showPageNum ? '@top-right{content:"पृष्ठ क्र. " counter(page) " / " counter(pages);font-size:8px;font-family:Arial,sans-serif;color:#333;padding-right:3mm}' : '') + '}';
+    var cfg = JSON.stringify({ W: A.W, H: A.H, fit: !!p.fitOnePage, mz: p.maxZoom || 2.2, fill: !!p.fillPage, a4: (p.pageSize || 'A4') === 'A4', css: css });
+    return '<script>(function(){var C=' + cfg + ';var FILL=' + JSON.stringify(REGFILL_SRC) + ';window.__gpReady=false;' +
+      'function run(){try{' +
+        'var st=document.createElement("style");st.textContent=C.css;(document.head||document.documentElement).appendChild(st);' +
+        'if(C.fill){try{var f=new Function("return "+FILL)();var s=C.a4?24:16;var pr=f({mode:"prep",W:C.W,H:C.H});var r=pr&&pr.ok?f({mode:"fill",W:C.W,H:C.H,safety:s,rh:22,minGap:8}):null;window.__gpFill={prep:pr,fill:r};}catch(e){window.__gpFill={err:String(e)};}}' +
+        'if(C.fit){var el=document.querySelector(".doc")||document.querySelector(".cert-box");' +
+          'if(el){document.body.style.width=C.W+"px";var lim=C.H*0.97,lo=0.55,hi=C.mz;el.style.minHeight="0px";' +
+            'for(var t=0;t<14;t++){var mid=(lo+hi)/2;el.style.zoom=mid;var h=el.getBoundingClientRect().height;if(h<=lim)lo=mid;else hi=mid;}' +
+            'el.style.zoom=lo;el.style.minHeight=Math.floor((C.H*0.975)/lo)+"px";' +
+            'document.body.style.width="";}}' +
+      '}catch(e){}window.__gpReady=true;}' +
+      'if(document.readyState==="complete")setTimeout(run,50);else window.addEventListener("load",function(){setTimeout(run,50);});' +
+      '})();<\/script>';
+  }
   function webPrint(p) {
     var html = String(p.html || '');
     var gp = P('GPPrint');
+    var inj = printPageScript(p);
     if (gp) {                                      // Android APK: नेटिव्ह PrintManager ("Save as PDF" / प्रिंटर)
+      html = html.indexOf('</body>') >= 0 ? html.replace('</body>', inj + '</body>') : html + inj;
       var settled = false;
       function fin(ev, payload) { if (settled) return; settled = true; clearTimeout(tm); ipc.emit(ev, payload); }
       // नेटिव्हकडून उत्तर आलेच नाही तरी "PDF तयार होत आहे" पट्टी कायमची अडकू नये
-      var tm = setTimeout(function () { fin('print-error', { message: 'प्रिंट डायलॉग उघडला नाही — पुन्हा प्रयत्न करा (किंवा ॲप अपडेट करा)' }); }, 8000);
+      var tm = setTimeout(function () { fin('print-error', { message: 'प्रिंट डायलॉग उघडला नाही — पुन्हा प्रयत्न करा (किंवा ॲप अपडेट करा)' }); }, 20000);
       gp.printHtml({ html: html, name: String(p.fileName || 'document').replace(/[^\w\u0900-\u097F.-]+/g, '_'), landscape: !!p.landscape, pageSize: p.pageSize || 'A4' })
         .then(function () { fin('print-done', {}); }, function (e) { fin('print-error', { message: 'प्रिंट सुरू झाले नाही: ' + (e && e.message || e) }); });
       return;
     }
-    var auto = '<script>window.addEventListener("load",function(){setTimeout(function(){try{window.focus();window.print();}catch(e){}},600);});<\/script>';
+    var auto = inj + '<script>window.addEventListener("load",function(){var n=0;(function w(){if(window.__gpReady||n++>40){try{window.focus();window.print();}catch(e){}}else setTimeout(w,150);})();});<\/script>';
     html = html.indexOf('</body>') >= 0 ? html.replace('</body>', auto + '</body>') : html + auto;
     var url = URL.createObjectURL(new Blob([html], { type: 'text/html;charset=utf-8' }));
-    var w = window.open(url, '_blank');
-    if (!w) { ipc.emit('print-error', { message: 'Popup block झाला — ब्राऊझरमध्ये या साईटला Popups ची परवानगी द्या' }); return; }
+    var win = window.open(url, '_blank');
+    if (!win) { ipc.emit('print-error', { message: 'Popup block झाला — ब्राऊझरमध्ये या साईटला Popups ची परवानगी द्या' }); return; }
     setTimeout(function () { URL.revokeObjectURL(url); }, 120000);
     ipc.emit('print-done', {});
   }
@@ -237,6 +268,7 @@
     };
     if (name === 'qrcode') { if (window.QRCode) return window.QRCode; throw new Error('qrcode उपलब्ध नाही'); }
     if (/xlsx\.core\.min\.js$/.test(name)) { if (window.XLSX) return window.XLSX; throw new Error('XLSX उपलब्ध नाही'); }
+    if (/jszip\.min\.js$/.test(name)) { if (window.JSZip) return window.JSZip; throw new Error('JSZip उपलब्ध नाही'); }
     if (name === 'path') return pathMod;
     if (name === 'fs') return fsMod;
     if (name === 'os') return { tmpdir: function () { return '/tmp'; } };

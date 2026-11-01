@@ -12,7 +12,7 @@
   if (window.GPSync) return;
 
   var SKIP = { GP_USER: 1, GP_CLOUD_Q: 1, GP_LAST_BACKUP: 1, GP_CERT_CACHE: 1,
-               GP_SYNC_CFG: 1, GP_SYNC_META: 1, GP_printlog_seeded: 1, GP_MOBILE_ACT: 1, GP_MOBILE_DEV: 1 };
+               GP_SYNC_CFG: 1, GP_SYNC_META: 1, GP_DIR: 1, GP_printlog_seeded: 1, GP_MOBILE_ACT: 1, GP_MOBILE_DEV: 1 };
   var RECMAP = { GP_n8: 1, GP_n9: 1, GP_n10: 1, GP_birth: 1, GP_death: 1, GP_vivah: 1,
                  GP_bpl: 1, GP_nodue: 1, GP_niradhar: 1,
                  GP_printlog: 1,
@@ -20,7 +20,7 @@
   var WHOLE = '~';
   var CHUNK = 700000;
   var COMMIT_MAX = 150;
-  var POLL_MS = 10000;
+  var DAY_CHECK_MS = 30 * 60 * 1000;   // तारीख बदलली का हे तपासण्यासाठी (इंटरनेट/reads लागत नाहीत)
   var DEF_URLS = { fs: 'https://firestore.googleapis.com/v1',
                    idt: 'https://identitytoolkit.googleapis.com/v1',
                    tok: 'https://securetoken.googleapis.com/v1' };
@@ -188,7 +188,7 @@
   }
 
   /* ---------- push ---------- */
-  function schedulePush() { clearTimeout(pushTimer); pushTimer = setTimeout(function () { cycle().catch(function () {}); }, 1500); }   // नेट नसेल तर शांतपणे थांबतो
+  function schedulePush() { clearTimeout(pushTimer); pushTimer = setTimeout(uploadSafe, 1500); }   // नेट नसेल तर शांतपणे थांबतो
   function docWrites(e, dk) {
     var val = readLocal(e.k, e.i), t = meta.t[dk] || Date.now(), name = parent() + '/rec/' + b64u(dk);
     var del = val == null, v = del ? '' : val, parts = [];
@@ -369,7 +369,7 @@
     busy = true; setStatus('wait', 'Sync चालू…');
     if ((meta.v || 1) < 3) { scanLocal(true); saveMeta(true); }   // आधी Sync न होणारी की (उदा. प्रिंट-नोंद) असेल तर तिच्या जुन्या नोंदी एकदा पाठवतो
     return pull().then(function () { return push(); }).then(function () {
-      lastOk = Date.now(); busy = false; setStatus('ok', '');
+      lastOk = Date.now(); markDay(); busy = false; setStatus('ok', '');
     }).catch(function (e) {
       busy = false;
       if (e.code === 'TOKEN_EXPIRED') setStatus('err', 'पुन्हा Sign in करा'); else setStatus('err', errMsg(e));
@@ -377,14 +377,35 @@
     });
   }
   function safeCycle() { return cycle().catch(function () {}); }
-  var timer = null;
+  var timer = null, lastTry = 0;
+  /* ---------- दिवसातून एकदा आपोआप Sync (पूर्ण: खाली+वर); बाकी वेळी हवे तर "आता Sync करा" बटण ---------- */
+  function today() { var d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+  function dayDone() { try { return ls().getItem('GP_SYNC_DAY') === today(); } catch (e) { return false; } }
+  function markDay() { try { ls().setItem('GP_SYNC_DAY', today()); } catch (e) {} }
+  function dailyCheck() {
+    if (!isOn() || document.hidden || dayDone()) return;
+    if (Date.now() - lastTry < 10 * 60 * 1000) return;     // अपयश आले तर १० मिनिटे थांबतो
+    lastTry = Date.now(); safeCycle();
+  }
+  // नवीन नोंदी जतन केल्यावर फक्त वर पाठवतो (फक्त writes; पुन्हा खाली वाचत नाही → reads लागत नाहीत)
+  function upload() {
+    if (!isOn() || busy || !Object.keys(meta.out).length) return Promise.resolve();
+    if (navigator.onLine === false) { setStatus('off', 'ऑफलाइन — नेट आल्यावर आपोआप होईल'); return Promise.resolve(); }
+    busy = true; setStatus('wait', 'Sync चालू…');
+    return push().then(function () { busy = false; setStatus('ok', ''); }).catch(function (e) {
+      busy = false;
+      if (e.code === 'TOKEN_EXPIRED') setStatus('err', 'पुन्हा Sign in करा'); else setStatus('err', errMsg(e));
+      throw e;
+    });
+  }
+  function uploadSafe() { return upload().catch(function () {}); }
   function start() {
     if (timer) return;
-    timer = setInterval(function () { if (!document.hidden) safeCycle(); }, POLL_MS);
-    window.addEventListener('online', safeCycle);
-    window.addEventListener('focus', safeCycle);
-    document.addEventListener('visibilitychange', function () { if (!document.hidden) safeCycle(); });
-    setTimeout(safeCycle, 1200);
+    timer = setInterval(dailyCheck, DAY_CHECK_MS);
+    window.addEventListener('online', uploadSafe);
+    window.addEventListener('focus', dailyCheck);
+    document.addEventListener('visibilitychange', dailyCheck);
+    setTimeout(dailyCheck, 1200);
   }
   function signOut() {
     ensureLoaded();
@@ -416,7 +437,7 @@
            '<br>पाठवायचे बाकी: <b>' + pend + '</b>' + (conf ? '<br>⚠️ conflict नोंदी: <b>' + conf + '</b> (हरलेल्या प्रती जपल्या आहेत)' : '') + '</div>' +
            '<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button id="gps-now" class="btn btn-gn">🔄 आता Sync करा</button>' +
            '<button id="gps-out" class="btn btn-out">🚪 Sync बंद करा</button></div>' +
-           '<div style="font-size:11.5px;color:#666;margin-top:10px">नेट असताना दर १० सेकंदांनी आपोआप Sync होतो. नेट नसताना केलेल्या नोंदी नेट आल्यावर पाठवल्या जातात.</div>';
+           '<div style="font-size:11.5px;color:#666;margin-top:10px">दिवसातून एकदा (दिवसाची पहिली वेळ ॲप उघडल्यावर) आपोआप Sync होतो. नवीन नोंदी जतन करताच वर जातात; नेट नसताना केलेल्या नोंदी नेट आल्यावर पाठवल्या जातात. दुसऱ्या डिव्हाइसवरचे ताजे बदल हवे असतील तर «🔄 आता Sync करा» दाबा.</div>';
     } else {
       h += '<div style="font-size:13.5px;line-height:1.8;color:#333">Cloud Sync अजून जोडलेला नाही.<br>सेटिंग <b>फक्त एकाच ठिकाणी</b> आहे: <b>⚙️ Masters → Google Firebase</b>. तिथे पायरी-पायरीने मार्गदर्शन, Project ID/API key, Email/Password आणि "Setup Code" आहे.</div>' +
            '<button id="gps-masters" class="btn btn-gn" style="width:100%;justify-content:center;margin-top:14px">⚙️ Masters मध्ये Sync सेटअप करा</button>';
@@ -430,13 +451,19 @@
   }
   function buildUi() {
     if (ui.btn || !document.body) return;
-    ui.btn = el('div', 'position:fixed;right:12px;bottom:70px;z-index:99998;width:46px;height:46px;border-radius:50%;background:#0D2B5E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:21px;box-shadow:0 3px 10px rgba(0,0,0,.35);cursor:pointer;user-select:none', '☁️');
-    ui.dot = el('span', 'position:absolute;right:2px;top:2px;width:12px;height:12px;border-radius:50%;border:2px solid #fff;background:#9e9e9e');
+    // हेडरमध्ये Logout बटणाच्या आधी (मजकुरावर तरंगत नाही); हेडर सापडले नाही तरच कोपऱ्यात
+    var right = document.querySelector('.hdr-right'), logout = right && right.querySelector('.logout-btn');
+    var inHdr = !!(right && logout);
+    ui.btn = el('div', inHdr
+      ? 'position:relative;width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;user-select:none;flex:none'
+      : 'position:fixed;right:12px;bottom:70px;z-index:99998;width:46px;height:46px;border-radius:50%;background:#0D2B5E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:21px;box-shadow:0 3px 10px rgba(0,0,0,.35);cursor:pointer;user-select:none', '☁️');
+    ui.dot = el('span', 'position:absolute;right:-3px;top:-3px;width:11px;height:11px;border-radius:50%;border:2px solid #0D2B5E;background:#9e9e9e');
     ui.btn.appendChild(ui.dot); ui.btn.onclick = openPanel;
     ui.panel = el('div', 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:14px');
     ui.box = el('div', 'background:#fff;border-radius:14px;padding:16px;width:100%;max-width:430px;max-height:92vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.4)');
     ui.panel.appendChild(ui.box); ui.panel.onclick = function (e) { if (e.target === ui.panel) closePanel(); };
-    document.body.appendChild(ui.btn); document.body.appendChild(ui.panel);
+    if (inHdr) right.insertBefore(ui.btn, logout); else document.body.appendChild(ui.btn);
+    document.body.appendChild(ui.panel);
     paint();
   }
   function init() {
@@ -446,10 +473,60 @@
     if (isOn()) { setStatus('wait', ''); start(); }
   }
 
+
+  /* ---------- 📲 नागरिक ॲप: staff च्या Sign-in ने साधे Firestore वाचन/लेखन (gpapp, gpapp_req) ---------- */
+  function fsEnc(v) {
+    if (v === null || v === undefined) return { nullValue: null };
+    if (typeof v === 'string') return { stringValue: v };
+    if (typeof v === 'boolean') return { booleanValue: v };
+    if (typeof v === 'number') return Math.floor(v) === v ? { integerValue: String(v) } : { doubleValue: v };
+    if (Array.isArray(v)) return { arrayValue: { values: v.map(fsEnc) } };
+    var f = {}; Object.keys(v).forEach(function (k) { if (v[k] !== undefined) f[k] = fsEnc(v[k]); });
+    return { mapValue: { fields: f } };
+  }
+  function fsDec(f) {
+    if (!f) return null;
+    if ('stringValue' in f) return f.stringValue;
+    if ('integerValue' in f) return Number(f.integerValue);
+    if ('doubleValue' in f) return f.doubleValue;
+    if ('booleanValue' in f) return f.booleanValue;
+    if ('timestampValue' in f) return f.timestampValue;
+    if ('nullValue' in f) return null;
+    if ('arrayValue' in f) return ((f.arrayValue || {}).values || []).map(fsDec);
+    if ('mapValue' in f) { var o = {}, m = (f.mapValue || {}).fields || {}; Object.keys(m).forEach(function (k) { o[k] = fsDec(m[k]); }); return o; }
+    return null;
+  }
+  function fsDocOut(d) { var o = {}, fl = d.fields || {}; Object.keys(fl).forEach(function (k) { o[k] = fsDec(fl[k]); }); o._id = String(d.name || '').split('/').pop(); return o; }
+  function fsReq(method, path, body, query) {
+    ensureLoaded();
+    if (!isOn()) return Promise.reject(Object.assign(new Error('आधी Cloud Sync मध्ये Sign in करा (Masters → ☁️ Sync)'), { code: 'NO_SYNC' }));
+    return token().then(function (t) {
+      return http(method, urls().fs + '/projects/' + encodeURIComponent(cfg.p) + '/databases/(default)/documents/' + path + (query || ''), body, { Authorization: 'Bearer ' + t });
+    });
+  }
+  var FS = {
+    get: function (path) { return fsReq('GET', path).then(fsDocOut, function (e) { if (e && (e.http === 404 || e.code === 'NOT_FOUND')) return null; throw e; }); },
+    set: function (path, obj) { var f = {}; Object.keys(obj).forEach(function (k) { if (obj[k] !== undefined) f[k] = fsEnc(obj[k]); }); return fsReq('PATCH', path, { fields: f }); },
+    patch: function (path, obj) {
+      var f = {}, q = [];
+      Object.keys(obj).forEach(function (k) { if (obj[k] !== undefined) { f[k] = fsEnc(obj[k]); q.push('updateMask.fieldPaths=' + encodeURIComponent(k)); } });
+      return fsReq('PATCH', path, { fields: f }, '?' + q.join('&'));
+    },
+    list: function (col) {
+      var out = [];
+      function page(tok, n) {
+        return fsReq('GET', col, null, '?pageSize=100' + (tok ? '&pageToken=' + encodeURIComponent(tok) : '')).then(function (r) {
+          (r && r.documents || []).forEach(function (d) { out.push(fsDocOut(d)); });
+          return (r && r.nextPageToken && n < 20) ? page(r.nextPageToken, n + 1) : out;
+        });
+      }
+      return page('', 0);
+    }
+  };
   window.GPSync = { onSet: onSet, onRemove: onRemove, onClear: onClear, signIn: signIn, signOut: signOut,
                     syncNow: function () { return cycle(); }, openPanel: openPanel, init: init,
                     isOn: isOn, errText: errMsg, status: function () { return { s: status.s, m: status.m, last: lastOk, pending: Object.keys(meta.out).length, conflicts: meta.conf.length, cfg: cfg }; },
-                    _meta: function () { return meta; } };
+                    _meta: function () { return meta; }, fs: FS };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else setTimeout(init, 0);
   window.addEventListener('load', init);
 })();

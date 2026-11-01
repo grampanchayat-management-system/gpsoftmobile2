@@ -9,6 +9,8 @@ import android.print.PrintManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.ValueCallback;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -20,6 +22,10 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 /**
  * HTML ला Android च्या प्रिंट डायलॉगमध्ये पाठवतो (तिथून "Save as PDF" किंवा Wi-Fi प्रिंटर).
  * JS मधून:  Capacitor.registerPlugin('GPPrint').printHtml({html, name, landscape, pageSize})
+ *
+ * छपाईच्या HTML मध्ये एक स्क्रिप्ट असते (platform-web.js मधून जोडलेली) जी दाखला एका पानात बसवते, नोंदवहीची पाने
+ * तळापर्यंत भरते आणि शेवटी window.__gpReady = true करते. म्हणून WebView मध्ये JavaScript चालू ठेवला आहे आणि
+ * प्रिंट सुरू करण्याआधी तो __gpReady होईपर्यंत थांबतो.
  */
 @CapacitorPlugin(name = "GPPrint")
 public class GPPrintPlugin extends Plugin {
@@ -54,11 +60,17 @@ public class GPPrintPlugin extends Plugin {
                 try {
                     cleanup();
                     final boolean[] started = new boolean[] { false };
+                    final int[] tries = new int[] { 0 };
+                    final Handler handler = new Handler(Looper.getMainLooper());
                     final WebView wv = new WebView(getActivity());
+                    WebSettings ws = wv.getSettings();
+                    ws.setJavaScriptEnabled(true);          // आपलीच HTML आहे — fit/fill स्क्रिप्ट चालवण्यासाठी
+                    ws.setDomStorageEnabled(false);
 
-                    // काही फोनवर स्क्रीनला न जोडलेला WebView लोड/रेंडर होत नाही — म्हणून १x१ पिक्सेलचा लपवलेला जोडतो
+                    // A4 च्या रुंदीचा (CSS ~800px) लपवलेला WebView — पानाच्या मापाशी जुळणारी मांडणी मिळण्यासाठी
+                    float density = getActivity().getResources().getDisplayMetrics().density;
                     ViewGroup root = (ViewGroup) getActivity().findViewById(android.R.id.content);
-                    root.addView(wv, new ViewGroup.LayoutParams(1, 1));
+                    root.addView(wv, new ViewGroup.LayoutParams((int) (800 * density), (int) (1200 * density)));
                     wv.setVisibility(View.INVISIBLE);
 
                     final Runnable startPrint = new Runnable() {
@@ -73,7 +85,11 @@ public class GPPrintPlugin extends Plugin {
                                         ? PrintAttributes.MediaSize.NA_LEGAL
                                         : PrintAttributes.MediaSize.ISO_A4;
                                 if (landscape) size = size.asLandscape();
-                                PrintAttributes attrs = new PrintAttributes.Builder().setMediaSize(size).build();
+                                // मार्जिन HTML मधल्या @page ने ठरतात (संगणकाइतकेच कमी) — म्हणून सिस्टीमचे मार्जिन शून्य
+                                PrintAttributes attrs = new PrintAttributes.Builder()
+                                        .setMediaSize(size)
+                                        .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
+                                        .build();
                                 pm.print(name, adapter, attrs);
                                 call.resolve();
                             } catch (Exception e) {
@@ -83,15 +99,31 @@ public class GPPrintPlugin extends Plugin {
                         }
                     };
 
+                    // fit/fill स्क्रिप्ट संपली का ते वारंवार विचारतो (जास्तीत जास्त ~६ सेकंद)
+                    final Runnable[] poll = new Runnable[1];
+                    poll[0] = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (started[0]) return;
+                            wv.evaluateJavascript("(window.__gpReady===true)", new ValueCallback<String>() {
+                                @Override
+                                public void onReceiveValue(String value) {
+                                    if ("true".equals(value) || tries[0]++ > 30) startPrint.run();
+                                    else handler.postDelayed(poll[0], 200);
+                                }
+                            });
+                        }
+                    };
+
                     wv.setWebViewClient(new WebViewClient() {
                         @Override
                         public void onPageFinished(WebView view, String url) {
-                            startPrint.run();
+                            handler.postDelayed(poll[0], 150);
                         }
                     });
                     printView = wv;
-                    // onPageFinished कधी आलाच नाही तरी प्रिंट सुरू व्हावे म्हणून ३ सेकंदांचा पर्यायी मार्ग
-                    new Handler(Looper.getMainLooper()).postDelayed(startPrint, 3000);
+                    // काहीच झाले नाही तरी प्रिंट सुरू व्हावे म्हणून शेवटचा पर्यायी मार्ग
+                    handler.postDelayed(startPrint, 10000);
                     wv.loadDataWithBaseURL("https://localhost/", html, "text/html", "UTF-8", null);
                 } catch (Exception e) {
                     Log.e(TAG, "print setup failed", e);
