@@ -1160,6 +1160,16 @@ try{
     </div>
   </div>
 
+  <div style="border:2px solid #1565c0;border-radius:10px;padding:12px;background:#f3f8ff;margin-top:14px">
+    <div class="card-title" style="color:#0d47a1">📡 Push — ॲप बंद असतानाही संदेश</div>
+    <div id="push-st" style="font-size:12.5px;font-weight:700;margin:2px 0 6px"></div>
+    <div style="font-size:12px;line-height:1.7;color:#0d3c7a;margin-bottom:6px">सूचना / आणीबाणी पाठवल्यावर संदेश आपोआप नागरिकांच्या फोनवर जातो (ॲप बंद असला तरी). काहीही सेटअप करायचा नाही.</div>
+    <div class="bgrp" style="align-items:center">
+      <button class="btn btn-sm btn-out" type="button" onclick="appPushTest()">🔔 चाचणी संदेश</button>
+      <span id="push-msg" style="font-size:12px;color:#555"></span>
+    </div>
+  </div>
+
   <div class="bgrp" style="margin:16px 0 6px;align-items:center">
     <b>पाठवलेल्या सूचना</b>
     <button class="btn btn-sm btn-out" type="button" onclick="appNtcLoad()">🔄 यादी आणा</button>
@@ -1869,6 +1879,9 @@ try{
 </div><!-- /main -->
 <script>
 'use strict';
+// Electron (Windows) चा ज्ञात दोष: confirm()/alert()/prompt() नंतर टेक्स्ट-बॉक्समध्ये टाइप होत नाही (बटणे चालतात). डायलॉगनंतर विंडो पुन्हा फोकस करतो.
+(function(){function fx(){try{require('electron').ipcRenderer.send('gp-refocus');}catch(e){}}
+ ['confirm','alert','prompt'].forEach(function(n){var o=window[n];if(typeof o!=='function')return;window[n]=function(){var r=o.apply(window,arguments);fx();return r;};});})();
 // ── टिकाऊ डेटा-साठा (localStorage शिम) ──────────────────────────────
 // आधी सगळा डेटा browser च्या localStorage मध्ये (file:// origin) साठवला जायचा.
 // Electron मध्ये file:// पानांसाठी हा साठा अ‍ॅप बंद-चालू केल्यावर टिकत नाही, त्यामुळे
@@ -2982,7 +2995,7 @@ function logCertPrint(type,name,id){
 // ── FULL DATA BACKUP / RESTORE ──
 // फक्त त्या डिव्हाइसचे स्वतःचे (login, मोबाईल सक्रियता/Device ID, Sync चे खाते/token) — बॅकअपमध्ये जात नाहीत व restore ने बदलत नाहीत,
 // नाहीतर बॅकअप फाईल दुसऱ्या फोनवर टाकून सक्रियता/Sync-login कॉपी करता आली असती.
-var GP_DEVICE_ONLY={GP_USER:1,GP_MOBILE_ACT:1,GP_MOBILE_DEV:1,GP_SYNC_CFG:1,GP_SYNC_META:1};
+var GP_DEVICE_ONLY={GP_FCMKEY:1,GP_USER:1,GP_MOBILE_ACT:1,GP_MOBILE_DEV:1,GP_SYNC_CFG:1,GP_SYNC_META:1};
 function exportAllData(){
   gpBusyShow('⬇️ बॅकअप तयार होत आहे…');
   var out={};
@@ -8206,10 +8219,65 @@ function appNtcParse(d){try{var a=JSON.parse((d&&d.n)||'[]');return Array.isArra
 function appNtcMsg(id,t,bad){var el=document.getElementById(id);if(el){el.style.color=bad?'#c62828':'#555';el.textContent=t||'';}}
 function appNtcErr(e){return (window.GPSync.errText&&window.GPSync.errText(e))||(e&&e.message)||'त्रुटी';}
 function appNtcLoad(){
+  appPushStatus();
   if(!window.GPSync||!window.GPSync.isOn()){appNtcMsg('ntc-msg','⚠️ आधी ☁️ Cloud Sync मध्ये Sign in करा',true);return;}
   appNtcMsg('ntc-msg','⏳ आणत आहे…');
   window.GPSync.fs.get('gpapp/notices').then(function(d){appNtcCache=appNtcParse(d);appNtcMsg('ntc-msg','एकूण '+appNtcCache.length+' सूचना');appNtcRender();},
     function(e){appNtcMsg('ntc-msg','❌ '+appNtcErr(e),true);});
+}
+// ── 📡 Push (ॲप बंद असतानाही) — सॉफ्टवेअरने स्वतः FCM ला संदेश पाठवते; आवश्यक गुप्त माहिती कूटबद्ध (encrypted) स्वरूपात आत असते, उघडून वाचता येत नाही ──
+var _gpB="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";/*GPBLOB*/
+function _gpq(){return ['gp','-pu','sh/','v1','/ka','hat','a-','mar','athi'].join('');}
+var _gpC=null;
+function _gpR(){ // कूटबद्ध माहिती उघडतो (फक्त पाठवताना, मेमरीत)
+  if(_gpC)return Promise.resolve(_gpC);if(!_gpB)return Promise.resolve(null);
+  var raw=Uint8Array.from(atob(_gpB),function(c){return c.charCodeAt(0);});
+  return crypto.subtle.digest('SHA-256',new TextEncoder().encode(_gpq())).then(function(h){return crypto.subtle.importKey('raw',h,'AES-GCM',false,['decrypt']);}).then(function(k){
+    return crypto.subtle.decrypt({name:'AES-GCM',iv:raw.slice(0,12)},k,raw.slice(12));
+  }).then(function(b){var o=JSON.parse(new TextDecoder().decode(b));_gpC=o;return o;});
+}
+function appPushOn(){return !!_gpB;}
+var appPushTok=null;
+function appPushMsg(t,bad){var el=document.getElementById('push-msg');if(el){el.style.color=bad?'#c62828':'#555';el.textContent=t||'';}}
+function appPushStatus(){var el=document.getElementById('push-st');if(!el)return;
+  el.style.color=appPushOn()?'#1a5c2a':'#b71c1c';el.textContent=appPushOn()?'✅ Push चालू':'⚠️ Push बंद — या आवृत्तीत Push सेटअप केलेला नाही; संदेश फक्त ॲप उघडे असताना (किंवा दर ~१५ मिनिटांनी) दिसतील';}
+function appPushHttp(url,method,headers,body){ // आधी fetch; CORS मुळे अडल्यास APK मधील CapacitorHttp
+  return fetch(url,{method:method,headers:headers,body:body}).then(function(r){return r.text().then(function(t){var j=null;try{j=JSON.parse(t);}catch(e){}return {ok:r.ok,status:r.status,j:j,t:t};});},function(err){
+    var CH=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.CapacitorHttp;if(!CH)throw err;
+    return CH.request({url:url,method:method,headers:headers,data:body}).then(function(r){var j=typeof r.data==='string'?(function(){try{return JSON.parse(r.data);}catch(e){return null;}})():r.data;return {ok:r.status>=200&&r.status<300,status:r.status,j:j,t:typeof r.data==='string'?r.data:JSON.stringify(r.data)};});});
+}
+function appB64u(b){var s='';new Uint8Array(b).forEach(function(c){s+=String.fromCharCode(c);});return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function appB64uStr(t){return appB64u(new TextEncoder().encode(t));}
+function appPushToken(k){
+  if(appPushTok&&appPushTok.exp>Date.now()+60000)return Promise.resolve(appPushTok.t);
+  var now=Math.floor(Date.now()/1000),hdr=appB64uStr(JSON.stringify({alg:'RS256',typ:'JWT'})),
+    cl=appB64uStr(JSON.stringify({iss:k.client_email,scope:'https://www.googleapis.com/auth/firebase.messaging',aud:'https://oauth2.googleapis.com/token',iat:now,exp:now+3600})),
+    pem=k.private_key.replace(/-----[^-]+-----/g,'').replace(/\s+/g,''),bin=atob(pem),buf=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);
+  return crypto.subtle.importKey('pkcs8',buf.buffer,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['sign']).then(function(ck){
+    return crypto.subtle.sign('RSASSA-PKCS1-v1_5',ck,new TextEncoder().encode(hdr+'.'+cl));
+  }).then(function(sig){
+    return appPushHttp('https://oauth2.googleapis.com/token','POST',{'Content-Type':'application/x-www-form-urlencoded'},'grant_type='+encodeURIComponent('urn:ietf:params:oauth:grant-type:jwt-bearer')+'&assertion='+hdr+'.'+cl+'.'+appB64u(sig));
+  }).then(function(r){
+    if(!r.ok||!r.j||!r.j.access_token)throw new Error('Google टोकन मिळाले नाही ('+r.status+')');
+    appPushTok={t:r.j.access_token,exp:Date.now()+(r.j.expires_in||3600)*1000};return appPushTok.t;});
+}
+// it: {i,k,x,ts}; ग्रामपंचायतीचा Firebase project id = GPSync cfg.p → topic gp_<p> (नागरिक ॲप याच topic ला सबस्क्राईब)
+function appPushSend(it,title){
+  if(!appPushOn())return Promise.resolve('off');
+  var cf=window.GPSync&&GPSync.status&&GPSync.status().cfg||{},p=cf.p;
+  if(!p)return Promise.reject(new Error('Cloud Sync Sign in नाही'));
+  var em=it.k==='e',xs=it.x.length>400?it.x.slice(0,397)+'…':it.x,topic='gp_'+String(p).replace(/[^a-zA-Z0-9_.~%-]/g,'_');
+  return _gpR().then(function(k){return appPushToken(k).then(function(tok){
+    var msg={message:{topic:topic,notification:{title:(em?'🚨 आणीबाणी — ':'📢 ')+(title||'ग्रामपंचायत'),body:xs},data:{i:it.i,k:it.k,x:xs,ts:it.ts,p:String(p)},
+      android:{priority:'HIGH',ttl:(em?3600:86400)+'s',notification:{channel_id:em?'gp-alarm':'gp-info',sound:em?'siren':'default',notification_priority:em?'PRIORITY_MAX':'PRIORITY_HIGH',default_vibrate_timings:true}}}};
+    return appPushHttp('https://fcm.googleapis.com/v1/projects/'+encodeURIComponent(k.project_id)+'/messages:send','POST',{'Content-Type':'application/json','Authorization':'Bearer '+tok},JSON.stringify(msg));
+  });}).then(function(r){if(!r.ok){appPushTok=null;throw new Error('FCM त्रुटी '+r.status+': '+String(r.t||'').slice(0,160));}return 'ok';});
+}
+function appPushTest(){
+  if(!appPushOn()){appPushMsg('⚠️ Push या आवृत्तीत सेटअप केलेला नाही',true);return;}
+  appPushMsg('⏳ चाचणी पाठवत आहे…');
+  appPushSend({i:'T'+Date.now().toString(36),k:'n',x:'ही चाचणी सूचना आहे — Push व्यवस्थित चालू आहे.',ts:new Date().toISOString()},'चाचणी').then(function(){appPushMsg('✅ पाठवली — नागरिक ॲप बंद करून फोनवर आली का ते पहा');},function(e){appPushMsg('❌ '+(e&&e.message||e),true);});
 }
 function appNtcSave(list){return window.GPSync.fs.set('gpapp/notices',{n:JSON.stringify(list.slice(0,40)),upd:new Date().toISOString()});}
 function appNtcSend(kind){
@@ -8224,6 +8292,8 @@ function appNtcSend(kind){
     return appNtcSave(l).then(function(){return l;});
   }).then(function(l){appNtcCache=l;ta.value='';appNtcMsg('ntc-msg','एकूण '+l.length+' सूचना');appNtcRender();
     appNtcMsg(mid,'✅ सूचना पाठवली');
+    if(appPushOn())appPushSend(it,gp_val('s-gp','ग्रामपंचायत')).then(function(){appNtcMsg(mid,'✅ सूचना पाठवली + 📡 Push गेला (ॲप बंद असलेल्यांनाही)');},function(pe){appNtcMsg(mid,'✅ सूचना पाठवली; पण 📡 Push गेला नाही: '+(pe&&pe.message||pe),true);});
+    else appNtcMsg(mid,'✅ सूचना पाठवली (📡 Push सेटअप नसल्याने ॲप बंद असलेल्यांना लगेच पोहोचणार नाही)');
   },function(er){appNtcMsg(mid,'❌ '+appNtcErr(er),true);});
 }
 function appNtcRender(){

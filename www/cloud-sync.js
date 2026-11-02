@@ -11,7 +11,7 @@
   'use strict';
   if (window.GPSync) return;
 
-  var SKIP = { GP_USER: 1, GP_CLOUD_Q: 1, GP_LAST_BACKUP: 1, GP_CERT_CACHE: 1,
+  var SKIP = { GP_FCMKEY: 1, GP_USER: 1, GP_CLOUD_Q: 1, GP_LAST_BACKUP: 1, GP_CERT_CACHE: 1,
                GP_SYNC_CFG: 1, GP_SYNC_META: 1, GP_DIR: 1, GP_printlog_seeded: 1, GP_MOBILE_ACT: 1, GP_MOBILE_DEV: 1 };
   var RECMAP = { GP_n8: 1, GP_n9: 1, GP_n10: 1, GP_birth: 1, GP_death: 1, GP_vivah: 1,
                  GP_bpl: 1, GP_nodue: 1, GP_niradhar: 1,
