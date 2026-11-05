@@ -298,7 +298,6 @@ try{
     <button class="nb" onclick="showPg('niradhar')" data-p="niradhar">👴 निराधार</button>
     <button class="nb" onclick="showPg('swagho');sgInit()" data-p="swagho">📝 स्वयंघोषणापत्र</button>
     <button class="nb" onclick="showPg('appreq');appSub(appSubCur);appCounts()" data-p="appreq">📲 ॲप दाखले</button>
-    <button class="nb" onclick="showPg('appusers');appUsersLoad()" data-p="appusers">👥 ॲप वापरकर्ते</button>
     <button class="nb" onclick="showPg('n12');renderN12Dropdowns();clearN12Form();" data-p="n12">🧾 नमुना १२</button>
     <button class="nb" onclick="showPg('masters')" data-p="masters">⚙️ Masters</button>
     <button class="nb" onclick="showPg('website');loadWebsiteForm();" data-p="website">🌐 वेबसाईट</button>
@@ -1075,36 +1074,20 @@ try{
 </div>
 
 <!-- 📲 ॲप दाखले — नागरिक ॲपमधून आलेल्या मागण्या (भरणा तपासून मंजूर/नाकारा) -->
-<div class="pg" id="pg-appusers">
-<div class="card">
-  <div class="card-title">👥 नागरिक ॲप वापरकर्ते</div>
-  <div class="alert al-info" style="font-size:12px;line-height:1.7">
-    आपल्या गावातील जे नागरिक नागरिक ॲप वापरत आहेत त्यांची नावे व मोबाईल नंबर. ज्यांनी ॲप पुन्हा उघडले किंवा काही मागणी केली तेच यादीत येतात — जुने वापरकर्ते ॲप पुढच्यांदा उघडल्यावर आपोआप दिसू लागतील.
-    (☁️ Cloud Sync Sign in आणि Firebase Rules अपडेट असणे आवश्यक.)
-  </div>
-  <div class="bgrp" style="margin-bottom:8px;align-items:center">
-    <button class="btn btn-nv" type="button" onclick="appUsersLoad()">🔄 यादी आणा</button>
-    <input id="au-q" placeholder="🔍 नाव / मोबाईल शोधा…" oninput="appUsersRender()" style="padding:7px;border-radius:6px;border:1px solid #ccc;min-width:180px">
-    <button class="btn btn-out" type="button" onclick="appUsersCsv()">⬇️ Excel/CSV</button>
-    <span id="au-msg" style="font-size:12px;color:#555"></span>
-  </div>
-  <div class="tbl-wrap"><table class="dtbl"><thead id="au-head"></thead>
-  <tbody id="au-tbl"><tr><td colspan="11" style="text-align:center;color:#9E9E9E;padding:14px">"यादी आणा" दाबा</td></tr></tbody></table></div>
-</div>
-</div>
-
 <div class="pg" id="pg-appreq">
 <div id="ar-tabs" class="tabs" style="margin:0 0 8px">
-  <button type="button" class="tab active" data-v="req" onclick="appSub('req')">📲 दाखला / कर मागण्या<span id="ar-cnt-req"></span></button>
+  <button type="button" class="tab active" data-v="req" onclick="appSub('req')">📝 ॲप दाखले<span id="ar-cnt-req"></span></button>
+  <button type="button" class="tab" data-v="tax" onclick="appSub('tax')">🏠 ॲप कर भरणा<span id="ar-cnt-tax"></span></button>
   <button type="button" class="tab" data-v="web" onclick="appSub('web')">🌐 वेबसाईट कर भरणा<span id="ar-cnt-web"></span></button>
   <button type="button" class="tab" data-v="nond" onclick="appSub('nond')">📝 नोंद विनंत्या<span id="ar-cnt-nond"></span></button>
   <button type="button" class="tab" data-v="comp" onclick="appSub('comp')">📣 तक्रार / सूचना<span id="ar-cnt-comp"></span></button>
+  <button type="button" class="tab" data-v="users" onclick="appSub('users')">👥 ॲप वापरकर्ते</button>
   <button type="button" class="tab" data-v="notice" onclick="appSub('notice')">📢 सूचना</button>
 </div>
 <div class="card" id="ar-v-req">
-  <div class="card-title">📲 ॲप दाखले पडताळणी</div>
+  <div class="card-title">📝 ॲप दाखले — मागण्या (स्वयंघोषणापत्र व इतर दाखले)</div>
   <div class="alert al-info" style="font-size:12px;line-height:1.7">
-    नागरिक ॲपमधून आलेल्या दाखला मागण्या व कर भरणा इथे दिसतात. <b>UTR/स्क्रीनशॉट वरून खात्यात पैसे आल्याचे तपासा</b>, मग <b>✅ मंजूर करा</b> — सही व शिक्क्यासह डिजिटल दाखला/पावती तयार होऊन नागरिकाला ॲपमध्ये डाउनलोडसाठी मिळते.
+    नागरिक ॲपमधून आलेल्या <b>दाखला मागण्या</b> (स्वयंघोषणापत्र, जन्म/मृत्यू, विवाह, बीपीएल इ.) इथे दिसतात. कर भरणा वेगळ्या <b>🏠 ॲप कर भरणा</b> टॅबमध्ये आहे. <b>UTR/स्क्रीनशॉट वरून खात्यात पैसे आल्याचे तपासा</b>, मग <b>✅ मंजूर करा</b> — सही व शिक्क्यासह डिजिटल दाखला/पावती तयार होऊन नागरिकाला ॲपमध्ये डाउनलोडसाठी मिळते.
     (☁️ Cloud Sync Sign in असणे आवश्यक — Masters मध्ये.)
   </div>
   <div class="bgrp" style="margin-bottom:8px;align-items:center">
@@ -1121,6 +1104,27 @@ try{
   <div id="ar-doc" style="display:none"></div>
 </div>
 
+
+<div class="card" id="ar-v-tax" style="display:none">
+  <div class="card-title">🏠 ॲप कर भरणा — पडताळणी</div>
+  <div class="alert al-info" style="font-size:12px;line-height:1.7">
+    नागरिक ॲपमधून आलेले <b>कर भरणा</b> (घरपट्टी / पाणीपट्टी) इथे दिसतात. <b>UTR/स्क्रीनशॉट वरून खात्यात पैसे आल्याचे तपासा</b>, मग <b>✅ मंजूर करा</b> — सही व शिक्क्यासह डिजिटल दाखला/पावती तयार होऊन नागरिकाला ॲपमध्ये डाउनलोडसाठी मिळते.
+    (☁️ Cloud Sync Sign in असणे आवश्यक — Masters मध्ये.)
+  </div>
+  <div class="bgrp" style="margin-bottom:8px;align-items:center">
+    <button class="btn btn-nv" type="button" onclick="appReqLoad(true)">🔄 यादी आणा</button>
+    <select id="at-filter" onchange="appReqRender()" style="padding:7px;border-radius:6px;border:1px solid #ccc">
+      <option value="pending">⏳ पडताळणी प्रलंबित</option><option value="approved">✅ मंजूर</option><option value="rejected">❌ नाकारलेले</option><option value="all">सर्व</option>
+    </select>
+    <span id="at-msg" style="font-size:12px;color:#555"></span>
+  </div>
+  <div class="tbl-wrap"><table class="dtbl">
+    <thead><tr><th>क्रमांक</th><th>दिनांक</th><th>प्रकार</th><th>नाव</th><th>मोबाईल</th><th>रक्कम ₹</th><th>UTR</th><th>स्थिती</th><th>कृती</th></tr></thead>
+    <tbody id="at-tbl"><tr><td colspan="9" style="text-align:center;color:#9E9E9E;padding:14px">"यादी आणा" दाबा</td></tr></tbody>
+  </table></div>
+  
+</div>
+
 <div class="card" id="ar-v-web" style="display:none">
   <div class="card-title">🌐 वेबसाईटवरील कर भरणा पडताळणी</div>
   <div class="alert al-info" style="font-size:12px;line-height:1.7">
@@ -1129,6 +1133,7 @@ try{
   </div>
   <div class="bgrp" style="margin-bottom:8px;align-items:center">
     <button class="btn btn-nv" type="button" onclick="appReqLoad(true)">🔄 यादी आणा</button>
+    <button class="btn btn-out" type="button" onclick="wbPublishTaxOnly()">🌐 वेबसाईटवरील शिल्लक आत्ता अपडेट करा</button>
     <select id="aw-filter" onchange="appReqRender()" style="padding:7px;border-radius:6px;border:1px solid #ccc">
       <option value="pending">⏳ पडताळणी प्रलंबित</option><option value="approved">✅ मंजूर</option><option value="rejected">❌ नाकारलेले</option><option value="all">सर्व</option>
     </select>
@@ -1138,6 +1143,22 @@ try{
     <thead><tr><th>क्रमांक</th><th>दिनांक</th><th>प्रकार</th><th>नाव</th><th>मोबाईल</th><th>रक्कम ₹</th><th>UTR</th><th>स्थिती</th><th>कृती</th></tr></thead>
     <tbody id="aw-tbl"><tr><td colspan="9" style="text-align:center;color:#9E9E9E;padding:14px">"यादी आणा" दाबा</td></tr></tbody>
   </table></div>
+</div>
+
+<div class="card" id="ar-v-users" style="display:none">
+  <div class="card-title">👥 नागरिक ॲप वापरकर्ते</div>
+  <div class="alert al-info" style="font-size:12px;line-height:1.7">
+    आपल्या गावातील जे नागरिक नागरिक ॲप वापरत आहेत त्यांची नावे व मोबाईल नंबर. ज्यांनी ॲप पुन्हा उघडले किंवा काही मागणी केली तेच यादीत येतात — जुने वापरकर्ते ॲप पुढच्यांदा उघडल्यावर आपोआप दिसू लागतील.
+    (☁️ Cloud Sync Sign in आणि Firebase Rules अपडेट असणे आवश्यक.)
+  </div>
+  <div class="bgrp" style="margin-bottom:8px;align-items:center">
+    <button class="btn btn-nv" type="button" onclick="appUsersLoad()">🔄 यादी आणा</button>
+    <input id="au-q" placeholder="🔍 नाव / मोबाईल शोधा…" oninput="appUsersRender()" style="padding:7px;border-radius:6px;border:1px solid #ccc;min-width:180px">
+    <button class="btn btn-out" type="button" onclick="appUsersCsv()">⬇️ Excel/CSV</button>
+    <span id="au-msg" style="font-size:12px;color:#555"></span>
+  </div>
+  <div class="tbl-wrap"><table class="dtbl"><thead id="au-head"></thead>
+  <tbody id="au-tbl"><tr><td colspan="15" style="text-align:center;color:#9E9E9E;padding:14px">"यादी आणा" दाबा</td></tr></tbody></table></div>
 </div>
 
 <div class="card" id="ar-v-nond" style="display:none">
@@ -2325,7 +2346,7 @@ function hcBuild(type,o){
       '<div id="'+o.qrBoxId+'"><div style="width:98px;height:98px;border:2px solid #333;display:flex;align-items:center;justify-content:center;font-size:8px">QR Loading...</div></div>'+
       '<div style="font-weight:700;margin-top:8px">‘This QR code can be used to check the authenticity of the certificate’</div>'+
     '</div>'+
-    '<div class="seal-slot" style="flex:1;display:flex;align-items:flex-end;justify-content:center;min-height:92px"></div>'+
+    '<div class="seal-slot" style="flex:1;display:flex;align-items:center;justify-content:center;min-height:92px"></div>'+
     '<div style="text-align:center;font-size:12px;line-height:1.35;max-width:320px">'+sign+
       '<div style="font-weight:700">निर्गमित करणाऱ्या प्राधिकाऱ्याची सही / SIGNATURE OF ISSUING AUTHORITY :</div>'+
       (o.officer?'<div style="color:#1a1aff">'+hcEsc(String(o.officer).toUpperCase())+'</div>':'')+
@@ -2428,7 +2449,7 @@ function hcCloudCfg(){
   return null; // ग्रामपंचायतीने Masters मध्ये भरले नाही = जुना QR (माहिती लिंकमध्येच), cloud वापरत नाही
 }
 function hcCloudOn(){return !!hcCloudCfg();}
-var FB_RULES_TEXT=["rules_version = '2';", "service cloud.firestore {", "  match /databases/{database}/documents {", "    // प्रमाणपत्रे: ID माहीत असेल तरच वाचता येते (यादी/शोध बंद), नवीन तयार करता येते, बदल/delete बंद.", "    // नवीन दाखल्याचा प्रकार/रकाने भविष्यात जोडले तरी हे Rules पुन्हा बदलावे लागणार नाहीत.", "    match /certs/{id} {", "      allow get: if true;", "      allow list: if false;", "      allow create: if id.size() >= 12 && id.size() <= 24", "        && request.resource.data.keys().hasAll(['t','c','n','is','ts'])", "        && request.resource.data.keys().size() <= 30", "        && request.resource.data.t is string && request.resource.data.t.size() <= 20", "        && request.resource.data.n is string && request.resource.data.n.size() <= 300;", "      allow update, delete: if false;", "    }", "", "    // 📲 नागरिक ॲप — ग्रामपंचायतीची सार्वजनिक माहिती (शुल्क, QR) सर्वांना वाचता येते; लिहिता फक्त ग्रामपंचायतीचा (ADMIN_EMAIL) user.", "    // नागरिक user चे email नेहमी ...@citizen.gp असतात; ते फक्त स्वतःच्या मागण्या तयार करू/वाचू शकतात.", "    match /gpapp/{doc} {", "      allow get: if true;", "      allow list: if false;", "      allow write: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL';", "    }", "    // 📲 मागणी क्रमांक (Dakhala0001 / Tax0001) — नागरिक आधी क्रमांक राखून ठेवतो (एकदाच तयार, बदलता येत नाही); कोणालाही वाचता येतो (पुढचा क्रमांक शोधण्यासाठी).", "    match /gpapp_seq/{id} {", "      allow get: if true;", "      allow list: if false;", "      allow create: if request.auth != null && request.auth.token.email.matches('.*@citizen[.]gp')", "        && id.matches('(Dakhala|Tax|Nond|Comp)[0-9]{4,6}')", "        && request.resource.data.uid == request.auth.uid", "        && request.resource.data.keys().size() <= 4;", "      allow update, delete: if false;", "    }", "    match /gpapp_req/{id} {", "      allow create: if request.auth != null && request.auth.token.email.matches('.*@citizen[.]gp')", "        && request.resource.data.uid == request.auth.uid", "        && request.resource.data.status == 'paid_pending'", "        && request.resource.data.keys().size() <= 40", "        && id.matches('(Dakhala|Tax)[0-9]{4,6}')", "        && get(/databases/$(database)/documents/gpapp_seq/$(id)).data.uid == request.auth.uid;", "      allow get, list: if request.auth != null", "        && (request.auth.token.email == 'ADMIN_EMAIL' || resource.data.uid == request.auth.uid);", "      allow update: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL';", "      allow delete: if false;", "    }", "", "    // 📲 खरा डेटा (नावे/थकबाकी यादी) — फक्त लॉगिन केलेल्या नागरिकांना वाचता येतो (यादी/शोध बंद, एकेक भाग वाचता येतो); लिहिता फक्त ग्रामपंचायतीचा (ADMIN_EMAIL) user.", "    match /gpapp_idx/{id} {", "      allow get: if request.auth != null;", "      allow list: if false;", "      allow write: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL';", "    }", "    // 📝 \"नोंद करून द्या\" विनंत्या — नागरिक आपली विनंती तयार करतो/वाचतो; स्थिती (नोंद केली / नोंद नाही) फक्त ग्रामपंचायत बदलते.", "    match /gpapp_nond/{id} {", "      allow create: if request.auth != null && request.auth.token.email.matches('.*@citizen[.]gp')", "        && request.resource.data.uid == request.auth.uid", "        && request.resource.data.status == 'pending'", "        && request.resource.data.keys().size() <= 30", "        && id.matches('Nond[0-9]{4,6}')", "        && get(/databases/$(database)/documents/gpapp_seq/$(id)).data.uid == request.auth.uid;", "      allow get, list: if request.auth != null", "        && (request.auth.token.email == 'ADMIN_EMAIL' || resource.data.uid == request.auth.uid);", "      allow update: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL';", "      allow delete: if false;", "    }", "    // 📣 तक्रार / सूचना — नागरिक आपली तक्रार तयार करतो/वाचतो; उत्तर व स्थिती (निकाली) फक्त ग्रामपंचायत बदलते.", "    match /gpapp_comp/{id} {", "      allow create: if request.auth != null && request.auth.token.email.matches('.*@citizen[.]gp')", "        && request.resource.data.uid == request.auth.uid", "        && request.resource.data.status == 'pending'", "        && request.resource.data.keys().size() <= 20", "        && id.matches('Comp[0-9]{4,6}')", "        && get(/databases/$(database)/documents/gpapp_seq/$(id)).data.uid == request.auth.uid;", "      allow get, list: if request.auth != null", "        && (request.auth.token.email == 'ADMIN_EMAIL' || resource.data.uid == request.auth.uid);", "      allow update: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL';", "      allow delete: if false;", "    }", "", "    // 🌐 वेबसाईटवरून कर भरणा (UTR / स्क्रीनशॉट) — कोणीही नवीन तयार करू शकतो (मर्यादित आकार/रकाने); वाचणे/मंजुरी फक्त ग्रामपंचायत (ADMIN_EMAIL).", "    match /gpapp_web/{id} {", "      allow create: if request.resource.data.keys().size() <= 20", "        && request.resource.data.kind == 'tax'", "        && request.resource.data.status == 'paid_pending'", "        && request.resource.data.pno is string && request.resource.data.pno.size() <= 20", "        && request.resource.data.name is string && request.resource.data.name.size() <= 120", "        && request.resource.data.mob is string && request.resource.data.mob.size() <= 15", "        && (!('shot' in request.resource.data) || (request.resource.data.shot is string && request.resource.data.shot.size() <= 380000))", "        && (!('shotPa' in request.resource.data) || (request.resource.data.shotPa is string && request.resource.data.shotPa.size() <= 380000));", "      allow get, list, update: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL';", "      allow delete: if false;", "    }", "", "    // 👥 नागरिक ॲप वापरकर्ते (नाव + मोबाईल) — नागरिक फक्त स्वतःची नोंद लिहितो; वाचणे फक्त ग्रामपंचायत (ADMIN_EMAIL).", "    match /gpapp_users/{id} {", "      allow create, update: if request.auth != null && request.auth.token.email.matches('.*@citizen[.]gp')", "        && request.auth.uid == id && request.resource.data.uid == request.auth.uid", "        && request.resource.data.keys().size() <= 8;", "      allow get, list: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL';", "      allow delete: if false;", "    }", "", "    // ☁️ Cloud Sync (फोन ↔ कॉम्प्युटर): फक्त त्या Firebase user लाच स्वतःचा डेटा वाचता/लिहिता येतो.", "    // इतर कोणीही (API key माहीत असली तरी) लॉगिनशिवाय यातला डेटा बघू शकत नाही.", "    match /gpsync/{uid}/{document=**} {", "      allow read, write: if request.auth != null && request.auth.uid == uid;", "    }", "  }", "}"].join('\n');
+var FB_RULES_TEXT=["rules_version = '2';", "service cloud.firestore {", "  match /databases/{database}/documents {", "    // प्रमाणपत्रे: ID माहीत असेल तरच वाचता येते (यादी/शोध बंद), नवीन तयार करता येते, बदल/delete बंद.", "    // नवीन दाखल्याचा प्रकार/रकाने भविष्यात जोडले तरी हे Rules पुन्हा बदलावे लागणार नाहीत.", "    match /certs/{id} {", "      allow get: if true;", "      allow list: if false;", "      allow create: if id.size() >= 12 && id.size() <= 24", "        && request.resource.data.keys().hasAll(['t','c','n','is','ts'])", "        && request.resource.data.keys().size() <= 30", "        && request.resource.data.t is string && request.resource.data.t.size() <= 20", "        && request.resource.data.n is string && request.resource.data.n.size() <= 300;", "      allow update, delete: if false;", "    }", "", "    // 📲 नागरिक ॲप — ग्रामपंचायतीची सार्वजनिक माहिती (शुल्क, QR) सर्वांना वाचता येते; लिहिता फक्त ग्रामपंचायतीचा (ADMIN_EMAIL) user.", "    // नागरिक user चे email नेहमी ...@citizen.gp असतात; ते फक्त स्वतःच्या मागण्या तयार करू/वाचू शकतात.", "    match /gpapp/{doc} {", "      allow get: if true;", "      allow list: if false;", "      allow write: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL';", "    }", "    // 📲 मागणी क्रमांक (Dakhala0001 / Tax0001) — नागरिक आधी क्रमांक राखून ठेवतो (एकदाच तयार, बदलता येत नाही); कोणालाही वाचता येतो (पुढचा क्रमांक शोधण्यासाठी).", "    match /gpapp_seq/{id} {", "      allow get: if true;", "      allow list: if false;", "      allow create: if request.auth != null && request.auth.token.email.matches('.*@citizen[.]gp')", "        && id.matches('(Dakhala|Tax|Nond|Comp)[0-9]{4,6}')", "        && request.resource.data.uid == request.auth.uid", "        && request.resource.data.keys().size() <= 4;", "      allow update, delete: if false;", "    }", "    match /gpapp_req/{id} {", "      allow create: if request.auth != null && request.auth.token.email.matches('.*@citizen[.]gp')", "        && request.resource.data.uid == request.auth.uid", "        && request.resource.data.status == 'paid_pending'", "        && request.resource.data.keys().size() <= 40", "        && id.matches('(Dakhala|Tax)[0-9]{4,6}')", "        && get(/databases/$(database)/documents/gpapp_seq/$(id)).data.uid == request.auth.uid;", "      allow get, list: if request.auth != null", "        && (request.auth.token.email == 'ADMIN_EMAIL' || resource.data.uid == request.auth.uid);", "      allow update: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL';", "      allow delete: if false;", "    }", "", "    // 📲 खरा डेटा (नावे/थकबाकी यादी) — फक्त लॉगिन केलेल्या नागरिकांना वाचता येतो (यादी/शोध बंद, एकेक भाग वाचता येतो); लिहिता फक्त ग्रामपंचायतीचा (ADMIN_EMAIL) user.", "    match /gpapp_idx/{id} {", "      allow get: if request.auth != null;", "      allow list: if false;", "      allow write: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL';", "    }", "    // 📝 \"नोंद करून द्या\" विनंत्या — नागरिक आपली विनंती तयार करतो/वाचतो; स्थिती (नोंद केली / नोंद नाही) फक्त ग्रामपंचायत बदलते.", "    match /gpapp_nond/{id} {", "      allow create: if request.auth != null && request.auth.token.email.matches('.*@citizen[.]gp')", "        && request.resource.data.uid == request.auth.uid", "        && request.resource.data.status == 'pending'", "        && request.resource.data.keys().size() <= 30", "        && id.matches('Nond[0-9]{4,6}')", "        && get(/databases/$(database)/documents/gpapp_seq/$(id)).data.uid == request.auth.uid;", "      allow get, list: if request.auth != null", "        && (request.auth.token.email == 'ADMIN_EMAIL' || resource.data.uid == request.auth.uid);", "      allow update: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL';", "      allow delete: if false;", "    }", "    // 📣 तक्रार / सूचना — नागरिक आपली तक्रार तयार करतो/वाचतो; उत्तर व स्थिती (निकाली) फक्त ग्रामपंचायत बदलते.", "    match /gpapp_comp/{id} {", "      allow create: if request.auth != null && request.auth.token.email.matches('.*@citizen[.]gp')", "        && request.resource.data.uid == request.auth.uid", "        && request.resource.data.status == 'pending'", "        && request.resource.data.keys().size() <= 20", "        && id.matches('Comp[0-9]{4,6}')", "        && get(/databases/$(database)/documents/gpapp_seq/$(id)).data.uid == request.auth.uid;", "      allow get, list: if request.auth != null", "        && (request.auth.token.email == 'ADMIN_EMAIL' || resource.data.uid == request.auth.uid);", "      allow update: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL';", "      allow delete: if false;", "    }", "", "    // 🌐 वेबसाईटवरून कर भरणा (UTR / स्क्रीनशॉट) — कोणीही नवीन तयार करू शकतो (मर्यादित आकार/रकाने); वाचणे/मंजुरी फक्त ग्रामपंचायत (ADMIN_EMAIL).", "    match /gpapp_web/{id} {", "      allow create: if request.resource.data.keys().size() <= 24", "        && request.resource.data.kind == 'tax'", "        && request.resource.data.status == 'paid_pending'", "        && request.resource.data.pno is string && request.resource.data.pno.size() <= 20", "        && request.resource.data.name is string && request.resource.data.name.size() <= 120", "        && request.resource.data.mob is string && request.resource.data.mob.size() <= 15", "        && (!('shot' in request.resource.data) || (request.resource.data.shot is string && request.resource.data.shot.size() <= 380000))", "        && (!('shotPa' in request.resource.data) || (request.resource.data.shotPa is string && request.resource.data.shotPa.size() <= 380000));", "      allow get, list, update: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL';", "      allow delete: if false;", "    }", "", "    // 👥 नागरिक ॲप वापरकर्ते (नाव + मोबाईल) — नागरिक फक्त स्वतःची नोंद लिहितो; वाचणे फक्त ग्रामपंचायत (ADMIN_EMAIL).", "    match /gpapp_users/{id} {", "      allow create, update: if request.auth != null && request.auth.token.email.matches('.*@citizen[.]gp')", "        && request.auth.uid == id && request.resource.data.uid == request.auth.uid", "        && request.resource.data.keys().size() <= 8;", "      allow get, list: if request.auth != null && request.auth.token.email == 'ADMIN_EMAIL';", "      allow delete: if false;", "    }", "", "    // ☁️ Cloud Sync (फोन ↔ कॉम्प्युटर): फक्त त्या Firebase user लाच स्वतःचा डेटा वाचता/लिहिता येतो.", "    // इतर कोणीही (API key माहीत असली तरी) लॉगिनशिवाय यातला डेटा बघू शकत नाही.", "    match /gpsync/{uid}/{document=**} {", "      allow read, write: if request.auth != null && request.auth.uid == uid;", "    }", "  }", "}"].join('\n');
 function fbOpenConsole(){
   var u='https://console.firebase.google.com/';
   try{require('electron').shell.openExternal(u);}catch(e){window.open(u,'_blank');}
@@ -7945,6 +7966,22 @@ var PRINT_FILE_NAMES={
   'bpl-doc':'BPL-दाखला','nd-doc':'येणे-बाकी-दाखला','nr-doc':'निराधार-दाखला',
   'certreport-doc':'दाखले-अहवाल','ar-doc':'ॲप-दाखला'
 };
+// ॲप दाखला WhatsApp साठी: सॉफ्टवेअरच्या प्रिंट-पानासारखेच (A4; नमुना ८ = आडवे, बाकी उभे; तेच मार्जिन) —
+// दाखला एका पानातच बसवतो (मोठा असेल तर लहान, लहान असेल तर पान भरेल असा), दुसऱ्या पानावर जात नाही.
+// zoom ऐवजी transform:scale वापरला आहे (html2canvas / मोबाईलवरही नीट चालण्यासाठी).
+function appFitPageHtml(fullHtml,landscape,maxZoom){
+  var W=landscape?1123:794,H=landscape?794:1123,M=3;
+  var css='<style>html,body{margin:0!important;padding:0!important;background:#fff}body{width:'+W+'px;height:'+H+'px;overflow:hidden;position:relative}#gpfit-pg{position:absolute;left:'+M+'px;top:'+M+'px;width:'+(W-2*M)+'px;height:'+(H-2*M)+'px;overflow:hidden}#gpfit{transform-origin:0 0}</style>';
+  var js='<script>(function(){function run(){try{var f=document.getElementById("gpfit"),el=f.querySelector(".doc")||f.querySelector(".cert-box")||f;'+
+    'var AW='+(W-2*M)+',AH='+(H-2*M-4)+',MZ='+(+maxZoom||2.2)+';'+
+    'function h(z){f.style.width=(AW/z)+"px";f.style.transform="scale("+z+")";el.style.minHeight="0px";return el.offsetHeight*z;}'+
+    'var best=1;if(h(1)<=AH){var lo=1,hi=MZ;for(var i=0;i<12;i++){var m=(lo+hi)/2;if(h(m)<=AH)lo=m;else hi=m;}best=lo;}'+
+    'else{var z=1;while(z>0.35&&h(z)>AH)z*=0.97;best=z;}'+
+    'h(best);el.style.minHeight=Math.max(0,Math.floor(AH/best))+"px";}catch(e){}}'+
+    'if(document.readyState==="complete")run();else window.addEventListener("load",run);})();<\/script>';
+  var html=fullHtml.replace('</head>',css+'</head>').replace(/<body>/,'<body><div id="gpfit-pg"><div id="gpfit">').replace(/<\/body>/,'</div></div>'+js+'</body>');
+  return {html:html,w:W,h:H};
+}
 function printDiv(id,landscape,legalPortrait,opts){
   var el=document.getElementById(id);if(!el)return;
   var printFileName=(opts&&opts.fileName)||PRINT_FILE_NAMES[id]||'दाखला';
@@ -8012,6 +8049,8 @@ function printDiv(id,landscape,legalPortrait,opts){
     bodyHtml=gpRegCoverHtml(regMeta)+idxHtml+'<div id="gp-reg-wrap">'+bodyHtml+'</div>'+gpRegCertHtml(regMeta);
   }
   var fullHtml='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+printFileName+'</title><style>'+styleStr+'</style></head><body>'+bodyHtml+'</body></html>';
+  // opts.toJpg: प्रिंटऐवजी तेच (प्रिंटसारखे) पान JPG साठी तयार करून callback ला देतो (WhatsApp वर पाठवण्यासाठी)
+  if(opts&&opts.toJpg){var _pg=appFitPageHtml(fullHtml,isLandscape,maxZoom);if(opts.onHtml)opts.onHtml(_pg.html,_pg.w,_pg.h);return;}
   try{
     var ipcRenderer=require('electron').ipcRenderer;
     // मोठ्या यादीत (उदा. "सर्व" नमुना ९क पावत्या — शेकडो रेकॉर्ड + प्रत्येकात QR/सही चे फोटो) HTML
@@ -8549,13 +8588,13 @@ function appNondNotFound(id){
 // ── 📲 ॲप दाखले — उप-टॅब (मागण्या / नोंद विनंत्या / तक्रार-सूचना) ──
 var appSubCur='req';
 function appSub(v){
-  if(['req','web','nond','comp','notice'].indexOf(v)<0)v='req';
+  if(['req','tax','web','nond','comp','users','notice'].indexOf(v)<0)v='req';
   appSubCur=v;
-  ['req','web','nond','comp','notice'].forEach(function(k){
+  ['req','tax','web','nond','comp','users','notice'].forEach(function(k){
     var el=document.getElementById('ar-v-'+k);if(el)el.style.display=(k===v)?'':'none';
     var tb=document.querySelector('#ar-tabs .tab[data-v="'+k+'"]');if(tb)tb.classList.toggle('active',k===v);
   });
-  if(v==='req'||v==='web')appReqLoad();else if(v==='nond')appNondLoad();else if(v==='comp')appCompLoad();else appNtcLoad();
+  if(v==='req'||v==='tax'||v==='web')appReqLoad();else if(v==='nond')appNondLoad();else if(v==='comp')appCompLoad();else if(v==='users')appUsersLoad();else appNtcLoad();
 }
 function appBadge(k,n){var el=document.getElementById('ar-cnt-'+k);if(el)el.innerHTML=n>0?'<span style="background:#c62828;color:#fff;border-radius:10px;padding:0 6px;margin-left:5px;font-size:10px;font-weight:700">'+n+'</span>':'';}
 function appCounts(){ // उघडलेल्या टॅबशिवाय बाकीचे टॅब शांतपणे ताजे करून प्रलंबित संख्या दाखवतो
@@ -8715,7 +8754,7 @@ function appReqPreview(r,patch,onOk,onCancel,note){
   w.innerHTML='<div style="background:#fff;border-radius:10px;width:min(880px,100%);max-height:96vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.4)">'+
     '<div style="padding:10px 14px;background:#0D2B5E;color:#fff;font-weight:700;font-size:14px">👁️ नागरिकाला हेच '+what+' पाठवले जाईल — नीट तपासा</div>'+
     '<div style="padding:8px 14px;font-size:12.5px;line-height:1.7;background:#fff8e1;border-bottom:1px solid #eee">'+
-      '<b>'+E(r.code||r._id)+'</b> · '+E(appReqTitle(r))+' · अर्जदार: <b>'+E(r.name||'')+'</b> ('+E(r.mob||'')+')<br>भरणा: <b>'+E(amt)+'</b>'+(utr?' · UTR: <b>'+E(utr)+'</b>':'')+
+      '<b>'+E(r.code||r._id)+'</b> · '+E(appReqTitle(r))+' · अर्जदार: <b>'+E(r.name||'')+'</b> ('+E(r.mob||'')+')'+(r.wa?' · WhatsApp: <b>'+E(r.wa)+'</b>':'')+'<br>भरणा: <b>'+E(amt)+'</b>'+(utr?' · UTR: <b>'+E(utr)+'</b>':'')+
       (note?'<div style="color:#8a5a00;margin-top:2px">'+E(note)+'</div>':'')+
       ' <button class="btn btn-sm btn-out" type="button" id="ar-prev-pay">💳 भरणा / स्क्रीनशॉट पहा</button></div>'+
     '<div id="ar-prev-doc" style="flex:1;overflow:auto;background:#90a4ae;padding:12px"></div>'+
@@ -8737,13 +8776,14 @@ function appReqPreview(r,patch,onOk,onCancel,note){
 // ── 📲 ॲप दाखले पान ──
 var appReqCache=[];
 function appOk(u){return typeof u==='string'&&/^data:image\/(jpeg|png);base64,[A-Za-z0-9+\/=]+$/.test(u)&&u.length<400000?u:'';}
-function appReqMsg(t,bad){['ar-msg','aw-msg'].forEach(function(id){var el=document.getElementById(id);if(el){el.style.color=bad?'#c62828':'#555';el.textContent=t||'';}});}
+function appReqMsg(t,bad){['ar-msg','at-msg','aw-msg'].forEach(function(id){var el=document.getElementById(id);if(el){el.style.color=bad?'#c62828':'#555';el.textContent=t||'';}});}
 // ── 👥 नागरिक ॲप वापरकर्ते यादी (प्रत्येकाने ॲपमधली कोणती सुविधा किती वेळा वापरली — कॉलमनुसार) ──
 var appUsersCache=[],appUsersFY='';
-var AU_COLS=[['dk','दाखला मागण्या'],['sg','स्वयंघोषणा-पत्र'],['tax','कर भरणा (संख्या)'],['amt','चालू आर्थिक वर्षात भरलेली रक्कम ₹'],['nond','नवीन नोंद विनंत्या'],['comp','तक्रार / सूचना']];
+var AU_COLS=[['dk','दाखला मागण्या'],['sg','स्वयंघोषणा-पत्र'],['fee','दाखला फी ₹'],['tax','कर भरणा (संख्या)'],['amt','कर रक्कम ₹'],['nond','नवीन नोंद विनंत्या'],['comp','तक्रार / सूचना']];
 function appUsersMsg(t,bad){var el=document.getElementById('au-msg');if(el){el.style.color=bad?'#c62828':'#555';el.textContent=t||'';}}
 // आर्थिक वर्ष १ एप्रिल ते ३१ मार्च (आजच्या तारखेवरून) — उदा. नोव्हेंबर २०२६ = 2026-27
 function appUsersFYRange(){var d=new Date(),y=d.getFullYear()-(d.getMonth()<3?1:0);return {from:y+'-04-01',to:(y+1)+'-03-31',label:y+'-'+String((y+1)%100).padStart(2,'0')};}
+function appUsersTaxAmt(x){return (x.amtGh!=null||x.amtPa!=null)?((+x.amtGh||0)+(+x.amtPa||0)):(+x.amount||0);}
 function appUsersLoad(){
   if(!window.GPSync||!window.GPSync.isOn()){appUsersMsg('⚠️ आधी ☁️ Cloud Sync मध्ये Sign in करा',true);return;}
   appUsersMsg('⏳ आणत आहे…');
@@ -8752,57 +8792,155 @@ function appUsersLoad(){
     var m={},fy=appUsersFYRange();appUsersFY=fy.label;
     var get=function(mob,name){
       mob=String(mob||'').replace(/\D/g,'').slice(-10);if(!mob)return null;
-      var u=m[mob]||(m[mob]={mob:mob,name:'',first:'',last:'',dk:0,sg:0,tax:0,amt:0,nond:0,comp:0});
+      var u=m[mob]||(m[mob]={mob:mob,name:'',wa:'',first:'',last:'',dk:0,sg:0,fee:0,tax:0,amt:0,nond:0,comp:0,recs:{req:[],nond:[],comp:[]}});
       if(name&&!u.name)u.name=name;return u;
     };
     var seen=function(u,ts){if(ts&&ts>u.last)u.last=ts;};
-    r[0].forEach(function(x){var u=get(x.mob,x.name);if(!u)return;if(x.joined&&(!u.first||x.joined<u.first))u.first=x.joined;seen(u,x.last||x.joined);});
+    r[0].forEach(function(x){var u=get(x.mob,x.name);if(!u)return;if(x.wa)u.wa=x.wa;if(x.joined&&(!u.first||x.joined<u.first))u.first=x.joined;seen(u,x.last||x.joined);});
     // जुने वापरकर्ते (ज्यांनी ॲप अजून उघडलेले नाही पण पूर्वी मागणी/तक्रार केली) — त्यांच्या मागण्यांवरून
-    r[1].forEach(function(x){var u=get(x.mob,x.name);if(!u)return;seen(u,x.ts);
-      if(x.kind==='tax'){u.tax++;var d=String(x.ts||'').slice(0,10);
-        if(x.status==='approved'&&d>=fy.from&&d<=fy.to){u.amt+=(x.amtGh!=null||x.amtPa!=null)?((+x.amtGh||0)+(+x.amtPa||0)):(+x.amount||0);}}
-      else if(x.dk==='sg')u.sg++;else u.dk++;});
-    r[2].forEach(function(x){var u=get(x.mob,x.applicant||x.name);if(!u)return;seen(u,x.ts);u.nond++;});
-    r[3].forEach(function(x){var u=get(x.mob,x.name);if(!u)return;seen(u,x.ts);u.comp++;});
+    r[1].forEach(function(x){var u=get(x.mob,x.name);if(!u)return;seen(u,x.ts);if(x.wa&&!u.wa)u.wa=x.wa;u.recs.req.push(x);
+      var inFY=String(x.ts||'').slice(0,10)>=fy.from&&String(x.ts||'').slice(0,10)<=fy.to;
+      if(x.kind==='tax'){u.tax++;if(x.status==='approved'&&inFY)u.amt+=appUsersTaxAmt(x);}
+      else{if(x.dk==='sg')u.sg++;else u.dk++;if(x.status==='approved'&&inFY)u.fee+=(+x.fee||0);}});
+    r[2].forEach(function(x){var u=get(x.mob,x.applicant||x.name);if(!u)return;seen(u,x.ts);if(x.wa&&!u.wa)u.wa=x.wa;u.recs.nond.push(x);u.nond++;});
+    r[3].forEach(function(x){var u=get(x.mob,x.name);if(!u)return;seen(u,x.ts);if(x.wa&&!u.wa)u.wa=x.wa;u.recs.comp.push(x);u.comp++;});
     appUsersCache=Object.keys(m).map(function(k){return m[k];}).sort(function(a,b){return String(a.name||'').localeCompare(String(b.name||''),'mr');});
     appUsersMsg('एकूण '+appUsersCache.length+' वापरकर्ते · आर्थिक वर्ष '+appUsersFY);appUsersRender();
   },function(e){appUsersMsg('❌ '+((window.GPSync.errText&&window.GPSync.errText(e))||(e&&e.message)||'त्रुटी'),true);});
 }
 function appUsersFmt(ts){if(!ts)return '—';var d=String(ts).slice(0,10).split('-').reverse().join('-');return d+' '+String(ts).slice(11,16);}
-function appUsersHead(){var h='<tr><th>अ.क्र.</th><th>नाव</th><th>मोबाईल</th>'+AU_COLS.map(function(c){return '<th>'+(c[0]==='amt'&&appUsersFY?'चालू आर्थिक वर्ष '+appUsersFY+' मध्ये भरलेली रक्कम ₹':c[1])+'</th>';}).join('')+'<th>पहिली नोंद</th><th>शेवटचे वापरले</th></tr>';var el=document.getElementById('au-head');if(el)el.innerHTML=h;}
+function appUsersColName(c){return (c[0]==='amt'||c[0]==='fee')&&appUsersFY?c[1]+' ('+appUsersFY+')':c[1];}
+function appUsersHead(){var h='<tr><th>अ.क्र.</th><th>नाव</th><th>मोबाईल</th><th>WhatsApp</th>'+AU_COLS.map(function(c){return '<th>'+appUsersColName(c)+'</th>';}).join('')+'<th>पहिली नोंद</th><th>शेवटचे वापरले</th><th>तपशील</th></tr>';var el=document.getElementById('au-head');if(el)el.innerHTML=h;}
 function appUsersRender(){
   var tb=document.getElementById('au-tbl');if(!tb)return;appUsersHead();
   var q=(gv('au-q')||'').trim().toLowerCase(),E=dashEsc;
   var l=appUsersCache.filter(function(u){return !q||String(u.name||'').toLowerCase().indexOf(q)>=0||u.mob.indexOf(q)>=0;});
-  if(!l.length){tb.innerHTML='<tr><td colspan="11" style="text-align:center;color:#9E9E9E;padding:14px">वापरकर्ते नाहीत</td></tr>';return;}
-  var tot={dk:0,sg:0,tax:0,amt:0,nond:0,comp:0};
+  if(!l.length){tb.innerHTML='<tr><td colspan="15" style="text-align:center;color:#9E9E9E;padding:14px">वापरकर्ते नाहीत</td></tr>';return;}
+  var tot={dk:0,sg:0,fee:0,tax:0,amt:0,nond:0,comp:0};
   var rows=l.map(function(u,i){AU_COLS.forEach(function(c){tot[c[0]]+=u[c[0]];});
-    return '<tr><td>'+(i+1)+'</td><td>'+E(u.name||'—')+'</td><td style="white-space:nowrap;font-weight:700">'+E(u.mob)+'</td>'+
-    AU_COLS.map(function(c){return '<td style="text-align:center'+(c[0]==='amt'?';font-weight:700':'')+'">'+(u[c[0]]||0)+'</td>';}).join('')+
-    '<td style="white-space:nowrap">'+E(appUsersFmt(u.first))+'</td><td style="white-space:nowrap">'+E(appUsersFmt(u.last))+'</td></tr>';}).join('');
-  tb.innerHTML=rows+'<tr style="font-weight:800;background:#eef3fb"><td colspan="3" style="text-align:right">एकूण ('+l.length+' वापरकर्ते)</td>'+AU_COLS.map(function(c){return '<td style="text-align:center">'+tot[c[0]]+'</td>';}).join('')+'<td colspan="2"></td></tr>';
+    return '<tr><td>'+(i+1)+'</td><td>'+E(u.name||'—')+'</td><td style="white-space:nowrap;font-weight:700">'+E(u.mob)+'</td><td style="white-space:nowrap">'+E(u.wa||'—')+'</td>'+
+    AU_COLS.map(function(c){return '<td style="text-align:center'+((c[0]==='amt'||c[0]==='fee')?';font-weight:700':'')+'">'+(u[c[0]]||0)+'</td>';}).join('')+
+    '<td style="white-space:nowrap">'+E(appUsersFmt(u.first))+'</td><td style="white-space:nowrap">'+E(appUsersFmt(u.last))+'</td>'+
+    '<td><button class="btn btn-sm btn-out" type="button" onclick="appUsersView(\''+E(u.mob)+'\')">👁️ पहा</button></td></tr>';}).join('');
+  tb.innerHTML=rows+'<tr style="font-weight:800;background:#eef3fb"><td colspan="4" style="text-align:right">एकूण ('+l.length+' वापरकर्ते)</td>'+AU_COLS.map(function(c){return '<td style="text-align:center">'+tot[c[0]]+'</td>';}).join('')+'<td colspan="3"></td></tr>';
+}
+// 👁️ एका वापरकर्त्याचे संपूर्ण रेकॉर्ड — मिळकतनिहाय कर भरणा, दाखला/स्वयंघोषणा फी, नोंद विनंत्या, तक्रारी
+function appUsersView(mob){
+  var u=appUsersCache.filter(function(x){return x.mob===mob;})[0];if(!u)return;
+  var E=dashEsc,st={paid_pending:'⏳ प्रलंबित',approved:'✅ मंजूर',rejected:'❌ नाकारले',pending:'⏳ प्रलंबित',done:'✅ नोंद केली',notfound:'❌ नोंद नाही',resolved:'✅ निकाली'};
+  var th='padding:4px 6px;border:1px solid #ddd;font-size:12px;',hd='<th style="'+th+'background:#eef3fb">',td='<td style="'+th+'">';
+  var dt=function(ts){return E(appUsersFmt(ts));};
+  var reqs=u.recs.req.slice().sort(function(a,b){return String(b.ts||'').localeCompare(String(a.ts||''));});
+  var taxes=reqs.filter(function(x){return x.kind==='tax';}),docs=reqs.filter(function(x){return x.kind!=='tax';});
+  var taxOk=0,feeOk=0,byP={};
+  taxes.forEach(function(x){if(x.status!=='approved')return;var a=appUsersTaxAmt(x);taxOk+=a;var k=String(x.pno||'—');
+    var g=byP[k]||(byP[k]={pno:k,owner:x.rname||'',n:0,gh:0,pa:0,tot:0,last:''});g.n++;
+    if(x.amtGh!=null||x.amtPa!=null){g.gh+=(+x.amtGh||0);g.pa+=(+x.amtPa||0);}else g.gh+=(+x.amount||0);
+    g.tot+=a;if(String(x.ts||'')>g.last)g.last=x.ts;if(!g.owner&&x.rname)g.owner=x.rname;});
+  docs.forEach(function(x){if(x.status==='approved')feeOk+=(+x.fee||0);});
+  var sec=function(t,body){return '<div style="font-weight:800;color:#0D2B5E;margin:12px 0 4px">'+t+'</div>'+body;};
+  var tbl=function(head,rows){return rows.length?'<div style="overflow-x:auto"><table style="border-collapse:collapse;width:100%"><tr>'+head.map(function(h){return hd+h+'</th>';}).join('')+'</tr>'+rows.join('')+'</table></div>':'<div style="font-size:12px;color:#999">नोंदी नाहीत</div>';};
+  var h='<div style="position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99999;display:flex;align-items:center;justify-content:center;padding:14px" onclick="if(event.target===this)this.remove()"><div style="background:#fff;border-radius:10px;max-width:820px;width:100%;max-height:92vh;overflow:auto;padding:16px">'+
+   '<div style="font-weight:800;font-size:17px">👤 '+E(u.name||'—')+'</div><div style="font-size:13px;color:#555;margin-bottom:6px">📱 '+E(u.mob)+(u.wa?' · WhatsApp: '+E(u.wa):'')+' · पहिली नोंद: '+dt(u.first)+' · शेवटचे वापरले: '+dt(u.last)+'</div>'+
+   '<div style="display:flex;gap:8px;flex-wrap:wrap;font-size:13px"><div style="background:#e6f4ea;border-radius:8px;padding:6px 10px">💰 एकूण भरलेला कर (मंजूर): <b>₹ '+taxOk+'</b></div><div style="background:#e3f0ff;border-radius:8px;padding:6px 10px">📄 एकूण दाखला फी (मंजूर): <b>₹ '+feeOk+'</b></div>'+
+   '<div style="background:#fff8e1;border-radius:8px;padding:6px 10px">चालू आर्थिक वर्ष '+E(appUsersFY)+': कर <b>₹ '+u.amt+'</b> · फी <b>₹ '+u.fee+'</b></div></div>'+
+   sec('🏠 मिळकतनिहाय कर भरणा (मंजूर)',tbl(['मिळकत क्र./अ.क्र.','मालक','भरणा (वेळा)','घरपट्टी ₹','पाणीपट्टी ₹','एकूण ₹','शेवटचा भरणा'],Object.keys(byP).map(function(k){var g=byP[k];return '<tr>'+td+E(g.pno)+'</td>'+td+E(g.owner||'—')+'</td>'+td+g.n+'</td>'+td+g.gh+'</td>'+td+g.pa+'</td>'+td+'<b>'+g.tot+'</b></td>'+td+dt(g.last)+'</td></tr>';})))+
+   sec('💳 सर्व कर भरणा (मागण्या)',tbl(['दिनांक','मिळकत','रक्कम ₹','UTR','स्थिती'],taxes.map(function(x){var a=(x.amtGh!=null||x.amtPa!=null)?('घर '+(x.amtGh||0)+' + पाणी '+(x.amtPa||0)+' = '+appUsersTaxAmt(x)):appUsersTaxAmt(x);return '<tr>'+td+dt(x.ts)+'</td>'+td+E(x.pno||'')+(x.rname?' ('+E(x.rname)+')':'')+'</td>'+td+E(a)+'</td>'+td+E([x.utrGh,x.utrPa].filter(Boolean).join(' / ')||x.utr||'')+'</td>'+td+(st[x.status]||E(x.status))+'</td></tr>';})))+
+   sec('📄 दाखला / स्वयंघोषणापत्र — मागण्या व फी',tbl(['दिनांक','प्रकार','फी ₹','UTR','स्थिती'],docs.map(function(x){return '<tr>'+td+dt(x.ts)+'</td>'+td+E(appReqTitle(x))+(x.rname?' — '+E(x.rname):'')+'</td>'+td+(+x.fee||0)+'</td>'+td+E(x.utr||'')+'</td>'+td+(st[x.status]||E(x.status))+'</td></tr>';})))+
+   sec('➕ नवीन नोंद विनंत्या',tbl(['दिनांक','क्रमांक','प्रकार','स्थिती'],u.recs.nond.slice().sort(function(a,b){return String(b.ts||'').localeCompare(String(a.ts||''));}).map(function(x){return '<tr>'+td+dt(x.ts)+'</td>'+td+E(x.code||'')+'</td>'+td+E(typeof dkName==='function'&&x.dk?dkName(x.dk):(x.dk||''))+'</td>'+td+(st[x.status]||E(x.status))+'</td></tr>';})))+
+   sec('📣 तक्रार / सूचना',tbl(['दिनांक','क्रमांक','प्रकार','विषय','स्थिती'],u.recs.comp.slice().sort(function(a,b){return String(b.ts||'').localeCompare(String(a.ts||''));}).map(function(x){return '<tr>'+td+dt(x.ts)+'</td>'+td+E(x.code||'')+'</td>'+td+(x.ct==='sugg'?'सूचना':'तक्रार')+'</td>'+td+E(x.subj||'')+'</td>'+td+(st[x.status]||E(x.status))+'</td></tr>';})))+
+   '<div style="text-align:right;margin-top:12px"><button class="btn btn-out" onclick="this.closest(\'div[style*=fixed]\').remove()">बंद करा</button></div></div></div>';
+  var w=document.createElement('div');w.innerHTML=h;document.body.appendChild(w.firstChild);
 }
 function appUsersCsv(){
   if(!appUsersCache.length){showToast('⚠️ आधी यादी आणा');return;}
   var q=function(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"';};
-  var rows=[['अ.क्र.','नाव','मोबाईल'].concat(AU_COLS.map(function(c){return c[0]==='amt'?'चालू आर्थिक वर्ष '+appUsersFY+' मध्ये भरलेली रक्कम ₹':c[1];}),['पहिली नोंद','शेवटचे वापरले'])].concat(appUsersCache.map(function(u,i){return [i+1,u.name||'',u.mob].concat(AU_COLS.map(function(c){return u[c[0]]||0;}),[appUsersFmt(u.first),appUsersFmt(u.last)]);}));
+  var rows=[['अ.क्र.','नाव','मोबाईल','WhatsApp'].concat(AU_COLS.map(appUsersColName),['पहिली नोंद','शेवटचे वापरले'])].concat(appUsersCache.map(function(u,i){return [i+1,u.name||'',u.mob,u.wa||''].concat(AU_COLS.map(function(c){return u[c[0]]||0;}),[appUsersFmt(u.first),appUsersFmt(u.last)]);}));
   var blob=new Blob(['﻿'+rows.map(function(r){return r.map(q).join(',');}).join('\r\n')],{type:'text/csv;charset=utf-8'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='app-users.csv';document.body.appendChild(a);a.click();setTimeout(function(){a.remove();URL.revokeObjectURL(a.href);},500);
+}
+// 📲 मंजुरीनंतर पावती/दाखला त्या व्यक्तीच्या WhatsApp नंबरवर पाठवण्यासाठी — पावतीचा JPG क्लिपबोर्डवर कॉपी करून त्याच नंबरचं WhatsApp उघडतो; फक्त Ctrl+V (पेस्ट) करून Send दाबावं लागतं.
+// (WhatsApp स्वतः कोणतीही फाईल बटण न दाबता आपोआप पाठवू देत नाही — त्यासाठी WhatsApp Business API लागते.)
+function appWaNum(v){var n=String(v||'').replace(/\D/g,'');if(n.length===10)n='91'+n;return n.length>=11?n:'';}
+function appWaOffer(r,patch){
+  if(!patch||!patch.certHtml)return;
+  var num=appWaNum(r.wa)||appWaNum(r.mob),E=dashEsc,old=document.getElementById('gpWaOffer');if(old)old.remove();
+  var w=document.createElement('div');w.id='gpWaOffer';
+  w.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100000;display:flex;align-items:center;justify-content:center;padding:14px';
+  w.innerHTML='<div style="background:#fff;border-radius:12px;max-width:440px;width:100%;padding:20px;text-align:center;font-family:Mangal,Arial,sans-serif"><div style="font-size:38px">📲</div>'+
+    '<div style="font-size:18px;font-weight:800;color:#1a5c2a;margin:4px 0">✅ मंजूर झाले</div>'+
+    '<div style="font-size:13.5px;line-height:1.7;color:#333">'+E(r.name||'')+' यांना संदेश + पावती/दाखला WhatsApp वर पाठवायचा?<br><span style="font-size:12px;color:#666">संदेश आधीच भरलेला येईल आणि पावती आपोआप पेस्ट होईल — फक्त Send दाबा.</span><br>नंबर: <b>'+E(num?num.replace(/^91/,''):'— (WhatsApp नंबर नाही)')+'</b>'+(r.wa?'':'<br><span style="color:#8a5a00;font-size:12px">(WhatsApp नंबर दिलेला नाही म्हणून मोबाईल नंबर वापरत आहे)</span>')+'</div>'+
+    '<div style="display:flex;gap:10px;justify-content:center;margin-top:16px"><button class="btn btn-out" id="gpWaNo">नंतर</button><button class="btn btn-gn" id="gpWaGo"'+(num?'':' disabled')+'>📲 WhatsApp वर पाठवा</button></div></div>';
+  document.body.appendChild(w);
+  document.getElementById('gpWaNo').onclick=function(){w.remove();};
+  document.getElementById('gpWaGo').onclick=function(){w.remove();appWaSend(patch.certHtml,num,r.code||r._id||'',appWaText(r,patch),appWaPr(r,patch));};
+}
+// मंजूर झालेल्या मागणीची पावती/दाखला पुन्हा WhatsApp वर पाठवण्यासाठी (आधी गेला नसेल तर) — नंबर बदलता येतो
+function appWaResend(id){
+  var r=appReqById(id);if(!r)return;
+  if(!r.certHtml){showToast('⚠️ या मागणीची पावती उपलब्ध नाही');return;}
+  var def=appWaNum(r.wa)||appWaNum(r.mob);
+  gpPrompt('WhatsApp नंबर (पावती पाठवायची आहे)',def.replace(/^91/,''),function(v){
+    var num=appWaNum(v);if(!num){showToast('⚠️ बरोबर WhatsApp नंबर टाका');return;}
+    var p={certHtml:r.certHtml,certNo:r.certNo||''};
+    appWaSend(p.certHtml,num,r.code||r._id||'',appWaText(r,p),appWaPr(r,null));
+  });
+}
+function appWaText(r,patch){
+  var gp=gp_val('s-gp',''),nm=r.name||'',no=(patch&&patch.certNo)?(' ('+patch.certNo+')'):'';
+  var what=r.kind==='tax'?('कर भरणा ₹ '+((r.amtGh!=null||r.amtPa!=null)?((+r.amtGh||0)+(+r.amtPa||0)):(+r.amount||0))):appReqTitle(r).replace(/^[^ऀ-ॿ]+/,'');
+  return 'नमस्कार '+nm+',\nतुमचा '+what+' तपासून मंजूर करण्यात आला आहे. पावती/दाखला'+no+' सोबत जोडला आहे.\nधन्यवाद.\n— ग्रामपंचायत '+gp;
+}
+// pr (दाखल्यासाठी): {landscape,dk} — दिल्यास दाखला सॉफ्टवेअरच्या प्रिंटसारख्या पानात (एका पानात) JPG होतो; कर पावतीसाठी null
+function appWaPr(r,patch){
+  if(!r||r.kind==='tax')return null;
+  var dk=String(r.dk||'');
+  return {landscape:r.land===true||!!(patch&&patch.land===true)||dk==='n8',dk:dk};
+}
+function appWaSend(html,num,tag,text,pr){
+  var doc='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>html,body{margin:0;background:#fff}body{font-family:Mangal,"Times New Roman",serif;width:794px}</style></head><body>'+html+'</body></html>';
+  var desktop=!window.GPWeb;
+  if(pr){ // दाखला: आधी प्रिंटसारखे पान बनवतो, मग तेच JPG करतो
+    var host=document.getElementById('wa-doc');
+    if(!host){host=document.createElement('div');host.id='wa-doc';host.style.display='none';document.body.appendChild(host);}
+    host.innerHTML=html;
+    try{
+      printDiv('wa-doc',pr.landscape,false,{single:true,dk:pr.dk,landscape:pr.landscape,toJpg:true,onHtml:function(h,w){appWaSend2(h,w,num,tag,text,desktop);}});
+    }catch(e){appWaSend2(doc,814,num,tag,text,desktop);}
+    return;
+  }
+  appWaSend2(doc,814,num,tag,text,desktop);
+}
+function appWaSend2(doc,width,num,tag,text,desktop){
+  try{
+    var ipc=require('electron').ipcRenderer;
+    showToast('⏳ पावतीचा JPG तयार होत आहे...',2500);
+    ipc.send('capture-html-jpg',{html:doc,width:width,ano:tag});
+    ipc.once('capture-html-jpg-done',function(e,res){
+      if(res&&res.ok){
+        showToast('✅ पावती कॉपी झाली — WhatsApp (सॉफ्टवेअरमध्येच) उघडत आहे… पहिल्यांदा QR स्कॅन करावा लागेल; मग पावती आपोआप पेस्ट होईल, फक्त Send दाबा',8000);
+        if(desktop)ipc.send('open-whatsapp-embedded',{phone:num,text:text}); // संगणक: सॉफ्टवेअरमधल्याच WhatsApp विंडोत चॅट उघडतं, संदेश भरलेला, पावती आपोआप पेस्ट
+        else showPasteHint(function(){ipc.send('open-whatsapp',{phone:num,text:text});}); // मोबाईल: संदेश भरलेला; पावती पेस्ट करावी लागते
+      }
+      else{showToast('⚠️ JPG तयार करता आलं नाही — फक्त संदेशासह WhatsApp उघडत आहे',3500);ipc.send('open-whatsapp',{phone:num,text:text});}
+    });
+  }catch(e){try{window.open('https://wa.me/'+num+'?text='+encodeURIComponent(text||''),'_blank');}catch(x){}}
 }
 function appReqLoad(manual){
   if(!window.GPSync||!window.GPSync.isOn()){appReqMsg('⚠️ आधी ☁️ Cloud Sync मध्ये Sign in करा',true);return;}
   appReqMsg('⏳ आणत आहे…');
   Promise.all([window.GPSync.fs.list('gpapp_req'),window.GPSync.fs.list('gpapp_web').then(function(w){return w.map(function(x){x._col='gpapp_web';return x;});},function(){return [];})]).then(function(ll){var l=ll[0].concat(ll[1]);
     appReqCache=l.sort(function(a,b){return String(b.ts||'').localeCompare(String(a.ts||''));});
-    appReqMsg('एकूण '+l.length+' मागण्या');appReqRender();appBadge('req',l.filter(function(r){return r.status==='paid_pending'&&r._col!=='gpapp_web';}).length);appBadge('web',l.filter(function(r){return r.status==='paid_pending'&&r._col==='gpapp_web';}).length);
+    appReqMsg('एकूण '+l.length+' मागण्या');appReqRender();['dk','tax','web'].forEach(function(c){appBadge(c==='dk'?'req':c,l.filter(function(r){return r.status==='paid_pending'&&appReqCat(r)===c;}).length);});
   },function(e){appReqMsg('❌ '+((window.GPSync.errText&&window.GPSync.errText(e))||(e&&e.message)||'त्रुटी'),true);});
 }
 setInterval(function(){var pg=document.getElementById('pg-appreq');if(pg&&pg.classList.contains('active')&&window.GPSync&&window.GPSync.isOn()){appSub(appSubCur);appCounts();}},30000);
 function appReqTitle(r){if(r._col==='gpapp_web')return '🌐 वेबसाईट — कर भरणा';if(r.kind==='tax')return '🏠 कर भरणा';if(r.dk&&r.dk!=='sg')return '📄 '+dkTitle(r.dk);return '📝 '+(SG_TYPES[+r.type]?SG_TYPES[+r.type].t:'स्वयंघोषणापत्र');}
-function appReqRender(){appReqRenderInto('ar-filter','ar-tbl',false);appReqRenderInto('aw-filter','aw-tbl',true);}
+function appReqCat(r){return r._col==='gpapp_web'?'web':(r.kind==='tax'?'tax':'dk');}
+function appReqRender(){appReqRenderInto('ar-filter','ar-tbl','dk');appReqRenderInto('at-filter','at-tbl','tax');appReqRenderInto('aw-filter','aw-tbl','web');}
 function appReqRenderInto(fid,tid,web){
   var f=gv(fid)||'pending',tb=document.getElementById(tid);if(!tb)return;
-  var list=appReqCache.filter(function(r){return (r._col==='gpapp_web')===web&&(f==='all'||(f==='pending'?r.status==='paid_pending':r.status===f));});
+  var list=appReqCache.filter(function(r){return appReqCat(r)===(web===true?'web':(web||'dk'))&&(f==='all'||(f==='pending'?r.status==='paid_pending':r.status===f));});
   if(!list.length){tb.innerHTML='<tr><td colspan="9" style="text-align:center;color:#9E9E9E;padding:14px">मागण्या नाहीत</td></tr>';return;}
   var E=dashEsc,badge={paid_pending:'<span style="color:#e65100;font-weight:700">⏳ प्रलंबित</span>',approved:'<span style="color:#1a5c2a;font-weight:700">✅ मंजूर</span>',rejected:'<span style="color:#c62828;font-weight:700">❌ नाकारले</span>'};
   tb.innerHTML=list.map(function(r){
@@ -8810,15 +8948,15 @@ function appReqRenderInto(fid,tid,web){
     var amt=r.kind==='tax'?(r.amtGh!=null||r.amtPa!=null?('घर ₹'+(r.amtGh||0)+' + पाणी ₹'+(r.amtPa||0)):r.amount):r.fee;
     var act='<button class="btn btn-sm btn-out" onclick="appReqView(\''+E(r._id)+'\')">👁️ पहा</button> ';
     if(r.status==='paid_pending')act+='<button class="btn btn-sm btn-gn" onclick="appReqApprove(\''+E(r._id)+'\')">👁️ तपासून मंजूर</button> <button class="btn btn-sm btn-out" onclick="appReqReject(\''+E(r._id)+'\')">❌</button>';
-    else if(r.status==='approved'&&r.certHtml)act+='<button class="btn btn-sm btn-nv" onclick="appReqPrint(\''+E(r._id)+'\')">🖨️ दाखला</button>';
+    else if(r.status==='approved'&&r.certHtml)act+='<button class="btn btn-sm btn-nv" onclick="appReqPrint(\''+E(r._id)+'\')">🖨️ दाखला</button> <button class="btn btn-sm btn-gn" onclick="appWaResend(\''+E(r._id)+'\')">📲 WhatsApp वर पाठवा</button>';
     return '<tr><td style="white-space:nowrap;font-weight:700">'+E(r.code||r._id)+'</td><td style="white-space:nowrap">'+E(dt)+'</td><td>'+E(appReqTitle(r))+'</td><td>'+E(r.name)+'</td><td>'+E(r.mob)+'</td><td>'+E(amt)+'</td><td>'+E(r.kind==='tax'&&(r.utrGh||r.utrPa)?[r.utrGh,r.utrPa].filter(Boolean).join(' / '):r.utr)+'</td><td>'+(badge[r.status]||E(r.status))+(r.note?'<div style="font-size:11px;color:#666">'+E(r.note)+'</div>':'')+'</td><td style="white-space:nowrap">'+act+'</td></tr>';
   }).join('');
 }
 function appReqById(id){return appReqCache.filter(function(r){return r._id===id;})[0];}
 function appReqView(id){
   var r=appReqById(id);if(!r)return;var E=dashEsc,shot=appOk(r.shot),ph=appOk(r.photo);
-  var rows=[['प्रकार',appReqTitle(r)],['दाखला कोणाचा (नोंद)',r.rname],['नोंद क्र.',r.rk],['नोंदीचा तपशील',r.rinfo],['अर्जदाराचे नाव',r.name],['वडिलांचे/पतीचे नाव',r.father],['नाते',r.rel],['वय',r.age],['व्यवसाय',r.occ],['आधार',r.aadh],['मोबाईल',r.mob],['पत्ता',r.addr],
-    ['मिळकत क्र./अ.क्र.',r.pno],['भरलेली रक्कम ₹',r.kind==='tax'?r.amount:r.fee],['ग्रामनिधी (घरपट्टी) ₹',r.amtGh],['पाणीपट्टी ₹',r.amtPa],['UTR',r.kind==='tax'&&(r.utrGh||r.utrPa)?'':r.utr],['UTR — ग्रामनिधी',r.utrGh],['UTR — पाणीपट्टी',r.utrPa],['दिनांक',r.ts],['स्थिती',r.status],['टीप',r.note]].filter(function(x){return x[1]!=null&&x[1]!=='';});
+  var rows=[['प्रकार',appReqTitle(r)],['दाखला कोणाचा (नोंद)',r.rname],['नोंद क्र.',r.rk],['नोंदीचा तपशील',r.rinfo],['अर्जदाराचे नाव',r.name],['वडिलांचे/पतीचे नाव',r.father],['नाते',r.rel],['वय',r.age],['व्यवसाय',r.occ],['आधार',r.aadh],['मोबाईल',r.mob],['WhatsApp',r.wa],['पत्ता',r.addr],
+    ['अ.क्र. (वेबसाईटवरून)',r.ano],['मिळकत क्र./अ.क्र.',r.pno],['भरलेली रक्कम ₹',r.kind==='tax'?r.amount:r.fee],['ग्रामनिधी (घरपट्टी) ₹',r.amtGh],['पाणीपट्टी ₹',r.amtPa],['UTR',r.kind==='tax'&&(r.utrGh||r.utrPa)?'':r.utr],['UTR — ग्रामनिधी',r.utrGh],['UTR — पाणीपट्टी',r.utrPa],['दिनांक',r.ts],['स्थिती',r.status],['टीप',r.note]].filter(function(x){return x[1]!=null&&x[1]!=='';});
   var h='<div style="position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99999;display:flex;align-items:center;justify-content:center;padding:14px" onclick="if(event.target===this)this.remove()"><div style="background:#fff;border-radius:10px;max-width:560px;width:100%;max-height:90vh;overflow:auto;padding:16px">'+
     '<div style="font-weight:700;font-size:16px;margin-bottom:8px">📲 मागणी तपशील</div><table style="width:100%;font-size:13px;border-collapse:collapse">'+
     rows.map(function(x){return '<tr><td style="padding:4px 6px;border-bottom:1px solid #eee;color:#666;width:42%">'+E(x[0])+'</td><td style="padding:4px 6px;border-bottom:1px solid #eee"><b>'+E(x[1])+'</b></td></tr>';}).join('')+'</table>'+
@@ -8849,11 +8987,13 @@ function appVerifyQR(type,no,name,cb){
   try{QRLib.toDataURL(url,{width:220,margin:1,errorCorrectionLevel:'L'},function(err,u){cb(err?'':u);});}catch(e){cb('');}
 }
 function appSignFooter(no,qr){
+  // तीन भाग: डावीकडे QR | मधोमध (centre) शिक्का | उजवीकडे सही + अधिकाऱ्याचे नाव — शिक्का आता सहीच्या ओळीत नाही, QR आणि सही यांच्या मध्यभागी आहे.
   var E=dashEsc,sign=GP['s-sign-officer']||'',seal=GP['s-seal']||'';
-  return '<div style="margin-top:6mm;display:flex;justify-content:space-between;align-items:flex-end;gap:10px;font-size:12px;line-height:1.5;border-top:1px dashed #888;padding-top:4mm">'+
-    '<div style="text-align:center">'+(qr?'<img src="'+qr+'" width="92" height="92"><div style="font-size:10px">QR स्कॅन करून पडताळणी करा</div>':'')+'</div>'+
-    '<div style="text-align:center"><div>दाखला क्र.: <b>'+E(no)+'</b> &nbsp; दिनांक: <b>'+E(hcDash(today()))+'</b></div>'+
-    appSignBlock(sign,seal,48,78)+
+  return '<div style="margin-top:6mm;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;line-height:1.5;border-top:1px dashed #888;padding-top:4mm">'+
+    '<div style="text-align:center;flex:0 0 auto">'+(qr?'<img src="'+qr+'" width="92" height="92"><div style="font-size:10px">QR स्कॅन करून पडताळणी करा</div>':'')+'</div>'+
+    '<div style="text-align:center;flex:1 1 auto;display:flex;justify-content:center;align-items:center">'+(seal?'<img src="'+seal+'" style="height:84px;width:auto;max-width:130px">':'')+'</div>'+
+    '<div style="text-align:center;flex:0 1 auto"><div>दाखला क्र.: <b>'+E(no)+'</b> &nbsp; दिनांक: <b>'+E(hcDash(today()))+'</b></div>'+
+    appSignBlock(sign,'',48,60)+
     '<div><b>'+E(gp_val('s-officer',''))+'</b></div><div>ग्रामपंचायत अधिकारी, '+E(sgGpName())+'</div>'+
     '<div style="font-size:10px;color:#444">हा दाखला डिजिटल स्वाक्षरीत असून QR द्वारे पडताळणी करता येते.</div></div></div>';
 }
@@ -8891,7 +9031,7 @@ function appReqApprove(id,auto,cb){
     var fail=function(){if(cb)cb(false);};
     var commit=function(patch,after){
       patch.status='approved';patch.decidedAt=new Date().toISOString();
-      window.GPSync.fs.patch((r._col||'gpapp_req')+'/'+id,patch).then(function(){if(after)after();if(!auto){showToast('✅ मंजूर — नागरिकाला ॲपमध्ये दाखला मिळेल',3500);appReqLoad();}if(cb)cb(true);},
+      window.GPSync.fs.patch((r._col||'gpapp_req')+'/'+id,patch).then(function(){if(after)after();if(!auto){showToast('✅ मंजूर — नागरिकाला ॲपमध्ये दाखला मिळेल',3500);appReqLoad();try{appWaOffer(r,patch);}catch(e){}}if(cb)cb(true);},
         function(e){showToast('⚠️ मंजूर करता आले नाही: '+((window.GPSync.errText&&window.GPSync.errText(e))||(e&&e.message)||''),5000);fail();});
     };
     // मंजुरीपूर्वी तयार दाखला/पावती उघडून दाखवतो — "मंजूर करा" दाबल्यावरच नागरिकाला जाते; "रद्द करा" ने काहीच होत नाही
@@ -8908,8 +9048,24 @@ function appReqApprove(id,auto,cb){
   };
   proceed(true);
 }
+// वेबसाईटवरून आलेला "मिळकत नंबर" म्हणजे घर नंबर (pno) असतो — तो आधी अ.क्र. समजून दुसऱ्याच मालमत्तेवर पावती होऊ नये म्हणून:
+// वेबसाईटने अ.क्र. (ano) पाठवला असेल तर तोच; नसेल तर आधी घर नंबर (pno) ने शोधतो, मग अ.क्र. ने.
+function appTaxFindFor(r){
+  var n9=loadData('n9');
+  if(r._col==='gpapp_web'){
+    // वेबसाईटचा भरणा फक्त अनुक्रमांक (अ.क्र.) ने जुळवतो — घर क्रमांक पुनरावृत्त/चुकीचा असू शकतो म्हणून तो वापरत नाही.
+    if(r.ano!=null&&r.ano!==''){var k0=String(r.ano);return n9[k0]?{ano:k0,rec:n9[k0]}:null;}
+    // जुन्या वेबसाईटवरून आलेली नोंद (अ.क्र. पाठवलेला नाही): घर क्रमांक फक्त तेव्हाच वापरतो जेव्हा तो ठीक एकाच मालमत्तेचा असेल; अन्यथा चुकीच्या नावावर पावती होऊ नये म्हणून थांबतो.
+    var k=toEnDigits(String(r.pno||'')).trim(),hits=[];
+    Object.keys(n9).forEach(function(a){var x=n9[a];if(x&&toEnDigits(String(x.pno||'')).trim()===k)hits.push({ano:a,rec:x});});
+    if(hits.length===1)return hits[0];
+    if(hits.length>1)showToast('⚠️ घर क्रमांक "'+r.pno+'" एकापेक्षा जास्त मालमत्तांचा आहे आणि वेबसाईटने अ.क्र. पाठवलेला नाही — वेबसाईट नव्याने प्रकाशित करून नागरिकाला पुन्हा पाठवायला सांगा, किंवा ❌ नाकारा',8000);
+    return null;
+  }
+  return appTaxFind(r.pno);
+}
 function appApproveTax(r,done,fail){fail=fail||function(){};
-  var hit=appTaxFind(r.pno);
+  var hit=appTaxFindFor(r);
   if(!hit){showToast('⚠️ मिळकत/अ.क्र. "'+r.pno+'" नमुना ९ मध्ये सापडला नाही — ❌ नाकारा किंवा नोंद तपासा',5000);return fail();}
   var due=appTaxDue(hit.ano,hit.rec),tot=0,totG=0,totP=0;
   APP_TAX_IDS.forEach(function(t){var x=due[t].p+due[t].c;tot+=x;if(t==='pa')totP+=x;else totG+=x;});
@@ -9684,6 +9840,7 @@ function wbBuildTaxDataOriginalShape(){
       row['चालू '+mrName[t]+' कर']=String(cvLeft);
       row['एकूण '+mrName[t]+' कर']=String(pvLeft+cvLeft);
     });
+    row['ano']=String(rec.ano!=null?rec.ano:ano); // वेबसाईटवरून भरणा पाठवताना खरा अ.क्र. परत मिळावा म्हणून
     row['V']=String(magilBerij); // मूळ फाईलमधलं "मागील एकूण मागणी" चं key तसंच ठेवलं (JS logic त्यावर अवलंबून नाही)
     row['चालू एकूण मागणी']=String(chaluBerij);
     row['एकूण मागणी']=String(magilBerij+chaluBerij);
@@ -10376,7 +10533,8 @@ function wbBuildPages(){
   pages['style.css']=wbReadTemplate('style.css'); // या टेम्प्लेटमध्ये वापरलेली नाही (प्रत्येक पानाचं स्वतःचं <style> आहे), तरी सोबत ठेवतो
   var taxHtml=wbApplyGpName(wbReadTemplate('tax.html'),gpNm,tal,dist);
   var taxDataJs='let data='+JSON.stringify(wbBuildTaxDataOriginalShape())+';';
-  pages['tax.html']=taxHtml.replace('__TAX_DATA_JSON__',taxDataJs);
+  pages['tax.html']=taxHtml;
+  pages['tax-data.js']=taxDataJs; // कर यादी वेगळ्या फाईलमध्ये — tax.html दर वेळी ती नव्याने (cache टाळून) लोड करते
   // सवलत (मालमत्ता कर) — % आणि कालावधी वेबसाईटच्या tax.html ला पाठवतो; प्रत्यक्ष "सध्या लागू आहे का"
   // हे तिथल्या JS मध्ये ब्राऊझरच्या आजच्या तारखेवरून ठरतं, त्यामुळे कालावधी संपल्यावर पुन्हा
   // प्रकाशित न करताही सवलत आपोआप बंद होते.
@@ -10385,10 +10543,13 @@ function wbBuildPages(){
     enabled:!!discCfg.enabled,percent:+discCfg.percent||0,percentChalu:+discCfg.percentChalu||0,
     from:discCfg.from||'',to:discCfg.to||'',note:discCfg.note||''
   })+';';
-  pages['tax.html']=pages['tax.html'].replace('__WB_DISCOUNT_JSON__',discountDataJs);
+  pages['tax-data.js']+='\n'+discountDataJs;
   // घरपट्टी/पाणीपट्टी QR — Masters मध्ये आधीच अपलोड केलेल्या त्याच इमेज (नमुना ९क पावतीसाठी वापरल्या जातात त्याच)
   pages['tax.html']=pages['tax.html'].replace('__WB_GHAR_QR__',gp_val('s-qr-gh',''));
   pages['tax.html']=pages['tax.html'].replace('__WB_PANI_QR__',gp_val('s-qr-pa',''));
+  // UPI लिंक बटण (GPay/PhonePe) — Masters मधील UPI ID (घरपट्टी / पाणीपट्टी) आणि ग्रामपंचायतीचे नाव
+  (function(){var cl=function(x){return String(x||'').trim().replace(/[^A-Za-z0-9_.@\-]/g,'');};
+    pages['tax.html']=pages['tax.html'].replace('__WB_UPI_GH__',function(){return cl(gp_val('s-upi',''));}).replace('__WB_UPI_PA__',function(){return cl(gp_val('s-upi-pa',''));}).replace('__WB_GP__',function(){return String(gp_val('s-gp','')).replace(/[\\'"<>]/g,'');});})();
   var waNote=(d.contact&&d.contact.phone)?('WhatsApp नंबर '+esc(d.contact.phone)):'ग्रामपंचायत कार्यालयाशी संपर्क साधून';
   pages['tax.html']=pages['tax.html'].replace('__WB_WA_NOTE__',waNote);
   // वेबसाईटवरून UTR/स्क्रीनशॉट थेट पाठवण्यासाठी — Masters मधील Firebase Project ID / API key (भरले नसतील तर फॉर्म दिसत नाही, जुनी WhatsApp टीप राहते)
@@ -10857,17 +11018,21 @@ async function wbPublishTaxOnly(){
   var d=loadWebsiteData(),gh=d.github||{};
   if(!gh.user||!gh.repo||!gh.token||!d.lastPublishedAt){showToast('⚠️ वेबसाईट आपोआप अपडेट झाली नाही — आधी वेबसाईट टॅबमध्ये GitHub माहिती भरून एकदा "प्रकाशित करा" दाबा',6000);return false;}
   try{
-    var html=wbBuildPages().pages['tax.html'];if(!html)return false;
-    var fileUrl='https://api.github.com/repos/'+gh.user+'/'+gh.repo+'/contents/tax.html',put=null;
-    for(var attempt=0;attempt<2;attempt++){ // sha जुळला नाही (409/422) तर ताजा sha घेऊन एकदा पुन्हा प्रयत्न
-      var sha=null,ex=await fetch(fileUrl,{headers:wbGithubHeaders(gh.token),cache:'no-store'});if(ex.ok){sha=(await ex.json()).sha;}
-      var body={message:'ग्रामपंचायत सॉफ्टवेअरमधून अपडेट: tax.html (भरणा मंजूर)',content:wbUtf8ToBase64(html)};if(sha)body.sha=sha;
-      put=await fetch(fileUrl,{method:'PUT',headers:wbGithubHeaders(gh.token),body:JSON.stringify(body)});
-      if(put.ok||(put.status!==409&&put.status!==422))break;
-    }
-    if(put.ok)showToast('🌐 वेबसाईटवरील कर यादी अपडेट केली (१-२ मिनिटांत दिसेल)',3500);
-    else showToast('⚠️ वेबसाईट अपडेट झाली नाही (GitHub '+put.status+') — वेबसाईट टॅबमधून "प्रकाशित करा" दाबा',6000);
-    return put.ok;
+    var pg=wbBuildPages().pages;if(!pg['tax.html']||!pg['tax-data.js'])return false;
+    var put=async function(name){
+      var fileUrl='https://api.github.com/repos/'+gh.user+'/'+gh.repo+'/contents/'+name,res=null;
+      for(var attempt=0;attempt<2;attempt++){ // sha जुळला नाही (409/422) तर ताजा sha घेऊन एकदा पुन्हा प्रयत्न
+        var sha=null,ex=await fetch(fileUrl,{headers:wbGithubHeaders(gh.token),cache:'no-store'});if(ex.ok){sha=(await ex.json()).sha;}
+        var body={message:'ग्रामपंचायत सॉफ्टवेअरमधून अपडेट: '+name+' (भरणा मंजूर)',content:wbUtf8ToBase64(pg[name])};if(sha)body.sha=sha;
+        res=await fetch(fileUrl,{method:'PUT',headers:wbGithubHeaders(gh.token),body:JSON.stringify(body)});
+        if(res.ok||(res.status!==409&&res.status!==422))break;
+      }
+      return res;
+    };
+    var r1=await put('tax-data.js'),r2=r1.ok?await put('tax.html'):r1;
+    if(r1.ok&&r2.ok)showToast('🌐 वेबसाईटवरील शिल्लक रक्कम अपडेट केली (१-२ मिनिटांत दिसेल)',4500);
+    else showToast('⚠️ वेबसाईट अपडेट झाली नाही (GitHub '+(r1.ok?r2.status:r1.status)+') — वेबसाईट टॅबमधून "प्रकाशित करा" दाबा',7000);
+    return r1.ok&&r2.ok;
   }catch(e){showToast('⚠️ वेबसाईट अपडेट झाली नाही (इंटरनेट/GitHub) — नंतर "प्रकाशित करा" दाबा',6000);return false;}
 }
 function wbUtf8ToBase64(str){

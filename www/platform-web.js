@@ -94,9 +94,10 @@
       try {
         if (ch === 'open-external') { openExternal(arg); }
         else if (ch === 'open-whatsapp') {
-          var n = String(arg || '').replace(/\D/g, '');
+          var o = (arg && typeof arg === 'object') ? arg : { phone: arg };
+          var n = String(o.phone || '').replace(/\D/g, '');
           if (n.length === 10) n = '91' + n;
-          openExternal('https://wa.me/' + n);
+          openExternal('https://wa.me/' + n + (o.text ? '?text=' + encodeURIComponent(String(o.text)) : ''));
         }
         else if (ch === 'print-html') webPrint(arg || {});
         else if (ch === 'capture-html-jpg') webCapture(arg || {});
