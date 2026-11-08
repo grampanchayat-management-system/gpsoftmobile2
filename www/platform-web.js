@@ -164,6 +164,22 @@
   }
 
   /* ----- पावती → JPG → क्लिपबोर्ड (WhatsApp मध्ये paste) — html2canvas असेल तरच ----- */
+  /* ----- APK: WhatsApp मध्ये चॅट + पावती (चित्र) + संदेश एकदम तयार — फक्त Send दाबायचे (GPPrint.shareWhatsApp, नेटिव्ह Android Intent) ----- */
+  function waNative(blob, p, cb) {
+    var G = P('GPPrint');
+    if (!G || !G.shareWhatsApp) { cb(false); return; }
+    var o = (p.wa && typeof p.wa === 'object') ? p.wa : { phone: p.wa };
+    var n = String(o.phone || '').replace(/\D/g, '');
+    if (n.length === 10) n = '91' + n;
+    var fr = new FileReader();
+    fr.onload = function () {
+      var b64 = String(fr.result).split(',')[1] || '';
+      G.shareWhatsApp({ phone: n, text: String(o.text || ''), data: b64, name: 'Receipt-' + (p.ano || 'x') + '.png' })
+        .then(function () { cb(true); }, function () { cb(false); });
+    };
+    fr.onerror = function () { cb(false); };
+    fr.readAsDataURL(blob);
+  }
   function webCapture(p) {
     if (!window.html2canvas) { ipc.emit('capture-html-jpg-done', { ok: false }); return; }
     var f = document.createElement('iframe');
@@ -174,8 +190,13 @@
       window.html2canvas(d.body, { backgroundColor: '#ffffff', scale: 2, useCORS: true }).then(function (cv) {
         cv.toBlob(function (blob) {
           document.body.removeChild(f);
-          var done = function (ok) { ipc.emit('capture-html-jpg-done', { ok: ok }); };
-          if (cap()) { nativeSave('Receipt-' + (p.ano || '') + '.png', blob); done(true); return; }   // APK: Share डायलॉगमधून WhatsApp निवडा
+          var done = function (ok, native) { ipc.emit('capture-html-jpg-done', { ok: ok, native: !!native }); };
+          if (cap()) {   // APK: आधी WhatsApp मध्ये थेट (चॅट + पावती + संदेश तयार, फक्त Send); जमले नाही तर जुना Share डायलॉग
+            var legacy = function () { nativeSave('Receipt-' + (p.ano || '') + '.png', blob); done(true); };
+            if (p.wa) waNative(blob, p, function (ok) { if (ok) done(true, true); else legacy(); });
+            else legacy();
+            return;
+          }
           try {
             navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]).then(function () { done(true); }, function () { fallbackShare(blob, p, done); });
           } catch (e) { fallbackShare(blob, p, done); }

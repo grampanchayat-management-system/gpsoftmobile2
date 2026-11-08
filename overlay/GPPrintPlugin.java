@@ -1,6 +1,15 @@
 package in.grampanchayat.app;
 
+import android.content.ActivityNotFoundException;
+import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Base64;
+import androidx.core.content.FileProvider;
+import java.io.File;
+import java.io.FileOutputStream;
+import com.getcapacitor.JSObject;
 import android.os.Handler;
 import android.os.Looper;
 import android.print.PrintAttributes;
@@ -131,5 +140,60 @@ public class GPPrintPlugin extends Plugin {
                 }
             }
         });
+    }
+
+    /**
+     * WhatsApp मध्ये त्या व्यक्तीचे चॅट थेट उघडतो — पावती (चित्र) जोडलेली आणि संदेश (caption) भरलेला; वापरकर्त्याला फक्त Send दाबायचे.
+     * JS मधून:  Capacitor.registerPlugin('GPPrint').shareWhatsApp({phone, text, data(base64 PNG), name})
+     * "jid" extra मुळे चॅट थेट उघडते; WhatsApp / WhatsApp Business दोन्ही चालतात. दोन्ही नसल्यास reject → JS जुन्या Share पद्धतीवर जातो.
+     */
+    @PluginMethod
+    public void shareWhatsApp(PluginCall call) {
+        try {
+            String phone = call.getString("phone", "");
+            String text = call.getString("text", "");
+            String data = call.getString("data", "");
+            String nm = call.getString("name", "receipt.png");
+            if (data == null || data.isEmpty()) { call.reject("no image"); return; }
+            String safe = (nm == null ? "receipt.png" : nm).replaceAll("[^A-Za-z0-9._-]", "_");
+            if (safe.isEmpty()) safe = "receipt.png";
+
+            File dir = new File(getContext().getCacheDir(), "wa");
+            if (!dir.exists()) dir.mkdirs();
+            File[] old = dir.listFiles();
+            if (old != null) for (File o : old) { try { o.delete(); } catch (Exception ignored) { } }
+            File f = new File(dir, safe);
+            FileOutputStream fo = new FileOutputStream(f);
+            fo.write(Base64.decode(data, Base64.DEFAULT));
+            fo.close();
+
+            Uri uri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".fileprovider", f);
+            String digits = phone == null ? "" : phone.replaceAll("\\D", "");
+
+            String[] pkgs = new String[] { "com.whatsapp", "com.whatsapp.w4b" };
+            for (String pkg : pkgs) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("image/png");
+                i.putExtra(Intent.EXTRA_STREAM, uri);
+                i.setClipData(ClipData.newRawUri("", uri));
+                if (text != null && !text.isEmpty()) i.putExtra(Intent.EXTRA_TEXT, text);
+                if (!digits.isEmpty()) i.putExtra("jid", digits + "@s.whatsapp.net");
+                i.setPackage(pkg);
+                i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                try {
+                    getActivity().startActivity(i);
+                    JSObject r = new JSObject();
+                    r.put("pkg", pkg);
+                    call.resolve(r);
+                    return;
+                } catch (ActivityNotFoundException nf) {
+                    // पुढचा (Business) पॅकेज आजमावतो
+                }
+            }
+            call.reject("WhatsApp installed नाही");
+        } catch (Exception e) {
+            Log.e(TAG, "shareWhatsApp failed", e);
+            call.reject("shareWhatsApp failed: " + e.getMessage());
+        }
     }
 }

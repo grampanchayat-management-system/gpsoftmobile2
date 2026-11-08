@@ -4941,7 +4941,7 @@ function renderN9Register(blank){
       return sa-sb;
     });
     var vAgg={gh:{p:0,c:0},ar:{p:0,c:0},dv:{p:0,c:0},pa:{p:0,c:0},pd:{p:0,c:0},fine:{p:0,c:0}};
-    var vSutTot=0;
+    var vSutTot=0,vSutP=0,vSutC=0; // सूट: मागील / चालू वेगळी (सवलतीसह ऑनलाइन भरणा — sutDetail मधून)
     n10recsForAno.forEach(function(rec){
       var vd=rec.vasulDetail||{};
       var vs=rec.vasul||{};
@@ -4951,11 +4951,15 @@ function renderN9Register(blank){
         else{vAgg[k].c+=(vs[k]||0);}
       });
       vSutTot+=(vs.sut||0);
+      // 🎁 सूट ज्या बाजूला (मागील थकबाकी / चालू) दिली गेली त्याच बाजूला दाखवायची — sutDetail असेल तर त्यातून; नसेल (हाताने केलेली पावती) तर आधीसारखी चालू मध्ये
+      var sdP=0,sdC=0;
+      if(rec.sutDetail){['gh','ar','dv','pa','pd','fine'].forEach(function(k){var q=rec.sutDetail[k];if(q){sdP+=(q.p||0);sdC+=(q.c||0);}});}
+      vSutP+=sdP;vSutC+=(vs.sut||0)-sdP;
     });
     var vRow=function(k){var d=vAgg[k];return {p:d.p,c:d.c,t:d.p+d.c};};
     var vGh=vRow('gh'),vAr=vRow('ar'),vDv=vRow('dv'),vPa=vRow('pa'),vPd=vRow('pd'),vFine=vRow('fine');
-    var vSut={p:0,c:vSutTot,t:vSutTot};
-    var vTotP=vGh.p+vAr.p+vDv.p+vPa.p+vPd.p+vFine.p;
+    var vSut={p:vSutP,c:vSutC,t:vSutTot};
+    var vTotP=vGh.p+vAr.p+vDv.p+vPa.p+vPd.p+vFine.p+vSut.p;
     var vTotC=vGh.c+vAr.c+vDv.c+vPa.c+vPd.c+vFine.c+vSut.c;
     var vTotT=vTotP+vTotC;
 
@@ -5239,9 +5243,10 @@ function captureElementAsWhatsAppJpg(el,ano,wa,onDone){
   try{
     var ipc=require('electron').ipcRenderer;
     showToast('⏳ पावतीचा JPG तयार होत आहे...',2500);
-    ipc.send('capture-html-jpg',{html:standaloneHtml,width:w+20,ano:ano});
+    ipc.send('capture-html-jpg',{html:standaloneHtml,width:w+20,ano:ano,wa:window.GPWeb?wa:null});
     ipc.once('capture-html-jpg-done',function(e,result){
       if(result&&result.ok){
+        if(result.native){showToast('✅ WhatsApp उघडले — चॅट व पावती तयार आहे; फक्त Send दाबा',7000);if(onDone)onDone(true);return;}
         showToast('✅ पावती क्लिपबोर्डवर कॉपी झाली',3000);
         // आधी मोठी सूचना दाखवतो आणि ती वाचूनच "WhatsApp उघडा" दाबल्यावर WhatsApp उघडतो —
         // आधी WhatsApp आधी उघडलं की ते लगेच फोकस घेऊन सूचना झाकून टाकत होतं, त्यामुळे वाचताच येत नव्हती
@@ -6752,7 +6757,8 @@ function computePerPropertyDue(){
         if(d){colP+=(d.p||0);colC+=(d.c||0);}
         else colC+=(vs[f]||0);
       });
-      colC+=(vs.sut||0);
+      var sdP2=0;if(rec.sutDetail){['gh','ar','dv','pa','pd','fine'].forEach(function(k){var q=rec.sutDetail[k];if(q)sdP2+=(q.p||0);});}
+      colP+=sdP2;colC+=(vs.sut||0)-sdP2; // सूट मागील/चालू वेगळी
     });
     var bakiP=demP-colP,bakiC=demC-colC;
     var due=Math.max(0,bakiP+bakiC);
@@ -8532,7 +8538,7 @@ function appNondLoad(){
   },function(e){appNondMsg('❌ '+((window.GPSync.errText&&window.GPSync.errText(e))||(e&&e.message)||'त्रुटी'),true);});
 }
 function appNondById(id){return appNondCache.filter(function(r){return r._id===id;})[0];}
-function appNondRender(){
+function appNondRender(){try{axFill();}catch(e){}
   var f=gv('an-filter')||'pending',tb=document.getElementById('an-tbl');if(!tb)return;
   var list=appNondCache.filter(function(r){return f==='all'||r.status===f;});
   if(!list.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:#9E9E9E;padding:14px">विनंत्या नाहीत</td></tr>';return;}
@@ -8594,6 +8600,7 @@ function appSub(v){
     var el=document.getElementById('ar-v-'+k);if(el)el.style.display=(k===v)?'':'none';
     var tb=document.querySelector('#ar-tabs .tab[data-v="'+k+'"]');if(tb)tb.classList.toggle('active',k===v);
   });
+  try{axFill();}catch(e){}
   if(v==='req'||v==='tax'||v==='web')appReqLoad();else if(v==='nond')appNondLoad();else if(v==='comp')appCompLoad();else if(v==='users')appUsersLoad();else appNtcLoad();
 }
 function appBadge(k,n){var el=document.getElementById('ar-cnt-'+k);if(el)el.innerHTML=n>0?'<span style="background:#c62828;color:#fff;border-radius:10px;padding:0 6px;margin-left:5px;font-size:10px;font-weight:700">'+n+'</span>':'';}
@@ -8713,7 +8720,7 @@ function appCompLoad(){
   },function(e){appCompMsg('❌ '+((window.GPSync.errText&&window.GPSync.errText(e))||(e&&e.message)||'त्रुटी')+' — नवीन Firebase Rules Publish केले आहेत का? (Masters → Rules कॉपी)',true);});
 }
 function appCompById(id){return appCompCache.filter(function(r){return r._id===id;})[0];}
-function appCompRender(){
+function appCompRender(){try{axFill();}catch(e){}
   var f=gv('ac-filter')||'pending',tb=document.getElementById('ac-tbl');if(!tb)return;
   var list=appCompCache.filter(function(r){return f==='all'||r.status===f;});
   if(!list.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;color:#9E9E9E;padding:14px">तक्रारी / सूचना नाहीत</td></tr>';return;}
@@ -8811,7 +8818,7 @@ function appUsersLoad(){
 function appUsersFmt(ts){if(!ts)return '—';var d=String(ts).slice(0,10).split('-').reverse().join('-');return d+' '+String(ts).slice(11,16);}
 function appUsersColName(c){return (c[0]==='amt'||c[0]==='fee')&&appUsersFY?c[1]+' ('+appUsersFY+')':c[1];}
 function appUsersHead(){var h='<tr><th>अ.क्र.</th><th>नाव</th><th>मोबाईल</th><th>WhatsApp</th>'+AU_COLS.map(function(c){return '<th>'+appUsersColName(c)+'</th>';}).join('')+'<th>पहिली नोंद</th><th>शेवटचे वापरले</th><th>तपशील</th></tr>';var el=document.getElementById('au-head');if(el)el.innerHTML=h;}
-function appUsersRender(){
+function appUsersRender(){try{axFill();}catch(e){}
   var tb=document.getElementById('au-tbl');if(!tb)return;appUsersHead();
   var q=(gv('au-q')||'').trim().toLowerCase(),E=dashEsc;
   var l=appUsersCache.filter(function(u){return !q||String(u.name||'').toLowerCase().indexOf(q)>=0||u.mob.indexOf(q)>=0;});
@@ -8915,9 +8922,10 @@ function appWaSend2(doc,width,num,tag,text,desktop){
   try{
     var ipc=require('electron').ipcRenderer;
     showToast('⏳ पावतीचा JPG तयार होत आहे...',2500);
-    ipc.send('capture-html-jpg',{html:doc,width:width,ano:tag});
+    ipc.send('capture-html-jpg',{html:doc,width:width,ano:tag,wa:desktop?null:{phone:num,text:text}});
     ipc.once('capture-html-jpg-done',function(e,res){
       if(res&&res.ok){
+        if(res.native){showToast('✅ WhatsApp उघडले — चॅट, संदेश व पावती तयार आहे; फक्त Send दाबा',7000);return;}
         showToast('✅ पावती कॉपी झाली — WhatsApp (सॉफ्टवेअरमध्येच) उघडत आहे… पहिल्यांदा QR स्कॅन करावा लागेल; मग पावती आपोआप पेस्ट होईल, फक्त Send दाबा',8000);
         if(desktop)ipc.send('open-whatsapp-embedded',{phone:num,text:text}); // संगणक: सॉफ्टवेअरमधल्याच WhatsApp विंडोत चॅट उघडतं, संदेश भरलेला, पावती आपोआप पेस्ट
         else showPasteHint(function(){ipc.send('open-whatsapp',{phone:num,text:text});}); // मोबाईल: संदेश भरलेला; पावती पेस्ट करावी लागते
@@ -8937,7 +8945,7 @@ function appReqLoad(manual){
 setInterval(function(){var pg=document.getElementById('pg-appreq');if(pg&&pg.classList.contains('active')&&window.GPSync&&window.GPSync.isOn()){appSub(appSubCur);appCounts();}},30000);
 function appReqTitle(r){if(r._col==='gpapp_web')return '🌐 वेबसाईट — कर भरणा';if(r.kind==='tax')return '🏠 कर भरणा';if(r.dk&&r.dk!=='sg')return '📄 '+dkTitle(r.dk);return '📝 '+(SG_TYPES[+r.type]?SG_TYPES[+r.type].t:'स्वयंघोषणापत्र');}
 function appReqCat(r){return r._col==='gpapp_web'?'web':(r.kind==='tax'?'tax':'dk');}
-function appReqRender(){appReqRenderInto('ar-filter','ar-tbl','dk');appReqRenderInto('at-filter','at-tbl','tax');appReqRenderInto('aw-filter','aw-tbl','web');}
+function appReqRender(){try{axFill();}catch(e){}appReqRenderInto('ar-filter','ar-tbl','dk');appReqRenderInto('at-filter','at-tbl','tax');appReqRenderInto('aw-filter','aw-tbl','web');}
 function appReqRenderInto(fid,tid,web){
   var f=gv(fid)||'pending',tb=document.getElementById(tid);if(!tb)return;
   var list=appReqCache.filter(function(r){return appReqCat(r)===(web===true?'web':(web||'dk'))&&(f==='all'||(f==='pending'?r.status==='paid_pending':r.status===f));});
@@ -8953,6 +8961,172 @@ function appReqRenderInto(fid,tid,web){
   }).join('');
 }
 function appReqById(id){return appReqCache.filter(function(r){return r._id===id;})[0];}
+// ── 📥 ॲप यादी — Excel / PDF download (वर्ष / आर्थिक वर्ष / महिना फिल्टरसह, किंवा सर्व) ──
+// प्रत्येक यादीच्या वर एक "📥 Download" पट्टी आपोआप येते. यादीत सध्या दिसणारी स्थिती-निवड (प्रलंबित / मंजूर / सर्व) तशीच लागू होते,
+// त्यावर वर्ष / आर्थिक वर्ष (१ एप्रिल–३१ मार्च) व महिना निवडून Excel किंवा PDF घेता येते. "सर्व" निवडल्यास सगळ्या नोंदी येतात.
+var AX_MON=['जानेवारी','फेब्रुवारी','मार्च','एप्रिल','मे','जून','जुलै','ऑगस्ट','सप्टेंबर','ऑक्टोबर','नोव्हेंबर','डिसेंबर'];
+var AX_ST={paid_pending:'प्रलंबित',approved:'मंजूर',rejected:'नाकारले',pending:'प्रलंबित',done:'नोंद केली',notfound:'नोंद नाही',resolved:'निकाली'};
+function axTxt(v){return String(v==null?'':v).replace(/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu,'').replace(/\s+/g,' ').trim();} // emoji काढतो (PDF/Excel मध्ये चौकोन दिसू नयेत)
+function axDt(ts){if(!ts)return '';var s=String(ts);return s.slice(0,10).split('-').reverse().join('-')+(s.length>10?' '+s.slice(11,16):'');}
+function axNum(v){var n=+v;return isNaN(n)?0:n;}
+function axTaxAmt(r){var sp=(r.amtGh!=null||r.amtPa!=null);return {sp:sp,gh:sp?axNum(r.amtGh):'',pa:sp?axNum(r.amtPa):'',tot:sp?(axNum(r.amtGh)+axNum(r.amtPa)):axNum(r.amount)};}
+function axReqBase(cat,fid){var f=gv(fid)||'pending';return appReqCache.filter(function(r){return appReqCat(r)===cat&&(f==='all'||(f==='pending'?r.status==='paid_pending':r.status===f));});}
+function axTaxCfg(cat,fid,title,file){
+  return {a:fid,stf:fid,title:title,file:file,
+    all:function(){return appReqCache.filter(function(r){return appReqCat(r)===cat;});},
+    base:function(){return axReqBase(cat,fid);},
+    dt:function(r){return r.ts;},sum:function(r){return r.status==='approved';},sumLbl:'एकूण (फक्त मंजूर)',
+    cols:function(){return [
+      {h:'क्रमांक',v:function(r){return r.code||r._id;}},{h:'दिनांक',v:function(r){return axDt(r.ts);}},{h:'प्रकार',v:function(r){return appReqTitle(r);}},
+      {h:'नाव',v:function(r){return r.name;}},{h:'मोबाईल',v:function(r){return r.mob;}},{h:'मिळकत क्र. / अ.क्र.',v:function(r){return r.pno||r.ano||'';}},
+      {h:'घरपट्टी ₹',n:1,s:1,v:function(r){return axTaxAmt(r).gh;}},{h:'पाणीपट्टी ₹',n:1,s:1,v:function(r){return axTaxAmt(r).pa;}},{h:'एकूण ₹',n:1,s:1,v:function(r){return axTaxAmt(r).tot;}},
+      {h:'UTR',v:function(r){return (r.utrGh||r.utrPa)?[r.utrGh,r.utrPa].filter(Boolean).join(' / '):r.utr;}},
+      {h:'स्थिती',v:function(r){return AX_ST[r.status]||r.status;}},{h:'टीप',v:function(r){return r.note||'';}}];}};
+}
+var AX={
+  req:{a:'ar-filter',stf:'ar-filter',title:'ॲप दाखले — मागण्या',file:'App-Dakhale',
+    all:function(){return appReqCache.filter(function(r){return appReqCat(r)==='dk';});},
+    base:function(){return axReqBase('dk','ar-filter');},
+    dt:function(r){return r.ts;},sum:function(r){return r.status==='approved';},sumLbl:'एकूण (फक्त मंजूर)',
+    cols:function(){return [
+      {h:'क्रमांक',v:function(r){return r.code||r._id;}},{h:'दिनांक',v:function(r){return axDt(r.ts);}},{h:'प्रकार',v:function(r){return appReqTitle(r);}},
+      {h:'नाव',v:function(r){return r.name;}},{h:'मोबाईल',v:function(r){return r.mob;}},{h:'रक्कम ₹',n:1,s:1,v:function(r){return axNum(r.fee);}},
+      {h:'UTR',v:function(r){return r.utr||'';}},{h:'स्थिती',v:function(r){return AX_ST[r.status]||r.status;}},{h:'टीप',v:function(r){return r.note||'';}}];}},
+  nond:{a:'an-filter',stf:'an-filter',title:'ॲप नोंद विनंत्या',file:'App-Nond-Vinanti',
+    all:function(){return appNondCache;},
+    base:function(){var f=gv('an-filter')||'pending';return appNondCache.filter(function(r){return f==='all'||r.status===f;});},
+    dt:function(r){return r.ts;},
+    cols:function(){return [
+      {h:'क्रमांक',v:function(r){return r.code||r._id;}},{h:'दिनांक',v:function(r){return axDt(r.ts);}},{h:'प्रकार',v:function(r){return dkTitle(r.dk);}},
+      {h:'नाव',v:function(r){return r.name||r.applicant||'';}},{h:'मोबाईल',v:function(r){return r.mob;}},
+      {h:'स्थिती',v:function(r){return AX_ST[r.status]||r.status;}},{h:'टीप',v:function(r){return r.note||'';}}];}},
+  comp:{a:'ac-filter',stf:'ac-filter',title:'ॲप तक्रार / सूचना',file:'App-Taar-Suchana',
+    all:function(){return appCompCache;},
+    base:function(){var f=gv('ac-filter')||'pending';return appCompCache.filter(function(r){return f==='all'||r.status===f;});},
+    dt:function(r){return r.ts;},
+    cols:function(){return [
+      {h:'क्रमांक',v:function(r){return r.code||r._id;}},{h:'दिनांक',v:function(r){return axDt(r.ts);}},{h:'प्रकार',v:function(r){return r.ct==='sugg'?'सूचना':'तक्रार';}},
+      {h:'श्रेणी',v:function(r){return CMP_CAT[r.cat]||r.cat||'';}},{h:'विषय',v:function(r){return r.subj;}},{h:'तपशील',v:function(r){return r.msg;}},{h:'ठिकाण / गल्ली',v:function(r){return r.place;}},
+      {h:'नाव',v:function(r){return r.name;}},{h:'मोबाईल',v:function(r){return r.mob;}},{h:'स्थिती',v:function(r){return AX_ST[r.status]||r.status;}},{h:'उत्तर',v:function(r){return r.reply||'';}}];}},
+  users:{a:'au-q',stf:'',title:'नागरिक ॲप वापरकर्ते',file:'App-Users',dateLbl:'शेवटचे वापरले',
+    all:function(){return appUsersCache;},
+    base:function(){var q=(gv('au-q')||'').trim().toLowerCase();return appUsersCache.filter(function(u){return !q||String(u.name||'').toLowerCase().indexOf(q)>=0||u.mob.indexOf(q)>=0;});},
+    dt:function(u){return u.last;},
+    cols:function(){return [{h:'नाव',v:function(u){return u.name||'';}},{h:'मोबाईल',v:function(u){return u.mob;}},{h:'WhatsApp',v:function(u){return u.wa||'';}}]
+      .concat(AU_COLS.map(function(c){return {h:appUsersColName(c),n:1,s:1,v:function(u){return u[c[0]]||0;}};}),
+        [{h:'पहिली नोंद',v:function(u){return axDt(u.first);}},{h:'शेवटचे वापरले',v:function(u){return axDt(u.last);}}]);}}
+};
+AX.tax=axTaxCfg('tax','at-filter','ॲप कर भरणा','App-Kar-Bharna');
+AX.web=axTaxCfg('web','aw-filter','वेबसाईट कर भरणा','Website-Kar-Bharna');
+// y: 'all' | 'c2026' (कॅलेंडर वर्ष) | 'f2026' (आर्थिक वर्ष 2026-27) ; m: 'all' | '01'..'12'
+function axPass(ts,y,m){
+  var d=String(ts||'').slice(0,10);if(!d)return y==='all'&&m==='all';
+  if(y!=='all'){var t=y.charAt(0),n=+y.slice(1);
+    if(t==='c'){if(+d.slice(0,4)!==n)return false;}
+    else if(d<n+'-04-01'||d>(n+1)+'-03-31')return false;}
+  if(m!=='all'&&d.slice(5,7)!==m)return false;
+  return true;
+}
+function axPer(y,m){
+  var a=y==='all'?'सर्व वर्षे':(y.charAt(0)==='c'?'वर्ष '+y.slice(1):'आर्थिक वर्ष '+y.slice(1)+'-'+String((+y.slice(1)+1)%100).padStart(2,'0'));
+  return a+' · '+(m==='all'?'सर्व महिने':'महिना: '+AX_MON[+m-1]);
+}
+function axTag(y,m){
+  var a=y==='all'?'All':(y.charAt(0)==='c'?y.slice(1):'FY'+y.slice(1)+'-'+String((+y.slice(1)+1)%100).padStart(2,'0'));
+  return a+'_'+(m==='all'?'All':m);
+}
+function axData(k){
+  var cfg=AX[k];if(!cfg)return null;
+  var y=gv('ax-y-'+k)||'all',m=gv('ax-m-'+k)||'all';
+  var list=cfg.base().filter(function(r){return axPass(cfg.dt(r),y,m);});
+  return {cfg:cfg,list:list,y:y,m:m};
+}
+// Excel व PDF दोन्हीसाठी एकच टेबल: head, rows (मूल्ये), tot (बेरीज ओळ)
+function axTable(d){
+  var cols=d.cfg.cols(),head=['अ.क्र.'].concat(cols.map(function(c){return c.h;}));
+  var rows=d.list.map(function(r,i){return [i+1].concat(cols.map(function(c){var v=c.v(r,i);return c.n?(v===''?'':axNum(v)):axTxt(v);}));});
+  var sumRows=d.cfg.sum?d.list.filter(d.cfg.sum):d.list,tot=null,first=-1;
+  cols.forEach(function(c,i){if(c.s&&first<0)first=i;});
+  if(first>=0){
+    tot=['(एकूण)'];
+    cols.forEach(function(c){var s=0;if(c.s)sumRows.forEach(function(r){s+=axNum(c.v(r));});tot.push(c.s?s:'');});
+    tot[0]=(d.cfg.sumLbl||'एकूण')+' — '+sumRows.length+' नोंदी';tot.firstSum=first+1;
+  }
+  return {head:head,rows:rows,tot:tot};
+}
+function axStLbl(cfg){var el=cfg.stf&&document.getElementById(cfg.stf);return el&&el.selectedOptions&&el.selectedOptions[0]?axTxt(el.selectedOptions[0].text):'';}
+function appExp(k,fmt){
+  var d=axData(k);if(!d)return;
+  if(!d.list.length){showToast('⚠️ निवडलेल्या कालावधीत नोंदी नाहीत');return;}
+  if(fmt==='xlsx')axXlsx(k,d);else axPdf(k,d);
+}
+function axXlsx(k,d){
+  if(typeof XLSX==='undefined'){showToast('⚠️ Excel तयार करण्याचे साधन लोड झाले नाही');return;}
+  try{
+    var t=axTable(d),st=axStLbl(d.cfg),aoa=[];
+    aoa.push([d.cfg.title+' — '+gp_val('s-gp','')+(gp_val('s-tal','')?', ता. '+gp_val('s-tal',''):'')+(gp_val('s-dist','')?', जि. '+gp_val('s-dist',''):'')]);
+    aoa.push(['कालावधी: '+axPer(d.y,d.m)+(d.cfg.dateLbl?' ('+d.cfg.dateLbl+' नुसार)':'')+(st?' · स्थिती: '+st:'')+' · नोंदी: '+d.list.length]);
+    aoa.push([]);aoa.push(t.head);t.rows.forEach(function(r){aoa.push(r);});
+    if(t.tot){var tr=t.tot.slice();aoa.push(tr);}
+    var ws=XLSX.utils.aoa_to_sheet(aoa);
+    ws['!cols']=t.head.map(function(h,i){var w=String(h).length+3;t.rows.forEach(function(r){w=Math.max(w,String(r[i]==null?'':r[i]).length+2);});return {wch:Math.min(Math.max(w,6),45)};});
+    ws['!autofilter']={ref:XLSX.utils.encode_range({s:{r:3,c:0},e:{r:3+t.rows.length,c:t.head.length-1}})};
+    var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'List');
+    var arr=XLSX.write(wb,{bookType:'xlsx',type:'array'}),blob=new Blob([arr],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    var url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download=d.cfg.file+'_'+axTag(d.y,d.m)+'.xlsx';document.body.appendChild(a);a.click();document.body.removeChild(a);
+    setTimeout(function(){URL.revokeObjectURL(url);},1000);
+    showToast('✅ Excel Download झाली — '+d.list.length+' नोंदी');
+  }catch(e){showToast('⚠️ Excel तयार करताना अडचण: '+(e&&e.message?e.message:e));}
+}
+function axPdf(k,d){
+  var E=dashEsc,t=axTable(d),st=axStLbl(d.cfg),cols=d.cfg.cols();
+  var th=t.head.map(function(h){return '<th>'+E(h)+'</th>';}).join('');
+  var body=t.rows.map(function(r){return '<tr>'+r.map(function(v,i){var num=i>0&&cols[i-1].n;return '<td class="'+(i===0?'c':(num?'r':''))+'">'+E(v)+'</td>';}).join('')+'</tr>';}).join('');
+  if(t.tot){var fs=t.tot.firstSum;body+='<tr class="tot"><td colspan="'+fs+'" class="c">'+E(t.tot[0])+'</td>'+t.tot.slice(fs).map(function(v,j){var num=cols[fs-1+j]&&cols[fs-1+j].n;return '<td class="'+(num?'r':'')+'">'+E(v)+'</td>';}).join('')+'</tr>';}
+  var html='<div class="doc" style="padding:10px"><div class="doc-hdr"><b style="font-size:15px">'+E(d.cfg.title)+'</b><br>'+
+    '<span style="font-size:11px">ग्रामपंचायत :- '+E(gp_val('s-gp',''))+'&nbsp;&nbsp;&nbsp;तालुका :- '+E(gp_val('s-tal',''))+'&nbsp;&nbsp;&nbsp;जिल्हा :- '+E(gp_val('s-dist',''))+'</span><br>'+
+    '<span style="font-size:11px">कालावधी: <b>'+E(axPer(d.y,d.m))+'</b>'+(d.cfg.dateLbl?' ('+E(d.cfg.dateLbl)+' नुसार)':'')+(st?' &nbsp;·&nbsp; स्थिती: <b>'+E(st)+'</b>':'')+' &nbsp;·&nbsp; नोंदी: <b>'+d.list.length+'</b></span></div>'+
+    '<table class="dtable" style="font-size:9px"><thead><tr>'+th+'</tr></thead><tbody>'+body+'</tbody></table></div>';
+  var el=document.getElementById('ax-pdf');
+  if(!el){el=document.createElement('div');el.id='ax-pdf';el.style.display='none';document.body.appendChild(el);}
+  el.innerHTML=html;
+  printDiv('ax-pdf',true,false,{fileName:d.cfg.file+'_'+axTag(d.y,d.m)}); // true = A4 लँडस्केप (रकाने जास्त आहेत)
+}
+// ── पट्टी (वर्ष / महिना / Excel / PDF) — प्रत्येक यादीच्या फिल्टर-ओळीखाली आपोआप जोडतो ──
+function axInit(){
+  Object.keys(AX).forEach(function(k){
+    if(document.getElementById('ax-bar-'+k))return;
+    var a=document.getElementById(AX[k].a);if(!a)return;
+    var host=(a.closest&&a.closest('.bgrp'))||a.parentElement;if(!host||!host.parentNode)return;
+    var bar=document.createElement('div');bar.id='ax-bar-'+k;
+    bar.style.cssText='display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 8px;padding:6px 8px;background:#f4f8ff;border:1px solid #cfe0ff;border-radius:8px;font-size:12px';
+    var sel='padding:6px;border-radius:6px;border:1px solid #ccc';
+    bar.innerHTML='<b>📥 Download</b>'+
+      '<label>वर्ष <select id="ax-y-'+k+'" onchange="axCount(\''+k+'\')" style="'+sel+'"><option value="all">सर्व</option></select></label>'+
+      '<label>महिना <select id="ax-m-'+k+'" onchange="axCount(\''+k+'\')" style="'+sel+'"><option value="all">सर्व</option>'+AX_MON.map(function(n,i){return '<option value="'+(i<9?'0':'')+(i+1)+'">'+n+'</option>';}).join('')+'</select></label>'+
+      '<button class="btn btn-out" type="button" onclick="appExp(\''+k+'\',\'xlsx\')">⬇️ Excel</button>'+
+      '<button class="btn btn-out" type="button" onclick="appExp(\''+k+'\',\'pdf\')">📄 PDF</button>'+
+      '<span id="ax-n-'+k+'" style="color:#555"></span>';
+    host.parentNode.insertBefore(bar,host.nextSibling);
+  });
+}
+function axCount(k){var d=axData(k),el=document.getElementById('ax-n-'+k);if(el&&d)el.textContent=d.list.length+' नोंदी';}
+function axFill(){
+  axInit();
+  Object.keys(AX).forEach(function(k){
+    var ys=document.getElementById('ax-y-'+k);if(!ys)return;
+    var cur=ys.value||'all',cy={},fy={};
+    AX[k].all().forEach(function(r){var d=String(AX[k].dt(r)||'').slice(0,10);if(d.length<10)return;var y=+d.slice(0,4),m=+d.slice(5,7);cy[y]=1;fy[m>=4?y:y-1]=1;});
+    var desc=function(o){return Object.keys(o).map(Number).sort(function(a,b){return b-a;});};
+    ys.innerHTML='<option value="all">सर्व</option>'+
+      desc(fy).map(function(y){return '<option value="f'+y+'">आर्थिक वर्ष '+y+'-'+String((y+1)%100).padStart(2,'0')+'</option>';}).join('')+
+      desc(cy).map(function(y){return '<option value="c'+y+'">वर्ष '+y+'</option>';}).join('');
+    ys.value=cur;if(ys.value!==cur)ys.value='all';
+    axCount(k);
+  });
+}
+
 function appReqView(id){
   var r=appReqById(id);if(!r)return;var E=dashEsc,shot=appOk(r.shot),ph=appOk(r.photo);
   var rows=[['प्रकार',appReqTitle(r)],['दाखला कोणाचा (नोंद)',r.rname],['नोंद क्र.',r.rk],['नोंदीचा तपशील',r.rinfo],['अर्जदाराचे नाव',r.name],['वडिलांचे/पतीचे नाव',r.father],['नाते',r.rel],['वय',r.age],['व्यवसाय',r.occ],['आधार',r.aadh],['मोबाईल',r.mob],['WhatsApp',r.wa],['पत्ता',r.addr],
@@ -9121,7 +9295,7 @@ function appApproveTax(r,done,fail){fail=fail||function(){};
       '<div>मालमत्ता धारकाचे नाव :- <b>'+E(hit.rec.owner||'')+'</b></div><div>अ.क्र. '+E(hit.ano)+' &nbsp; घर क्र. :- '+E(hit.rec.pno||'')+' &nbsp; सन '+E(gp_val('s-yr',''))+'</div>'+
       '<div>भरणा करणारे:- '+E(r.name||'')+' &nbsp; मोबाईल:- '+E(r.mob||'')+' &nbsp; UTR:- '+E(utrTxt)+'</div>'+
       '<table style="width:100%;border-collapse:collapse;margin-top:8px;font-size:13px"><tr><th style="'+th+'">कराची नावे</th><th style="'+th+'">थकबाकी</th><th style="'+th+'">चालू</th><th style="'+th+'">एकूण</th></tr>'+rows+
-      (sutTot>0?'<tr><td style="'+th+'">🎁 सवलत (सूट)'+(pmR||pcR?' — मागील '+pmR+'%'+(pcR?' / चालू '+pcR+'%':''):'')+'</td><td colspan="2" style="'+th+'"></td><td style="'+th+'text-align:center">₹ '+sutTot+'</td></tr>':'')+
+      (sutTot>0?'<tr><td style="'+th+'">🎁 सवलत (सूट)'+(pmR||pcR?' — मागील '+pmR+'%'+(pcR?' / चालू '+pcR+'%':''):'')+'</td><td style="'+th+'text-align:center">'+APP_TAX_IDS.reduce(function(a,t){return a+sd[t].p;},0)+'</td><td style="'+th+'text-align:center">'+APP_TAX_IDS.reduce(function(a,t){return a+sd[t].c;},0)+'</td><td style="'+th+'text-align:center">₹ '+sutTot+'</td></tr>':'')+
       '<tr><td style="'+th+'font-weight:700">एकूण वसूल</td><td colspan="2" style="'+th+'"></td><td style="'+th+'text-align:center;font-weight:700">₹ '+amt+'</td></tr></table>'+
       '<div style="margin-top:6px">उर्वरित बाकी: <b>₹ '+(tot-amt-sutTot)+'</b></div>'+appSignFooter(no,qr)+'</div></div>';
     done({certHtml:html,certNo:no,note:''},function(){

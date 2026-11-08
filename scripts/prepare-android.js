@@ -33,3 +33,19 @@ if (!/versionCode\s+\d+/.test(g)) throw new Error('build.gradle मध्ये 
 g = g.replace(/versionCode\s+\d+/, 'versionCode ' + vc).replace(/versionName\s+"[^"]*"/, 'versionName "' + vn + '"');
 fs.writeFileSync(gradle, g);
 console.log('[prepare] versionCode', vc, 'versionName', vn);
+
+// 4) FileProvider — WhatsApp ला पावतीचे चित्र (cache मधून) द्यायला लागतो. Capacitor चा साचा तो देतो; नसेल तर इथे जोडतो/सांगतो.
+(function () {
+  const xmlDir = path.join(appDir, 'res', 'xml');
+  const fp = path.join(xmlDir, 'file_paths.xml');
+  fs.mkdirSync(xmlDir, { recursive: true });
+  let x = fs.existsSync(fp) ? fs.readFileSync(fp, 'utf8') : '<?xml version="1.0" encoding="utf-8"?>\n<paths xmlns:android="http://schemas.android.com/apk/res/android">\n</paths>\n';
+  if (!/<cache-path\b/.test(x)) {
+    x = x.replace('</paths>', '    <cache-path name="my_cache_images" path="." />\n</paths>');
+    fs.writeFileSync(fp, x);
+    console.log('[prepare] file_paths.xml मध्ये cache-path जोडला');
+  }
+  const mf = fs.readFileSync(path.join(appDir, 'AndroidManifest.xml'), 'utf8');
+  if (!/\.fileprovider/.test(mf)) throw new Error('AndroidManifest.xml मध्ये FileProvider (.fileprovider) सापडला नाही — WhatsApp वर पावती जोडण्यासाठी तो लागतो');
+  console.log('[prepare] FileProvider OK');
+})();
