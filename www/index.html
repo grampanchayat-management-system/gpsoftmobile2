@@ -52,10 +52,88 @@
     document.getElementById('gp-lgo').onclick=function(){
       var r=GPWeb.activate(document.getElementById('gp-lk').value, document.getElementById('gp-lc').value);
       if(!r.ok){ document.getElementById('gp-lm').textContent='❌ '+(MSG[r.reason]||MSG.bad); return; }
-      g.style.cssText=''; g.innerHTML='<img src="icons/icon-192.png" alt=""><div>⏳ लोड होत आहे…</div>'; launch();
+      g.style.cssText=''; g.innerHTML='<img src="icons/icon-192.png" alt=""><div>⏳ लोड होत आहे…</div>'; gate();
     };
   }
-  GPWeb.boot().then(function(){ if(GPWeb.isActivated()) launch(); else showLock(); });
+  /* 🔒 दुसरा टप्पा (Software Key + Mobile Code नंतर): ☁️ Cloud Sync Sign in (Email + Password) व कॉम्प्युटरवरून झालेला Sync.
+     याशिवाय ॲप उघडत नाही — म्हणजे फक्त Key/Code मिळाली म्हणून कुणी हे ॲप स्वतंत्र (ऑफलाईन) software म्हणून फुकट वापरू शकत नाही:
+     ॲप Mobile Code मध्ये बांधलेल्या Firebase Project च्या खात्यानेच उघडते आणि त्या क्लाउडवर कॉम्प्युटरचा डेटा (ग्रामपंचायत नाव इ.) असावा लागतो.
+     सत्यापन इंटरनेटवर होते; त्यानंतर GRACE_DAYS दिवस ऑफलाईन चालते, मग पुन्हा नेट लावून सत्यापन लागते.
+     Firebase → Authentication मध्ये ते user बंद (Disable) केले की इथून पुढे ॲप उघडत नाही. */
+  var GRACE_DAYS=15, REVAL_MS=12*36e5, GATE_KEY='GP_SYNC_GATE', NOTE_KEY='GP_SYNC_NOTE';
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+  function lsx(){ try{ return window.localStorage; }catch(e){ return null; } }
+  function lget(k){ try{ return lsx().getItem(k); }catch(e){ return null; } }
+  function lset(k,v){ try{ lsx().setItem(k,v); }catch(e){} }
+  function ldel(k){ try{ lsx().removeItem(k); }catch(e){} }
+  function hasDesk(){ try{ var g=JSON.parse(lget('GP_MASTERS')||'{}'); return !!(g&&String(g['s-gp']||'').trim()); }catch(e){ return false; } }   // कॉम्प्युटरवरून आलेला डेटा (ग्रामपंचायत नाव)
+  function lastOk(){ var t=+lget(GATE_KEY)||0; return (t>Date.now()+864e5)?0:t; }   // भविष्यातील वेळ = फोनचे घड्याळ पुढे केले → अवैध
+  function markOk(){ lset(GATE_KEY,String(Date.now())); }
+  function isFresh(){ var t=lastOk(); return t>0 && (Date.now()-t)<GRACE_DAYS*864e5; }
+  function sessionOk(){ try{ var c=GPSync.status().cfg||{}; return !!(GPSync.isOn() && GPWeb.projectAllowed(c.p)); }catch(e){ return false; } }
+  function isDenied(e){
+    var c=String((e&&e.code)||'')+' '+String((e&&e.message)||'');
+    return !!(e && (e.code==='TOKEN_EXPIRED' || e.http===401 || e.http===403 || /USER_DISABLED|USER_NOT_FOUND|INVALID_REFRESH_TOKEN|TOKEN_EXPIRED|PERMISSION_DENIED/.test(c)));
+  }
+  function validate(){   // Firebase शी प्रत्यक्ष संपर्क: खाते चालू आहे का + डेटा घेणे/देणे
+    return GPSync.syncNow().then(function(){
+      if(GPSync.status().s==='ok'){ markOk(); return 'ok'; }
+      return 'unknown';
+    }, function(e){ return isDenied(e)?'denied':'error'; });
+  }
+  function revoke(msg){ try{ GPSync.signOut(); }catch(e){} ldel(GATE_KEY); lset(NOTE_KEY,msg); location.replace('index.html'); }
+  function takeNote(){ var n=lget(NOTE_KEY)||''; if(n) ldel(NOTE_KEY); return n; }
+  function showSync(note){
+    var g=document.getElementById('gps'), a=GPWeb.activation()||{}, c=(GPSync.status().cfg)||{};
+    var inp='width:100%;box-sizing:border-box;padding:11px;border:1.5px solid #c9d1e0;border-radius:9px;font-size:16px;margin:3px 0 10px;font-family:inherit;color:#111';
+    g.style.cssText='height:auto;min-height:100%;padding:16px;box-sizing:border-box;justify-content:center';
+    g.innerHTML='<div style="max-width:430px;width:100%;background:#fff;color:#222;border-radius:16px;padding:20px;text-align:left;box-shadow:0 10px 40px rgba(0,0,0,.35)">'+
+      '<div style="text-align:center"><img src="icons/icon-192.png" alt="" style="width:64px;height:64px;border-radius:16px"><h2 style="margin:8px 0 2px;color:#0D2B5E;font-size:19px">☁️ Cloud Sync Sign in</h2></div>'+
+      '<p style="font-size:13px;line-height:1.7;color:#444;margin:8px 0 10px">हे ॲप तुमच्या <b>कॉम्प्युटरवरील software शी जोडलेल्या खात्यानेच</b> उघडते. आधी कॉम्प्युटरवरील software मध्ये <b>☁️ Cloud Sync चालू करून डेटा क्लाउडवर चढवलेला</b> असावा; मग इथे तोच Email व Password टाका.</p>'+
+      '<div style="background:#eef4ff;border:1.5px dashed #6d8fd1;border-radius:10px;padding:8px;margin-bottom:12px;text-align:center;font-size:12.5px;color:#345">Firebase Project ID (Mobile Code मधील): <b>'+esc(a.project||'')+'</b></div>'+
+      '<label style="font-size:12.5px;font-weight:700">Web API Key</label><input id="gp-sk" autocomplete="off" autocapitalize="off" placeholder="AIza..." value="'+esc(c.k||'')+'" style="'+inp+'">'+
+      '<label style="font-size:12.5px;font-weight:700">Email</label><input id="gp-se" type="email" autocomplete="username" autocapitalize="off" value="'+esc(c.email||'')+'" style="'+inp+'">'+
+      '<label style="font-size:12.5px;font-weight:700">Password</label><input id="gp-sp" type="password" autocomplete="current-password" style="'+inp+'">'+
+      '<div id="gp-sm" style="color:#c62828;font-size:13px;line-height:1.5;min-height:20px;margin-bottom:8px">'+esc(note||'')+'</div>'+
+      '<button id="gp-sgo" style="width:100%;padding:13px;border:0;border-radius:10px;background:#1b5e20;color:#fff;font-size:16px;font-weight:700">✅ Sign in करा व डेटा घ्या</button>'+
+      '<button id="gp-sback" style="width:100%;margin-top:10px;padding:9px;border:0;background:none;color:#456;font-size:12.5px;text-decoration:underline">← Software Key / Mobile Code बदला</button></div>';
+    function msg(t,col){ var m=document.getElementById('gp-sm'); m.style.color=col||'#c62828'; m.textContent=t; }
+    document.getElementById('gp-sback').onclick=function(){ if(confirm('या फोनवरची सक्रियता काढायची का? पुन्हा Software Key + Mobile Code लागेल. (डेटा तसाच राहील)')){ try{ GPSync.signOut(); }catch(e){} ldel(GATE_KEY); GPWeb.deactivate(); location.replace('index.html'); } };
+    var go=document.getElementById('gp-sgo');
+    go.onclick=function(){
+      var k=document.getElementById('gp-sk').value.trim(), em=document.getElementById('gp-se').value.trim(), pw=document.getElementById('gp-sp').value;
+      if(!k||!em||!pw){ msg('⚠️ Web API Key, Email आणि Password तिन्ही भरा.'); return; }
+      go.disabled=true; msg('⏳ Sign in होत आहे व डेटा घेत आहे…','#1565c0');
+      GPSync.signIn(a.project,k,em,pw,'down').then(function(){
+        if(!hasDesk()){
+          try{ GPSync.signOut(); }catch(e){} ldel(GATE_KEY); go.disabled=false;
+          msg('❌ क्लाउडवर कॉम्प्युटरचा डेटा सापडला नाही. आधी कॉम्प्युटरवरील software मध्ये ☁️ Cloud Sync चालू करून डेटा क्लाउडवर चढवा; मग इथे पुन्हा Sign in करा.');
+          return;
+        }
+        markOk(); g.style.cssText=''; g.innerHTML='<img src="icons/icon-192.png" alt=""><div>⏳ लोड होत आहे…</div>'; launch();
+      }, function(e){ go.disabled=false; msg('❌ '+((GPSync.errText&&GPSync.errText(e))||(e&&e.message)||'त्रुटी')); });
+    };
+  }
+  function gate(){
+    if(!(window.GPSync&&GPSync.status&&GPSync.syncNow)){ document.getElementById('gps').innerHTML='⚠️ तपासणी लोड झाली नाही — ॲप बंद करून पुन्हा उघडा.'; return; }
+    var note=takeNote();
+    if(!sessionOk()||!hasDesk()){ showSync(note); return; }
+    if(isFresh()){
+      launch();
+      if(Date.now()-lastOk()>REVAL_MS && navigator.onLine!==false){
+        validate().then(function(r){ if(r==='denied') revoke('या खात्याचा प्रवेश बंद झाला आहे — पुन्हा Sign in करा.'); });
+      }
+      return;
+    }
+    if(navigator.onLine===false){ showSync('इंटरनेट जोडून ॲप पुन्हा उघडा — शेवटचे सत्यापन '+GRACE_DAYS+' दिवसांपेक्षा जुने आहे किंवा झालेले नाही.'); return; }
+    document.getElementById('gps').innerHTML='<img src="icons/icon-192.png" alt=""><div>⏳ खाते तपासत आहे…</div>';
+    validate().then(function(r){
+      if(r==='ok') launch();
+      else if(r==='denied') revoke('या खात्याचा प्रवेश बंद झाला आहे किंवा Sign in ची मुदत संपली — पुन्हा Sign in करा.');
+      else showSync(note||'तपासणी होऊ शकली नाही (इंटरनेट/Firebase अडचण) — पुन्हा प्रयत्न करा.');
+    });
+  }
+  GPWeb.boot().then(function(){ if(GPWeb.isActivated()) gate(); else showLock(); });
 })();
 </script>
 </body>
