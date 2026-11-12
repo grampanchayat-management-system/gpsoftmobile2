@@ -1343,8 +1343,8 @@ try{
 <div class="card">
   <div class="card-title">⚙️ Masters — ग्रामपंचायत माहिती</div>
   <div class="tabs">
-    <div class="tab active" onclick="switchTab(this,'mst-main')">🏛️ ग्रामपंचायत माहिती</div>
-    <div class="tab" onclick="switchTab(this,'mst-roads');roadsRender()">🛣️ रस्ते / गल्ली नावे</div>
+    <div class="tab active" onclick="switchTab(this,'mst-main');roadsRender()">🏛️ ग्रामपंचायत माहिती</div>
+    <div class="tab" onclick="switchTab(this,'mst-app')">📱 मोबाईल ॲप / ☁️ Firebase / 📲 नागरिक ॲप</div>
   </div>
 <div id="mst-main">
   <div class="section-hdr">🏛️ ग्रामपंचायत माहिती</div>
@@ -1451,6 +1451,40 @@ try{
       </div>
     </div>
   </div>
+  <div class="section-hdr" style="margin-top:22px">🛣️ रस्ते / गल्ली नावे (नमुना ८ साठी)</div>
+  <div class="alert al-info" style="font-size:12px;line-height:1.6">
+    इथे गावातील रस्ते / गल्ल्यांची नावे एकदा भरा. नमुना ८ मध्ये नवीन नोंद करताना "रस्त्याचे / गल्लीचे नाव" वर क्लिक केल्यावर ही यादी (dropdown) दिसेल — यादीतून निवडता येईल, किंवा हवे तर थेट टाईपही करता येईल.
+    <b>Excel मधून नोंदी आयात करताना</b> तिथे टाईप केलेली नावे जशीच्या तशी घेतली जातात — ती इथे असणे आवश्यक नाही.
+  </div>
+  <div class="fgrid" style="grid-template-columns:1fr auto;align-items:end">
+    <div class="fg"><label>नवीन रस्ता / गल्लीचे नाव</label><input id="road-new" placeholder="उदा. गावठाण गल्ली" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();roadAddOne();}"></div>
+    <div class="fg"><button class="btn btn-gn" type="button" onclick="roadAddOne()">➕ जोडा</button></div>
+  </div>
+  <div class="fg" style="margin-top:8px"><label>एकाच वेळी अनेक नावे (प्रत्येक ओळीत एक — Excel मधून कॉपी-पेस्ट चालेल)</label>
+    <textarea id="road-bulk" rows="4" placeholder="गावठाण गल्ली&#10;मारुती मंदिर रोड&#10;शाळा रोड" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:13px;font-family:inherit;box-sizing:border-box"></textarea>
+  </div>
+  <div class="bgrp" style="margin-top:8px">
+    <button class="btn btn-gn" type="button" onclick="roadAddBulk()">➕ सर्व जोडा</button>
+    <button class="btn btn-out" type="button" onclick="roadImportFromN8()">📥 नमुना ८ मधील आधीची नावे घ्या</button>
+  </div>
+  <div id="road-msg" style="font-size:12px;color:#1a5c2a;margin-top:8px;min-height:16px"></div>
+  <div class="section-hdr" style="margin-top:14px">📋 जतन केलेली नावे <span id="road-count" style="font-weight:400;font-size:12px"></span></div>
+  <div id="road-list" style="overflow-x:auto"></div>
+  <div class="bgrp" style="margin-top:16px">
+    <button class="btn btn-gn" onclick="saveMasters()" style="font-size:14px;padding:12px 28px">💾 Masters जतन करा</button>
+    <button class="btn btn-out" onclick="loadMasters()">↺ Reload</button>
+  </div>
+  <div class="alert al-ok" id="masters-ok" style="display:none;margin-top:10px">✅ Masters जतन झाले!</div>
+  <div class="section-hdr" style="margin-top:22px">💾 संपूर्ण डेटा बॅकअप (महत्त्वाचे!)</div>
+  <div style="font-size:12px;color:#555;margin-bottom:8px">Software reinstall/update करण्यापूर्वी नेहमी बॅकअप घ्या — नाहीतर जुना डेटा दिसणार नाही.</div>
+  <div class="bgrp">
+    <button class="btn btn-gn" onclick="exportAllData()">⬇️ डेटा बॅकअप घ्या (Export)</button>
+    <button class="btn btn-out" onclick="document.getElementById('restore-file-inp').click()">⬆️ बॅकअप पुन्हा लोड करा (Import)</button>
+    <input type="file" id="restore-file-inp" accept=".json" style="display:none" onchange="importAllData(this.files[0])">
+  </div>
+</div><!-- /mst-main -->
+
+<div id="mst-app" style="display:none">
     <div class="mst-box">
         <div class="section-hdr" style="margin-top:0">📱 मोबाईल ॲप — लायसन्स (Software Key + Mobile Code)</div>
         <div id="mb-desktop">
@@ -1580,38 +1614,9 @@ try{
     <button class="btn btn-gn" onclick="saveMasters()" style="font-size:14px;padding:12px 28px">💾 Masters जतन करा</button>
     <button class="btn btn-out" onclick="loadMasters()">↺ Reload</button>
   </div>
-  <div class="alert al-ok" id="masters-ok" style="display:none;margin-top:10px">✅ Masters जतन झाले!</div>
-  <div class="section-hdr" style="margin-top:22px">💾 संपूर्ण डेटा बॅकअप (महत्त्वाचे!)</div>
-  <div style="font-size:12px;color:#555;margin-bottom:8px">Software reinstall/update करण्यापूर्वी नेहमी बॅकअप घ्या — नाहीतर जुना डेटा दिसणार नाही.</div>
-  <div class="bgrp">
-    <button class="btn btn-gn" onclick="exportAllData()">⬇️ डेटा बॅकअप घ्या (Export)</button>
-    <button class="btn btn-out" onclick="document.getElementById('restore-file-inp').click()">⬆️ बॅकअप पुन्हा लोड करा (Import)</button>
-    <input type="file" id="restore-file-inp" accept=".json" style="display:none" onchange="importAllData(this.files[0])">
-  </div>
-</div><!-- /mst-main -->
+  <div class="alert al-ok" id="masters-ok2" style="display:none;margin-top:10px">✅ Masters जतन झाले!</div>
+</div><!-- /mst-app -->
 
-<!-- 🛣️ रस्ते / गल्ली नावे (Master) — नमुना ८ मध्ये "रस्त्याचे / गल्लीचे नाव" dropdown साठी -->
-<div id="mst-roads" style="display:none">
-  <div class="section-hdr">🛣️ रस्ते / गल्ली नावांची यादी</div>
-  <div class="alert al-info" style="font-size:12px;line-height:1.6">
-    इथे गावातील रस्ते / गल्ल्यांची नावे एकदा भरा. नमुना ८ मध्ये नवीन नोंद करताना "रस्त्याचे / गल्लीचे नाव" वर क्लिक केल्यावर ही यादी (dropdown) दिसेल — यादीतून निवडता येईल, किंवा हवे तर थेट टाईपही करता येईल.
-    <b>Excel मधून नोंदी आयात करताना</b> तिथे टाईप केलेली नावे जशीच्या तशी घेतली जातात — ती इथे असणे आवश्यक नाही.
-  </div>
-  <div class="fgrid" style="grid-template-columns:1fr auto;align-items:end">
-    <div class="fg"><label>नवीन रस्ता / गल्लीचे नाव</label><input id="road-new" placeholder="उदा. गावठाण गल्ली" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();roadAddOne();}"></div>
-    <div class="fg"><button class="btn btn-gn" type="button" onclick="roadAddOne()">➕ जोडा</button></div>
-  </div>
-  <div class="fg" style="margin-top:8px"><label>एकाच वेळी अनेक नावे (प्रत्येक ओळीत एक — Excel मधून कॉपी-पेस्ट चालेल)</label>
-    <textarea id="road-bulk" rows="4" placeholder="गावठाण गल्ली&#10;मारुती मंदिर रोड&#10;शाळा रोड" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:13px;font-family:inherit;box-sizing:border-box"></textarea>
-  </div>
-  <div class="bgrp" style="margin-top:8px">
-    <button class="btn btn-gn" type="button" onclick="roadAddBulk()">➕ सर्व जोडा</button>
-    <button class="btn btn-out" type="button" onclick="roadImportFromN8()">📥 नमुना ८ मधील आधीची नावे घ्या</button>
-  </div>
-  <div id="road-msg" style="font-size:12px;color:#1a5c2a;margin-top:8px;min-height:16px"></div>
-  <div class="section-hdr" style="margin-top:14px">📋 जतन केलेली नावे <span id="road-count" style="font-weight:400;font-size:12px"></span></div>
-  <div id="road-list" style="overflow-x:auto"></div>
-</div>
 </div>
 </div>
 
@@ -2830,8 +2835,8 @@ function saveMasters(){
       localStorage.setItem('GP_MASTERS',JSON.stringify(s));GP=s;updateHeader();
       updatePaniOptions();updateVaparOptions();
       recalcAllN8();
-      var el=document.getElementById('masters-ok');el.style.display='block';
-      setTimeout(function(){el.style.display='none';},2000);
+      var el=document.getElementById('masters-ok');el.style.display='block';var el2=document.getElementById('masters-ok2');if(el2)el2.style.display='block';
+      setTimeout(function(){el.style.display='none';if(el2)el2.style.display='none';},2000);
       gpBusyDone('✅ Masters जतन झाले!');
       try{if(window.GPSync&&window.GPSync.isOn()&&gv('s-dir-v'))appPublishCfg();}catch(e2){} // ॲप माहिती + खरा डेटा + गाव नोंदणी आपोआप (वेगळी बटणे नाहीत)
     }catch(err){
@@ -4245,7 +4250,7 @@ function renderN8Register(){
   // दिसायचा (अक्षरे मिसळल्यासारखी). प्रिंटमध्ये हे दिसत नव्हते कारण प्रिंट CSS .reg-tbl ला
   // table-layout:auto देतो आणि nowrap लावत नाही. इथे white-space:normal देऊन स्क्रीनवरही तेच
   // (प्रिंटसारखे, व्यवस्थित wrap होणारे) वर्तन आणतो.
-  var tableHtml='<table class="reg-tbl" style="width:100%;border-collapse:collapse;font-size:9.5px;table-layout:fixed;white-space:normal">'+
+  var tableHtml='<table class="reg-tbl" style="width:100%;border-collapse:collapse;font-size:9.5px;table-layout:fixed;white-space:normal;word-break:break-word;overflow-wrap:anywhere">'+
   colgroupHtml+'<thead>'+theadRowsHtml+'</thead>'+recBlocks.join('')+'</table>';
 
 
@@ -4459,13 +4464,13 @@ function genN8Cert(ano){
   // मालकाचे नाव (idx4) आणि मालमत्तेचे वर्णन (idx6) हे स्तंभ थोडे मोठे केले आहेत (नाव/वर्णन
   // जास्त जागेत नीट दिसावेत म्हणून), आणि रकाना ११ (रेडीरेकनर दरामधील "इमारत" — जो नेहमी रिकामाच
   // असतो, फक्त "जमीन" व "बांधकाम" दर वापरले जातात) ऐवजी ती जागा वापरण्यासाठी ekदम लहान केला आहे.
-  var colWidths=['2.2','4','2.5','2.5','8.2','5.7','10.8','3','5.5','3.5','2.4','4.6','2.6','2.3','5.5','2.6','3.8','3','3','3.8','5.2','1.3','1.3','1.3','1.8','1.8','5.6'];
+  var colWidths=['2.2','4','2.5','2.5','8.2','5.7','9.8','3','5.5','3.5','2.4','4.6','2.6','3.6','6.5','2.6','3.8','2.4','2.4','3.8','5.2','1.3','1.3','1.3','1.8','1.8','5.6'];
   // ⚠️ रकाना ११ (रेडीरेकनर दरामधील "इमारत") आधी 0.3% इतका अति-अरुंद होता, त्यामुळे "इमारत" हे उभं हेडिंग व
   // रकाना-क्रमांक दिसत नव्हते; आता 2.4% दिला आहे. तसेच रकाना १८ (दिवाबत्ती) व १९ (आरोग्य) 1.5% वरून 3% केले आहेत.
   // ही वाढीव जागा बांधकाम/पाणी/एकूण/शेरा/वर्णन इ. स्तंभांतून थोडी-थोडी घेतली आहे — बेरीज अजूनही ~१००% च आहे.
   var vh='padding:3px 1px;vertical-align:middle;text-align:center;overflow:hidden';
   // उभे (खालून वर वाचले जाणारे) हेडिंग — writing-mode वापरल्याने मजकुराच्या लांबीनुसार ओळीची उंची आपोआप वाढते
-  var vspan=function(lbl){return '<span style="display:inline-block;writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;font-size:12px;font-weight:700;line-height:1.2">'+lbl+'</span>';};
+  var vspan=function(lbl,fs){return '<span style="display:inline-block;writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;font-size:'+(fs||12)+'px;font-weight:700;line-height:1.2">'+lbl+'</span>';};
   var vth=function(lbl,w){return '<th rowspan="2" style="border:1px solid #999;'+vh+';width:'+w+'%">'+vspan(lbl)+'</th>';};
   var t=d.totals||{};
   var g=gp_val,gpNm=g('s-gp',''),tal=g('s-tal',''),dist=g('s-dist','');
@@ -4506,7 +4511,7 @@ function genN8Cert(ano){
   '</div>'+
   '<hr class="doc-div">'+
   '<div style="overflow-x:auto">'+
-  '<table style="width:100%;table-layout:fixed;border-collapse:collapse;font-size:12px;overflow:hidden">'+
+  '<table style="width:100%;table-layout:fixed;border-collapse:collapse;font-size:12px;overflow:hidden;word-break:break-word;overflow-wrap:anywhere">'+
   '<colgroup>'+colWidths.map(function(w){return '<col style="width:'+w+'%">';}).join('')+'</colgroup>'+
   '<tr style="background:#e8e8e8;color:#000;font-weight:700">'+
   '<th rowspan="2" style="border:1px solid #999;padding:3px;width:'+colWidths[0]+'%;overflow-wrap:break-word;font-size:11.5px">अ.क्र.</th>'+
@@ -4532,15 +4537,15 @@ function genN8Cert(ano){
   '<th style="border:1px solid #999;'+vh+'">'+vspan('इमारत')+'</th>'+
   '<th style="border:1px solid #999;'+vh+'">'+vspan('बांधकाम')+'</th>'+
   '<th style="border:1px solid #999;'+vh+'">'+vspan('घरपट्टी')+'</th>'+
-  '<th style="border:1px solid #999;'+vh+'">'+vspan('दिवाबत्ती')+'</th>'+
-  '<th style="border:1px solid #999;'+vh+'">'+vspan('आरोग्यकर')+'</th>'+
+  '<th style="border:1px solid #999;'+vh+'">'+vspan('दिवाबत्ती',10)+'</th>'+
+  '<th style="border:1px solid #999;'+vh+'">'+vspan('आरोग्यकर',10)+'</th>'+
   '<th style="border:1px solid #999;'+vh+'">'+vspan('पाणीपट्टी')+'</th>'+
   '<th style="border:1px solid #999;'+vh+'">'+vspan('एकूण')+'</th>'+
-  '<th style="border:1px solid #999;'+vh+'">'+vspan('घर')+'</th>'+
-  '<th style="border:1px solid #999;'+vh+'">'+vspan('दिवाबत्ती')+'</th>'+
-  '<th style="border:1px solid #999;'+vh+'">'+vspan('आरोग्यकर')+'</th>'+
-  '<th style="border:1px solid #999;'+vh+'">'+vspan('पाणीपट्टी')+'</th>'+
-  '<th style="border:1px solid #999;'+vh+'">'+vspan('एकूण')+'</th>'+
+  '<th style="border:1px solid #999;'+vh+'">'+vspan('घर',8.5)+'</th>'+
+  '<th style="border:1px solid #999;'+vh+'">'+vspan('दिवाबत्ती',8.5)+'</th>'+
+  '<th style="border:1px solid #999;'+vh+'">'+vspan('आरोग्यकर',8.5)+'</th>'+
+  '<th style="border:1px solid #999;'+vh+'">'+vspan('पाणीपट्टी',8.5)+'</th>'+
+  '<th style="border:1px solid #999;'+vh+'">'+vspan('एकूण',8.5)+'</th>'+
   '</tr>'+
   '<tr style="background:#e8e8e8;color:#000;font-weight:700;font-size:11px">'+
   ['१','२','३','४','५','६','७','८','९','१०','११','१२','१३','१४','१५','१६','१७','१८','१९','२०','२१','२२','२३','२४','२५','२६','२७']
@@ -4574,8 +4579,8 @@ function genN8Cert(ano){
     '<td style="border:1px solid #ccc;padding:2px;text-align:center;font-size:12px">'+r.cv.toLocaleString()+'</td>'+
     td(r.bt?r.bt.tax:'')+td(r.imarat||r.padsar||0)+
     (i===0?
-      tdSpan(d.rows[0].diva||0)+
-      tdSpan(d.rows[0].arogya||0)+
+      tdSpan(d.rows[0].diva||0,'font-size:11px')+
+      tdSpan(d.rows[0].arogya||0,'font-size:11px')+
       tdSpan(getPaniAmount(d.pani))+
       '<td rowspan="'+nRows+'" style="border:1px solid #ccc;padding:2px;text-align:center;font-weight:700;font-size:12px">'+(t.total||0)+'</td>'+
       tdBlankSpan()+tdBlankSpan()+tdBlankSpan()+tdBlankSpan()+tdBlankSpan()+
@@ -8001,7 +8006,7 @@ function printDiv(id,landscape,legalPortrait,opts){
   // लहान (zoom कमी) करून एकाच पानात बसवायचा आहे — हे प्रत्यक्ष PDF पान-संख्या मोजून main.js मध्ये होतं.
   var singleDocIds=['n8-doc','birth-doc','death-doc','vivah-doc','bpl-doc','nd-doc','nr-doc'];
   var fitOnePage=singleDocIds.indexOf(id)!==-1||!!(opts&&opts.single); // opts.single: ॲप दाखले यादीतून छापलेले दाखले (ar-doc) — मुख्य सॉफ्टवेअरसारखेच एका पानात
-  var maxZoom=(id==='bpl-doc'||id==='nd-doc'||id==='nr-doc'||(opts&&['bpl','nodue','niradhar'].indexOf(opts.dk)>=0))?1.1:2.2; // हे ३ दाखले पान भरताना अक्षरे फार मोठी होऊ नयेत
+  var maxZoom=(id==='bpl-doc'||id==='nd-doc'||id==='nr-doc'||(opts&&['bpl','nodue','niradhar'].indexOf(opts.dk)>=0))?1.1:((id==='n8-doc'||(opts&&opts.dk==='n8'))?1.8:2.2); // नमुना ८ उताऱ्याचे अक्षर फार मोठे होऊ नये म्हणून कमाल zoom १.८ // हे ३ दाखले पान भरताना अक्षरे फार मोठी होऊ नयेत
   // नोंदवही (Register) असेल तर सुरुवातीला मुखपृष्ठ व शेवटी पानांचे प्रमाणपत्र जोडायचे — नमुना ८, नमुना ९ आणि
   // (opts.regMeta दिल्यास) पाणीपट्टी नोंदवही
   var regMeta=null;
