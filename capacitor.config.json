@@ -1,6 +1,6 @@
 {
   "appId": "in.grampanchayat.app",
-  "appName": "ग्रामपंचायत",
+  "appName": "ग्रामपंचायत व्यवस्थापन प्रणाली",
   "webDir": "www",
   "server": { "androidScheme": "https" }
 }

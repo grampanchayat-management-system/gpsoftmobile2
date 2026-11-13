@@ -8,7 +8,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>ग्रामपंचायत</title>
+<title>ग्रामपंचायत व्यवस्थापन प्रणाली</title>
 <style>html,body{margin:0;height:100%;background:#0D2B5E;color:#fff;font-family:'Noto Sans Devanagari',Mangal,Arial,sans-serif}#gps{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-size:15px}#gps img{width:84px;height:84px;border-radius:20px}</style>
 </head>
 <body>
@@ -133,7 +133,25 @@
       else showSync(note||'तपासणी होऊ शकली नाही (इंटरनेट/Firebase अडचण) — पुन्हा प्रयत्न करा.');
     });
   }
-  GPWeb.boot().then(function(){ if(GPWeb.isActivated()) gate(); else showLock(); });
+  /* 💾 Sign in टप्प्यातही डेटा ॲपच्या खऱ्या (IndexedDB) साठ्यातच लिहिला जावा — app.html मधील localStorage शिम सारखाच.
+     (याआधी इथला Sync ब्राऊझरच्या साध्या localStorage मध्ये लिहायचा, म्हणून ॲप उघडल्यावर क्लाउडवरचा डेटा दिसत नव्हता.) */
+  function installStore(){
+    try{
+      var store=window.__GP_DISK||(window.__GP_DISK={}), ipc=window.require('electron').ipcRenderer;
+      function persist(){ try{ ipc.sendSync('gp-data-save',store); }catch(e){} }
+      var has=function(k){ return Object.prototype.hasOwnProperty.call(store,k); };
+      var shim={
+        getItem:function(k){ return has(k)?store[k]:null; },
+        setItem:function(k,v){ store[k]=String(v); persist(); },
+        removeItem:function(k){ delete store[k]; persist(); },
+        clear:function(){ store={}; window.__GP_DISK=store; persist(); },
+        key:function(i){ var ks=Object.keys(store); return ks[i]!==undefined?ks[i]:null; }
+      };
+      Object.defineProperty(shim,'length',{get:function(){ return Object.keys(store).length; }});
+      Object.defineProperty(window,'localStorage',{value:shim,configurable:true});
+    }catch(e){}
+  }
+  GPWeb.boot().then(function(){ installStore(); if(GPWeb.isActivated()) gate(); else showLock(); });
 })();
 </script>
 </body>

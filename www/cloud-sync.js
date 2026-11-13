@@ -148,10 +148,14 @@
   }
 
   /* ---------- local change tracking ---------- */
+  var rlCache = null;   // push दरम्यान: एकाच key चा पूर्ण नकाशा प्रत्येक नोंदीसाठी पुन्हा पुन्हा parse होऊ नये (हजारो नोंदींना फोन गोठत होता)
   function readLocal(k, id) {
     var v = ls().getItem(k);
     if (id === WHOLE) return v == null ? null : v;
-    var m = pj(v); if (!isObj(m) || !(id in m)) return null;
+    var m;
+    if (rlCache && rlCache[k] && rlCache[k].raw === v) m = rlCache[k].map;
+    else { m = pj(v); if (rlCache) rlCache[k] = { raw: v, map: m }; }
+    if (!isObj(m) || !(id in m)) return null;
     return JSON.stringify(m[id]);
   }
   function mark(k, id, t, init) {
@@ -206,17 +210,21 @@
     var dks = Object.keys(meta.out); if (!dks.length) return Promise.resolve(0);
     // एका commit मध्ये जास्तीत जास्त ~३०० writes आणि ~५MB (Firestore मर्यादा: ५०० writes, १०MB) — मोठे फोटो/PDF असलेल्या नोंदींसाठी
     var batch = [], writes = [], sent = {}, heads = [], bytes = 0, i;
+    rlCache = {};
     for (i = 0; i < dks.length && batch.length < COMMIT_MAX; i++) {
       var dk = dks[i], e = meta.out[dk], ws = docWrites(e, dk), sz = 0;
       ws.forEach(function (w) { sz += JSON.stringify(w).length; });
       if (batch.length && (writes.length + ws.length > 300 || bytes + sz > 5000000)) break;
       batch.push(dk); sent[dk] = e.r; heads.push({ dk: dk, idx: writes.length }); writes = writes.concat(ws); bytes += sz;
     }
+    rlCache = null;
     return fsCall(root() + ':commit', { writes: writes }).then(function (resp) {
       var wr = (resp && resp.writeResults) || [];
       heads.forEach(function (h) { if (wr[h.idx] && wr[h.idx].updateTime) meta.rv[h.dk] = wr[h.idx].updateTime; });
       batch.forEach(function (dk) { if (meta.out[dk] && meta.out[dk].r === sent[dk]) delete meta.out[dk]; });
       saveMeta();
+      var left = Object.keys(meta.out).length;
+      if (left) setStatus('wait', 'Sync चालू… ' + left + ' नोंदी पाठवायच्या बाकी');   // आकडा प्रत्यक्ष कमी होताना दिसावा
       return Object.keys(meta.out).length ? push(0).then(function (n) { return n + batch.length; }) : batch.length;
     }, function (e) {
       var clash = e.http === 409 || /FAILED_PRECONDITION|ALREADY_EXISTS|ABORTED/.test(String(e.code));
@@ -400,8 +408,8 @@
   }
   function uploadSafe() { return upload().catch(function () {}); }
   function start() {
-    if (timer) return;
-    timer = setInterval(dailyCheck, DAY_CHECK_MS);
+    if (!timer) timer = setInterval(dailyCheck, DAY_CHECK_MS);
+    // Sign in पडद्यावरून app.html उघडताना (document.write) पान बदलते व listeners पुसले जातात — म्हणून प्रत्येक वेळी पुन्हा जोडतो (समान function असल्याने दुहेरी होत नाहीत)
     window.addEventListener('online', uploadSafe);
     window.addEventListener('focus', dailyCheck);
     document.addEventListener('visibilitychange', dailyCheck);
