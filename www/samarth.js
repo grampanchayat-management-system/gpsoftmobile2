@@ -211,13 +211,25 @@
     xml = xml.slice(0, a) + body + xml.slice(b);
     xml = xml.replace(/<dimension ref="[^"]*"\s*\/>/, '<dimension ref="A1:M' + last + '" />');
     var end = Math.max(100, last + 100);                       // dropdown पुरेशा ओळींपर्यंत (टेम्प्लेटमध्ये फक्त १०० पर्यंत होते)
-    var dv = '<dataValidations count="4">' +
+    // ✅ दुहेरी तपासणी: G (Mobile No.) मध्ये तोच नंबर पुन्हा टाकला तर "Double" पॉपअप (Stop) + B (नाव) मध्ये दुबार नावे पिवळी दिसतात
+    var dend = Math.max(1000, last + 100);
+    var cf = '<conditionalFormatting sqref="B2:B' + dend + '"><cfRule type="expression" dxfId="0" priority="1">' +
+      '<formula>AND(B2&lt;&gt;"",COUNTIF($B$2:$B$' + dend + ',B2)&gt;1)</formula></cfRule></conditionalFormatting>';
+    var dv = '<dataValidations count="5">' +
+      '<dataValidation type="custom" errorStyle="stop" allowBlank="1" showErrorMessage="1" errorTitle="Double" error="हा मोबाईल नंबर आधीच आहे!" sqref="G2:G' + dend + '">' +
+      '<formula1>COUNTIF($G$2:$G$' + dend + ',G2)=1</formula1></dataValidation>' +
       '<dataValidation type="list" sqref="C2:C' + end + '"><formula1>"Male,Female"</formula1></dataValidation>' +
       '<dataValidation type="list" sqref="D2:D' + end + '"><formula1>"General,OBC,SC,ST,Other"</formula1></dataValidation>' +
       '<dataValidation type="list" sqref="E2:E' + end + '"><formula1>"S/o,W/o,D/o"</formula1></dataValidation>' +
       '<dataValidation type="list" sqref="M2:M' + end + '"><formula1>=IF($C2="Male",MaleList,FemaleList)</formula1></dataValidation></dataValidations>';
-    xml = xml.replace(/<dataValidations[\s\S]*?<\/dataValidations>/, dv);
+    xml = xml.replace(/<dataValidations[\s\S]*?<\/dataValidations>/, cf + dv);   // schema क्रम: conditionalFormatting नंतर dataValidations
     return xml;
+  }
+  function stylesXml(xml) {   // दुबार नावांसाठी पिवळा रंग (dxf)
+    var dxf = '<dxfs count="1"><dxf><fill><patternFill patternType="solid"><fgColor rgb="FFFFFF00"/><bgColor rgb="FFFFFF00"/></patternFill></fill></dxf></dxfs>';
+    if (/<dxfs[^>]*\/>/.test(xml)) return xml.replace(/<dxfs[^>]*\/>/, dxf);
+    if (/<dxfs[\s\S]*?<\/dxfs>/.test(xml)) return xml.replace(/<dxfs[\s\S]*?<\/dxfs>/, dxf);
+    return xml.replace('</styleSheet>', dxf + '</styleSheet>');
   }
   function makeXlsx(rows) {
     var Z = window.JSZip;
@@ -227,6 +239,10 @@
       return zip.file('xl/worksheets/sheet1.xml').async('string').then(function (xml) {
         var hasBom = xml.charCodeAt(0) === 0xFEFF;
         zip.file('xl/worksheets/sheet1.xml', (hasBom ? '\uFEFF' : '') + sheetXml(hasBom ? xml.slice(1) : xml, rows));
+        return zip.file('xl/styles.xml').async('string');
+      }).then(function (st) {
+        var bom = st.charCodeAt(0) === 0xFEFF;
+        zip.file('xl/styles.xml', (bom ? '\uFEFF' : '') + stylesXml(bom ? st.slice(1) : st));
         return zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', compression: 'DEFLATE' });
       });
     });
