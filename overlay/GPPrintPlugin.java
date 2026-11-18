@@ -79,7 +79,13 @@ public class GPPrintPlugin extends Plugin {
                     // A4 च्या रुंदीचा (CSS ~800px) लपवलेला WebView — पानाच्या मापाशी जुळणारी मांडणी मिळण्यासाठी
                     float density = getActivity().getResources().getDisplayMetrics().density;
                     ViewGroup root = (ViewGroup) getActivity().findViewById(android.R.id.content);
-                    root.addView(wv, new ViewGroup.LayoutParams((int) (800 * density), (int) (1200 * density)));
+                    // WebView ची रुंदी = छापायच्या पानाची रुंदी (CSS px, ९६ dpi): A4 उभे ७९४ / आडवे ११२३, Legal उभे ८१६ / आडवे १३४४.
+                    // आधी नेहमी ८०० होती — आडव्या पानांवर (नमुना ८ दाखला, नमुना ९क पावती, नोंदवही) मांडणी मोठी होऊन पानाबाहेर सांडायची.
+                    final boolean legal = "Legal".equalsIgnoreCase(pageSize);
+                    final double pw = legal ? 8.5 : 8.27, ph = legal ? 14.0 : 11.69;
+                    final int cssW = (int) Math.round((landscape ? ph : pw) * 96);
+                    final int cssH = (int) Math.round((landscape ? pw : ph) * 96);
+                    root.addView(wv, new ViewGroup.LayoutParams((int) (cssW * density), (int) (cssH * density)));
                     wv.setVisibility(View.INVISIBLE);
 
                     final Runnable startPrint = new Runnable() {

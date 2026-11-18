@@ -130,12 +130,20 @@
     return '<script>(function(){var C=' + cfg + ';var FILL=' + JSON.stringify(REGFILL_SRC) + ';window.__gpReady=false;' +
       'function run(){try{' +
         'var st=document.createElement("style");st.textContent=C.css;(document.head||document.documentElement).appendChild(st);' +
-        'if(C.fill){try{var f=new Function("return "+FILL)();var s=C.a4?24:16;var pr=f({mode:"prep",W:C.W,H:C.H});var r=pr&&pr.ok?f({mode:"fill",W:C.W,H:C.H,safety:s,rh:22,minGap:8}):null;window.__gpFill={prep:pr,fill:r};}catch(e){window.__gpFill={err:String(e)};}}' +
+        'document.body.style.width=C.W+"px";' +
+        'if(C.fill){try{var f=new Function("return "+FILL)();var s=C.a4?24:16;var pr=f({mode:"prep",W:C.W,H:C.H});var r=pr&&pr.ok?f({mode:"fill",W:C.W,H:C.H,safety:s,rh:22,minGap:8}):null;window.__gpFill={prep:pr,fill:r};}catch(e){window.__gpFill={err:String(e)};}document.body.style.width=C.W+"px";' +
+        'if(C.fill){try{var wrp=document.getElementById("gp-reg-wrap"),tbl=wrp&&wrp.querySelector("table.reg-tbl"),th=tbl&&tbl.tHead;' +
+          'if(th&&tbl.tBodies.length){var Hs=C.H-(C.a4?24:16),wr=wrp.getBoundingClientRect(),tr=tbl.getBoundingClientRect(),thH=th.getBoundingClientRect().height,y=tr.top-wr.top+thH,pt=y,brk=[];' +
+            'for(var k=0;k<tbl.tBodies.length;k++){var bd=tbl.tBodies[k],bh=bd.getBoundingClientRect().height;if(y+bh>Hs&&y>pt+0.5){brk.push(bd);y=thH;pt=thH;}y+=bh;}' +
+            // हेडिंग (मथळा + रकान्यांची नावे) प्रत्येक पानावर स्वतः टाकतो — काही Android WebView मध्ये <thead> आपोआप पुन्हा-पुन्हा छापला जात नाही
+            'th.style.display="table-row-group";' +
+            'brk.forEach(function(bd){var nb=document.createElement("tbody");nb.className="gp-rep";nb.style.cssText="break-before:page;page-break-before:always;break-inside:avoid";for(var q=0;q<th.rows.length;q++)nb.appendChild(th.rows[q].cloneNode(true));tbl.insertBefore(nb,bd);});' +
+          '}}catch(e){}}}' +
         'if(C.fit){var el=document.querySelector(".doc")||document.querySelector(".cert-box");' +
-          'if(el){document.body.style.width=C.W+"px";var lim=C.H*0.97,lo=0.55,hi=C.mz;el.style.minHeight="0px";' +
+          'if(el){document.body.style.width=C.W+"px";var lim=C.H*0.93,lo=0.5,hi=C.mz;el.style.minHeight="0px";el.style.height="auto";el.style.overflow="visible";' +
             'for(var t=0;t<14;t++){var mid=(lo+hi)/2;el.style.zoom=mid;var h=el.getBoundingClientRect().height;if(h<=lim)lo=mid;else hi=mid;}' +
-            'el.style.zoom=lo;el.style.minHeight=Math.floor((C.H*0.975)/lo)+"px";' +
-            'document.body.style.width="";}}' +
+            'el.style.zoom=lo;var bh=Math.floor((C.H*0.95)/lo)+"px";el.style.minHeight=bh;el.style.height=bh;el.style.overflow="hidden";el.style.pageBreakInside="avoid";el.style.breakInside="avoid";' +
+            'document.body.style.width=C.W+"px";}}' +
       '}catch(e){}window.__gpReady=true;}' +
       'if(document.readyState==="complete")setTimeout(run,50);else window.addEventListener("load",function(){setTimeout(run,50);});' +
       '})();<\/script>';

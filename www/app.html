@@ -1000,6 +1000,7 @@ try{
   <div id="bpl-form" class="n8pro">
     <input type="hidden" id="bpl-dt"><div class="n8-hero"><div class="n8-hero-l"><div class="n8-hero-ic">🏠</div><div><div class="n8-hero-t">BPL दाखला — नवीन एंट्री</div><div class="n8-hero-s">दारिद्र्यरेषेखालील यादी</div></div></div><div class="n8-ano-box"><label>अनुक्रमांक</label><input id="bpl-id" readonly class="ro"></div></div>
     <div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">१</span>अर्जदार व BPL तपशील</div><div class="n8-grid n8-g1"><div class="fg n8-own-main"><label>नाव (मराठी)</label><input id="bpl-name" placeholder="नाव"></div></div><div style="height:6px"></div><div class="n8-grid n8-g3"><div class="fg"><label>Name (English)</label><input id="bpl-name-e" placeholder="Name"></div><div class="fg"><label>दा.रे.यादी क्रमांक</label><input id="bpl-no" placeholder="69"></div><div class="fg"><label>BPL कालावधी</label><input id="bpl-period" readonly class="ro"></div></div></div>
+    <div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">२</span>लाभार्थीचा फोटो (दाखल्यावर बारकोडच्या खाली छापला जातो)</div><div class="n8-grid n8-g2"><div class="fg"><label>फोटो निवडा / कॅमेऱ्याने काढा</label><input type="file" id="bpl-photo-file" accept="image/*" onchange="certPhotoPick(this,'bpl-photo')"><input type="hidden" id="bpl-photo"></div><div class="fg"><label>&nbsp;</label><div><img id="bpl-photo-preview" alt="" style="display:none;height:74px;border:1px solid #bbb;border-radius:4px;vertical-align:middle"> <a href="#" id="bpl-photo-del" style="display:none;font-size:12px;margin-left:6px" onclick="certPhotoClear('bpl-photo');return false">❌ फोटो काढा</a></div></div></div></div>
     <div class="bgrp n8-actions"><span class="n8-hint">अ.क्र. आपोआप येतो</span><button class="btn btn-nv" onclick="saveBPL()">💾 जतन करा</button>
       <button class="btn btn-out" onclick="clearBPLForm()">🗑️ साफ</button></div>
   </div>
@@ -1029,6 +1030,7 @@ try{
   <div id="nd-form" class="n8pro">
     <input type="hidden" id="nd-dt"><div class="n8-hero"><div class="n8-hero-l"><div class="n8-hero-ic">✅</div><div><div class="n8-hero-t">येणे बाकी नाही दाखला — नवीन एंट्री</div><div class="n8-hero-s">ग्रामपंचायत कर/पाणीपट्टी — येणे बाकी नाही</div></div></div><div class="n8-ano-box"><label>अनुक्रमांक</label><input id="nd-id" readonly class="ro"></div></div>
     <div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">१</span>अर्जदार तपशील</div><div class="n8-grid n8-g1"><div class="fg n8-own-main"><label>नाव (मराठी)</label><input id="nd-name" placeholder="नाव"></div></div><div style="height:6px"></div><div class="n8-grid n8-g1"><div class="fg"><label>Name (English)</label><input id="nd-name-e" placeholder="Name"></div></div></div>
+    <div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">२</span>लाभार्थीचा फोटो (दाखल्यावर बारकोडच्या खाली छापला जातो)</div><div class="n8-grid n8-g2"><div class="fg"><label>फोटो निवडा / कॅमेऱ्याने काढा</label><input type="file" id="nd-photo-file" accept="image/*" onchange="certPhotoPick(this,'nd-photo')"><input type="hidden" id="nd-photo"></div><div class="fg"><label>&nbsp;</label><div><img id="nd-photo-preview" alt="" style="display:none;height:74px;border:1px solid #bbb;border-radius:4px;vertical-align:middle"> <a href="#" id="nd-photo-del" style="display:none;font-size:12px;margin-left:6px" onclick="certPhotoClear('nd-photo');return false">❌ फोटो काढा</a></div></div></div></div>
     <div class="bgrp n8-actions"><span class="n8-hint">अ.क्र. आपोआप येतो</span><button class="btn btn-nv" onclick="saveNoDue()">💾 जतन करा</button>
       <button class="btn btn-out" onclick="clearNoDueForm()">🗑️ साफ</button></div>
   </div>
@@ -1058,6 +1060,7 @@ try{
   <div id="nr-form" class="n8pro">
     <input type="hidden" id="nr-dt"><div class="n8-hero"><div class="n8-hero-l"><div class="n8-hero-ic">👴</div><div><div class="n8-hero-t">निराधार दाखला — नवीन एंट्री</div><div class="n8-hero-s">निराधार व्यक्ती दाखला</div></div></div><div class="n8-ano-box"><label>अनुक्रमांक</label><input id="nr-id" readonly class="ro"></div></div>
     <div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">१</span>अर्जदार तपशील</div><div class="n8-grid n8-g1"><div class="fg n8-own-main"><label>नाव (मराठी)</label><input id="nr-name" placeholder="नाव"></div></div><div style="height:6px"></div><div class="n8-grid n8-g2"><div class="fg"><label>Name (English)</label><input id="nr-name-e" placeholder="Name"></div><div class="fg"><label>वय (Age)</label><input id="nr-age" type="number" placeholder="60"></div></div></div>
+    <div class="n8-sec"><div class="n8-sec-h"><span class="n8-num">२</span>लाभार्थीचा फोटो (दाखल्यावर बारकोडच्या खाली छापला जातो)</div><div class="n8-grid n8-g2"><div class="fg"><label>फोटो निवडा / कॅमेऱ्याने काढा</label><input type="file" id="nr-photo-file" accept="image/*" onchange="certPhotoPick(this,'nr-photo')"><input type="hidden" id="nr-photo"></div><div class="fg"><label>&nbsp;</label><div><img id="nr-photo-preview" alt="" style="display:none;height:74px;border:1px solid #bbb;border-radius:4px;vertical-align:middle"> <a href="#" id="nr-photo-del" style="display:none;font-size:12px;margin-left:6px" onclick="certPhotoClear('nr-photo');return false">❌ फोटो काढा</a></div></div></div></div>
     <div class="bgrp n8-actions"><span class="n8-hint">अ.क्र. आपोआप येतो</span><button class="btn btn-nv" id="nr-gen-btn" onclick="genNiradhar()">👴 दाखला तयार करा</button></div>
   </div>
   <div id="nr-pre" style="display:none">
@@ -2015,6 +2018,8 @@ window.addEventListener('load',function(){
   if(!ou){window.location.href='login.html';return;}
   try{var u=JSON.parse(ou);document.getElementById('hdrUser').textContent=u.em||'user';}catch(e){}
   init();
+
+  gpVillageGate(); // गाव निवडल्याशिवाय पुढे जाता येत नाही
 });
 function doLogout(){if(confirm('Logout करायचे का?'))window.location.href='login.html';}
 
@@ -2410,6 +2415,11 @@ function ncBarcodeSvg(text,maxW,h,margin){
   return '<svg xmlns="http://www.w3.org/2000/svg" width="'+Math.round(total*mod*100)/100+'" height="'+h+'" viewBox="0 0 '+total+' '+h+'" preserveAspectRatio="none" shape-rendering="crispEdges" style="display:block;margin:'+(margin||'4px auto 0')+';background:#fff"><g fill="#000">'+rects+'</g></svg>';
 }
 var NC_NAVY='#000080',NC_LOGO_PX=100;
+// लाभार्थीचा ओळख-फोटो (BPL / येणे बाकी नाही / निराधार) — बारकोड व दाखला क्रमांकाच्या खाली, उजवीकडे. फोटो नसेल तर रिकामी चौकट (प्रत्यक्ष फोटो चिकटवण्यासाठी).
+function ncPhotoBox(src){
+  return '<div class="nc-photo" style="width:28mm;height:34mm;border:1.5px solid #000;margin:6px 0 0 auto;box-sizing:border-box;overflow:hidden;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact">'+
+    (src?'<img src="'+src+'" style="width:100%;height:100%;object-fit:cover;display:block">':'<div style="padding-top:34%;text-align:center;font-size:10px;font-weight:700;color:#777;line-height:1.5">लाभार्थीचा फोटो<br>Photo</div>')+'</div>';
+}
 function ncBuild(o){
   var gpEn=hcGpEn(o.gpNmE);
   var logo='<img src="'+MH_LOGO_B64+'" style="width:'+NC_LOGO_PX+'px;height:'+NC_LOGO_PX+'px;object-fit:contain">';
@@ -2420,7 +2430,7 @@ function ncBuild(o){
       '<img src="'+ASHOK_EMBLEM_B64+'" style="width:52px;height:60px;object-fit:contain;display:block;margin:0 auto 2px">'+
       'महाराष्ट्र शासन<br>GOVERNMENT OF MAHARASHTRA<br>ग्रामविकास विभाग<br>RURAL DEVELOPMENT DEPARTMENT<br>'+
       'ग्रामपंचायत '+hcEsc(o.gpNm)+' ता. '+hcEsc(o.tal)+' जि. '+hcEsc(o.dist)+'<br>'+hcEsc(gpEn)+'</div>'+
-    '<div style="width:'+(o.right?'135':(o.certMr?'250':'90'))+'px;text-align:center;font-size:12px;line-height:1.25;color:'+NC_NAVY+';font-weight:700">'+(o.right||(o.certMr?ncBarcodeSvg(o.certEn,240,52,'0 auto 4px')+'<div style="font-size:11.5px;line-height:1.4;font-weight:700;color:'+NC_NAVY+';white-space:nowrap">दाखला क्रमांक : '+o.certMr+'<br>Certificate No. : '+hcEsc(o.certEn)+'</div>':o.sub)||'')+'</div>'+
+    '<div style="width:'+(o.right?'135':(o.certMr?'250':'90'))+'px;text-align:center;font-size:12px;line-height:1.25;color:'+NC_NAVY+';font-weight:700">'+(o.right||(o.certMr?ncBarcodeSvg(o.certEn,240,52,'0 auto 4px')+'<div style="font-size:11.5px;line-height:1.4;font-weight:700;color:'+NC_NAVY+';white-space:nowrap">दाखला क्रमांक : '+o.certMr+'<br>Certificate No. : '+hcEsc(o.certEn)+'</div>'+(o.withPhoto?ncPhotoBox(o.photo):''):o.sub)||'')+'</div>'+
   '</div>'+
   '<div style="text-align:center;margin:'+(o.left?'8px 0 6px':'14px 0 10px')+';line-height:'+(o.left?'1.15':'1.3')+';color:'+o.c+';font-weight:700"><div style="font-size:18px">'+o.mr+'</div><div style="font-size:20px">'+o.en+'</div></div>'+
   (o.meta||'')+
@@ -4251,40 +4261,32 @@ function renderN8Register(){
   // दिसायचा (अक्षरे मिसळल्यासारखी). प्रिंटमध्ये हे दिसत नव्हते कारण प्रिंट CSS .reg-tbl ला
   // table-layout:auto देतो आणि nowrap लावत नाही. इथे white-space:normal देऊन स्क्रीनवरही तेच
   // (प्रिंटसारखे, व्यवस्थित wrap होणारे) वर्तन आणतो.
+  // शीर्षक (नमुना ८ नियम ३२(१) / सन / ग्रामपंचायत-तालुका-जिल्हा) <thead> मध्ये — म्हणजे प्रत्येक पानावर पुन्हा छापले जाते
+  // शीर्षक जाणीवपूर्वक कमी उंचीचे (२ ओळी, लहान लोगो) ठेवले आहे — <thead> ची एकूण उंची पानाच्या ~२५% पेक्षा
+  // जास्त झाली तर Chromium पुढच्या पानांवर heading पुन्हा छापतच नाही. हे मोठे करू नका.
+  var regTitleHtml='<div style="display:flex;justify-content:space-between;align-items:center;line-height:1.25">'+
+  '<div style="text-align:center;width:36px">'+
+  '<img src="'+MH_LOGO_B64+'" style="width:28px;height:28px;object-fit:contain;display:block">'+
+  '</div>'+
+  '<div style="text-align:center;flex:1;padding:0 6px">'+
+  '<b style="font-size:13px">नमुना ८ नियम ३२(१)</b> &nbsp;—&nbsp; <b style="font-size:11.5px">सन '+period+' साठी कर आकारणी नोंदवही</b><br>'+
+  '<span style="font-size:10.5px">ग्रामपंचायत :- <b>'+gpNm+'</b>&nbsp;&nbsp;&nbsp;तालुका :- '+tal+'&nbsp;&nbsp;&nbsp;जिल्हा :- '+dist+'</span>'+
+  '</div>'+
+  '<div style="width:36px"></div>'+
+  '</div>';
   var tableHtml='<table class="reg-tbl" style="width:100%;border-collapse:collapse;font-size:9.5px;table-layout:fixed;white-space:normal;word-break:break-word;overflow-wrap:anywhere">'+
-  colgroupHtml+'<thead>'+theadRowsHtml+'</thead>'+recBlocks.join('')+'</table>';
+  colgroupHtml+'<thead><tr><td colspan="27" style="border:none;padding:0 0 4px;background:#fff;text-align:center">'+regTitleHtml+'</td></tr>'+theadRowsHtml.replace('<tr><td colspan="27" style="height:8mm;border:none;padding:0"></td></tr>','')+'</thead>'+recBlocks.join('')+'</table>';
 
 
   var html='<div style="font-family:Mangal,Arial;font-size:11px">'+
-  '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">'+
-  '<div style="text-align:center;width:105px">'+
-  '<img src="'+MH_LOGO_B64+'" style="width:100px;height:100px;object-fit:contain">'+
-  '</div>'+
-  '<div style="text-align:center;flex:1;padding:0 8px">'+
-  '<b style="font-size:16px">नमुना ८ नियम ३२(१)</b><br>'+
-  '<b style="font-size:12.5px">सन '+period+' साठी कर आकारणी नोंदवही</b><br>'+
-  'ग्रामपंचायत :- <b>'+gpNm+'</b>&nbsp;&nbsp;&nbsp;तालुका :- '+tal+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;जिल्हा :- '+dist+
-  '</div>'+
-  '<div style="width:105px"></div>'+
-  '</div>'+
   tableHtml+
-  '<table style="width:100%;border-collapse:collapse;font-size:10px;margin-top:14px">'+
-  '<tr>'+
-  '<th style="border:1px solid #999;padding:5px;background:#e8e8e8;color:#000;font-weight:700">एकूण इमारत कर</th>'+
-  '<th style="border:1px solid #999;padding:5px;background:#e8e8e8;color:#000;font-weight:700">एकूण दिवाबत्ती कर</th>'+
-  '<th style="border:1px solid #999;padding:5px;background:#e8e8e8;color:#000;font-weight:700">एकूण आरोग्य कर</th>'+
-  '<th style="border:1px solid #999;padding:5px;background:#e8e8e8;color:#000;font-weight:700">एकूण पाणीपट्टी</th>'+
-  '<th style="border:1px solid #999;padding:5px;background:#e8e8e8;color:#000;font-weight:700">एकूण पडसर कर</th>'+
-  '<th style="border:1px solid #999;padding:5px;background:#e8e8e8;color:#000;font-weight:700">एकूण कराची रक्कम</th>'+
-  '</tr><tr>'+
-  '<td style="border:1px solid #999;padding:5px;text-align:center;font-weight:700">'+gI+'</td>'+
-  '<td style="border:1px solid #999;padding:5px;text-align:center;font-weight:700">'+gD+'</td>'+
-  '<td style="border:1px solid #999;padding:5px;text-align:center;font-weight:700">'+gA+'</td>'+
-  '<td style="border:1px solid #999;padding:5px;text-align:center;font-weight:700">'+gP+'</td>'+
-  '<td style="border:1px solid #999;padding:5px;text-align:center;font-weight:700">'+gPad+'</td>'+
-  '<td style="border:1px solid #999;padding:5px;text-align:center;font-weight:700;background:#fff3cd">'+gT+'</td>'+
+  '<table style="width:100%;border-collapse:collapse;font-size:10.5px;margin-top:6px"><tr>'+
+  [['एकूण इमारत कर',gI],['एकूण दिवाबत्ती कर',gD],['एकूण आरोग्य कर',gA],['एकूण पाणीपट्टी',gP],['एकूण पडसर कर',gPad],['एकूण कराची रक्कम',gT]].map(function(x,ix){
+    return '<td style="border:1px solid #999;padding:4px 5px;background:#e8e8e8;font-weight:700;text-align:center">'+x[0]+'</td>'+
+    '<td style="border:1px solid #999;padding:4px 5px;font-weight:700;text-align:center'+(ix===5?';background:#fff3cd':'')+'">'+x[1]+'</td>';
+  }).join('')+
   '</tr></table>'+
-  '<div style="font-size:11px;margin-top:8px">'+
+  '<div style="font-size:10px;margin-top:4px;line-height:1.4">'+
   '१ - सदरचा उतारा हा मालकी हक्काचा नसून कर आकारणीचा आहे.<br>'+
   '२ - शासन परिपत्रक क्र. VTM२६०३/प्र.क्र. २०६८/प. रा. ४ दि २० नोव्हेंबर २००३ नुसार पती-पत्नी संयुक्त नावे करण्याबाबत निर्देशित.'+
   '</div></div>';
@@ -4465,7 +4467,8 @@ function genN8Cert(ano){
   // मालकाचे नाव (idx4) आणि मालमत्तेचे वर्णन (idx6) हे स्तंभ थोडे मोठे केले आहेत (नाव/वर्णन
   // जास्त जागेत नीट दिसावेत म्हणून), आणि रकाना ११ (रेडीरेकनर दरामधील "इमारत" — जो नेहमी रिकामाच
   // असतो, फक्त "जमीन" व "बांधकाम" दर वापरले जातात) ऐवजी ती जागा वापरण्यासाठी ekदम लहान केला आहे.
-  var colWidths=['2.2','4','2.5','2.5','8.2','5.7','9.8','3','5.5','3.5','2.4','4.6','2.6','3.6','6.5','2.6','3.8','2.4','2.4','3.8','5.2','1.3','1.3','1.3','1.8','1.8','5.6'];
+  var colWidths=['3.2','4','3.1','3.1','8.2','5.7','9.4','4.2','5.5','3.5','1.2','3.4','2.0','3.6','6.5','2.6','3.8','2.4','2.4','3.8','5.2','1.3','1.3','1.3','1.8','1.8','5.6'];
+  // (उतारा) रकाना १ मोठा (२.२→३.२), ८ वाढवला (३→४.२), ११ लहान (२.४→१.२), १३ कमी (२.६→२.०); १०० चे संतुलन रकाना ७ मधून
   // ⚠️ रकाना ११ (रेडीरेकनर दरामधील "इमारत") आधी 0.3% इतका अति-अरुंद होता, त्यामुळे "इमारत" हे उभं हेडिंग व
   // रकाना-क्रमांक दिसत नव्हते; आता 2.4% दिला आहे. तसेच रकाना १८ (दिवाबत्ती) व १९ (आरोग्य) 1.5% वरून 3% केले आहेत.
   // ही वाढीव जागा बांधकाम/पाणी/एकूण/शेरा/वर्णन इ. स्तंभांतून थोडी-थोडी घेतली आहे — बेरीज अजूनही ~१००% च आहे.
@@ -4535,7 +4538,7 @@ function genN8Cert(ano){
   '</tr>'+
   '<tr style="background:#e8e8e8;color:#000;font-weight:700">'+
   '<th style="border:1px solid #999;'+vh+'">'+vspan('जमीन')+'</th>'+
-  '<th style="border:1px solid #999;'+vh+'">'+vspan('इमारत')+'</th>'+
+  '<th style="border:1px solid #999;'+vh+'">'+vspan('इमारत',8)+'</th>'+
   '<th style="border:1px solid #999;'+vh+'">'+vspan('बांधकाम')+'</th>'+
   '<th style="border:1px solid #999;'+vh+'">'+vspan('घरपट्टी')+'</th>'+
   '<th style="border:1px solid #999;'+vh+'">'+vspan('दिवाबत्ती',10)+'</th>'+
@@ -4550,7 +4553,8 @@ function genN8Cert(ano){
   '</tr>'+
   '<tr style="background:#e8e8e8;color:#000;font-weight:700;font-size:11px">'+
   ['१','२','३','४','५','६','७','८','९','१०','११','१२','१३','१४','१५','१६','१७','१८','१९','२०','२१','२२','२३','२४','२५','२६','२७']
-    .map(function(nn,ix){return '<th style="border:1px solid #999;padding:2px;width:'+colWidths[ix]+'%;font-size:11px">'+nn+'</th>';}).join('')+
+    .map(function(nn,ix){var small=(ix>=21&&ix<=23)||ix===10; // रकाना २२,२३,२४ (आणि ११) अरुंद — आकडा लहान, एका ओळीत
+      return '<th style="border:1px solid #999;padding:'+(small?'2px 0':'2px')+';width:'+colWidths[ix]+'%;font-size:'+(small?'7':'11')+'px;white-space:nowrap;overflow:hidden;line-height:1.2">'+nn+'</th>';}).join('')+
   '</tr>';
 
   var nRows=Math.max((d.rows||[]).length,1);
@@ -4847,15 +4851,15 @@ function paniRegDocHtml(typeKey){
   var totRow='<tbody class="rec-grp reg-pin"><tr style="background:#fff3cd;font-weight:700"><td colspan="3" style="'+td+'text-align:center">एकूण</td>'+
     '<td style="'+td+'text-align:right">'+sPrev+'</td><td style="'+td+'text-align:right">'+sCurr+'</td><td style="'+td+'text-align:right">'+sTot+'</td></tr></tbody>';
   return '<div style="font-family:Mangal,Arial;font-size:12px;width:100%">'+
+    '<table class="reg-tbl" style="width:100%;border-collapse:collapse;table-layout:fixed;white-space:normal">'+
+    '<colgroup><col style="width:8%"><col style="width:29%"><col style="width:29%"><col style="width:11.5%"><col style="width:11.5%"><col style="width:11%"></colgroup>'+
+    // वरची रिकामी "स्पेसर" ओळ — पान क्रमांक व टेबल-हेडिंग एकमेकांत मिसळू नयेत (नमुना ९ रजिस्टरप्रमाणेच)
+    '<thead><tr><td colspan="6" style="border:none;padding:0 0 4px;background:#fff;text-align:center">'+
     '<div style="text-align:center;margin-bottom:8px">'+
     '<b style="font-size:15px">पाणीपट्टी नोंदवही — '+ty.title+'</b><br>'+
     '<b style="font-size:12px">सन '+yr+' — नमुना ९ अंतर्गत</b><br>'+
     'ग्रामपंचायत : '+gpNm+'&nbsp;&nbsp;&nbsp;तालुका : '+tal+'&nbsp;&nbsp;&nbsp;जिल्हा : '+dist+
-    '</div>'+
-    '<table class="reg-tbl" style="width:100%;border-collapse:collapse;table-layout:fixed;white-space:normal">'+
-    '<colgroup><col style="width:8%"><col style="width:29%"><col style="width:29%"><col style="width:11.5%"><col style="width:11.5%"><col style="width:11%"></colgroup>'+
-    // वरची रिकामी "स्पेसर" ओळ — पान क्रमांक व टेबल-हेडिंग एकमेकांत मिसळू नयेत (नमुना ९ रजिस्टरप्रमाणेच)
-    '<thead><tr><td colspan="6" style="height:7mm;border:none;padding:0"></td></tr>'+
+    '</div>'+'</td></tr>'+
     '<tr><th '+th+'>अ.क्र.</th><th '+th+'>मालमत्ता धारकाचे नाव</th><th '+th+'>भोगवटादाराचे नाव</th><th '+th+'>मागील बाकी</th><th '+th+'>चालू रक्कम</th><th '+th+'>एकूण</th></tr></thead>'+
     body+totRow+'</table></div>';
 }
@@ -4901,17 +4905,18 @@ function renderN9Register(blank){
   var bl=function(v){return blank?'':v;}; // blank=true असेल तर वसूल/बाकी बाजू रिकामी (हाताने भरण्यासाठी) दाखवतो, मागणी नेहमीप्रमाणे भरलेली
 
   var html='<div style="font-family:Mangal,Arial;font-size:12px;width:100%">'+
+  '<table class="reg-tbl">'+
+  '<thead>'+
+  // वरच्या मोकळ्या ओळीत Chrome आपोआप पान क्रमांक टाकतं — तो आणि खालचं टेबल हेडिंग एकमेकांत
+  // मिसळू नये म्हणून ही रिकामी "स्पेसर" ओळ; <thead> मध्ये असल्याने ती प्रत्येक पानावर आपोआप पुन्हा येते
+  '<tr><td colspan="23" style="border:none;padding:0 0 4px;background:#fff;text-align:center">'+
   '<div style="text-align:center;margin-bottom:8px">'+
   '<b style="font-size:15px">नमुना क्रमांक ९</b><br>'+
   '<b style="font-size:11px">[नियम २२(९),३२(९),५(६) व (७) पहा]</b><br>'+
   '<b style="font-size:12.5px">सन '+yr+' वर्षाच्या आकारणी केलेल्या मागणीचे नोंदणी पुस्तक</b><br>'+
   'ग्रामपंचायत : '+gpNm+'&nbsp;&nbsp;&nbsp;तालुका : '+tal+'&nbsp;&nbsp;&nbsp;जिल्हा : '+dist+
   '</div>'+
-  '<table class="reg-tbl">'+
-  '<thead>'+
-  // वरच्या मोकळ्या ओळीत Chrome आपोआप पान क्रमांक टाकतं — तो आणि खालचं टेबल हेडिंग एकमेकांत
-  // मिसळू नये म्हणून ही रिकामी "स्पेसर" ओळ; <thead> मध्ये असल्याने ती प्रत्येक पानावर आपोआप पुन्हा येते
-  '<tr><td colspan="23" style="height:7mm;border:none;padding:0"></td></tr>'+
+  '</td></tr>'+
   '<tr>'+
   '<th rowspan="2">अ.क्र.</th>'+
   '<th rowspan="2">मिळकत क्रमांक</th>'+
@@ -5244,17 +5249,17 @@ function makeN9kHtml(recs,commit){
     '<div>पुढील कराची रक्कम वसुलीयोग्य आहे.</div>'+
     '</div>'+
     '<table style="width:100%;border-collapse:collapse;font-size:11px">'+
-    '<tr><th style="border:1px solid #999;padding:6px 8px" rowspan="2">कराचे नाव</th><th style="border:1px solid #999;padding:6px 8px" colspan="3">वसूल पात्र रक्कमा</th></tr>'+
-    '<tr><th style="border:1px solid #999;padding:6px 8px">थकबाकी</th><th style="border:1px solid #999;padding:6px 8px">चालू</th><th style="border:1px solid #999;padding:6px 8px">एकूण</th></tr>'+
-    rows2.map(function(rx,ix){return '<tr><td style="border:1px solid #999;padding:6px 8px">'+(ix+1)+'. '+rx[0]+'</td>'+
-    '<td style="border:1px solid #999;padding:6px 8px;text-align:center">'+rx[1]+'</td>'+
-    '<td style="border:1px solid #999;padding:6px 8px;text-align:center">'+rx[2]+'</td>'+
-    '<td style="border:1px solid #999;padding:6px 8px;text-align:center">'+(rx[1]+rx[2])+'</td></tr>';}).join('')+
+    '<tr><th style="border:1px solid #999;padding:3px 8px" rowspan="2">कराचे नाव</th><th style="border:1px solid #999;padding:3px 8px" colspan="3">वसूल पात्र रक्कमा</th></tr>'+
+    '<tr><th style="border:1px solid #999;padding:3px 8px">थकबाकी</th><th style="border:1px solid #999;padding:3px 8px">चालू</th><th style="border:1px solid #999;padding:3px 8px">एकूण</th></tr>'+
+    rows2.map(function(rx,ix){return '<tr><td style="border:1px solid #999;padding:3px 8px">'+(ix+1)+'. '+rx[0]+'</td>'+
+    '<td style="border:1px solid #999;padding:3px 8px;text-align:center">'+rx[1]+'</td>'+
+    '<td style="border:1px solid #999;padding:3px 8px;text-align:center">'+rx[2]+'</td>'+
+    '<td style="border:1px solid #999;padding:3px 8px;text-align:center">'+(rx[1]+rx[2])+'</td></tr>';}).join('')+
     '<tr style="font-weight:700;background:#fff3cd">'+
-    '<td style="border:1px solid #999;padding:6px 8px">एकूण</td>'+
-    '<td style="border:1px solid #999;padding:6px 8px;text-align:center">'+tP+'</td>'+
-    '<td style="border:1px solid #999;padding:6px 8px;text-align:center">'+tC+'</td>'+
-    '<td style="border:1px solid #999;padding:6px 8px;text-align:center">'+tot+'</td></tr>'+
+    '<td style="border:1px solid #999;padding:3px 8px">एकूण</td>'+
+    '<td style="border:1px solid #999;padding:3px 8px;text-align:center">'+tP+'</td>'+
+    '<td style="border:1px solid #999;padding:3px 8px;text-align:center">'+tC+'</td>'+
+    '<td style="border:1px solid #999;padding:3px 8px;text-align:center">'+tot+'</td></tr>'+
     '</table>'+
     '<div>'+
     '<div style="font-style:italic;font-size:11.5px;margin-bottom:4px">अक्षरी :- रुपये '+toWords(tot)+' फक्त</div>'+
@@ -5263,11 +5268,11 @@ function makeN9kHtml(recs,commit){
     '</div>'+
     '<div style="display:flex;justify-content:space-between;gap:8px">'+
     '<div style="text-align:center;width:48%">'+
-    (signSarp?'<img src="'+signSarp+'" style="max-height:32px;max-width:100%;object-fit:contain">':'<div style="height:32px"></div>')+
+    (signSarp?'<img src="'+signSarp+'" style="max-height:28px;max-width:100%;object-fit:contain">':'<div style="height:28px"></div>')+
     '<div style="border-top:1px solid #333;margin-top:2px;padding-top:2px;font-size:10px">सरपंच<br>'+sarpNm+'</div>'+
     '</div>'+
     '<div style="text-align:center;width:48%">'+
-    (signOff?'<img src="'+signOff+'" style="max-height:32px;max-width:100%;object-fit:contain">':'<div style="height:32px"></div>')+
+    (signOff?'<img src="'+signOff+'" style="max-height:28px;max-width:100%;object-fit:contain">':'<div style="height:28px"></div>')+
     '<div style="border-top:1px solid #333;margin-top:2px;padding-top:2px;font-size:10px">ग्रामपंचायत अधिकारी<br>'+officer+'</div>'+
     '</div>'+
     '</div>'+
@@ -6248,7 +6253,7 @@ function genBPL(){
   var certNo=peekBPLCertNo(),officer=g('s-officer','');
   var bplVerify=g('s-url','https://gp.mahaegram.co.in/GeneralPages/Home.aspx');
   document.getElementById('bpl-doc').innerHTML=ncBuild({
-    gap:true,c:'#b45f06',mr:'दारिद्र्य रेषेखालील कुटुंबाचा दाखला',en:'BELOW POVERTY LINE CERTIFICATE',
+    withPhoto:true,photo:gv('bpl-photo'),gap:true,c:'#b45f06',mr:'दारिद्र्य रेषेखालील कुटुंबाचा दाखला',en:'BELOW POVERTY LINE CERTIFICATE',
     gpNm:gpNm,gpNmE:gpNmE,tal:tal,talE:talE,dist:dist,distE:distE,verifyUrl:bplVerify,
     certMr:certNoMr('bpl',certNo),certEn:certNo,
     meta:ncCertRow('','','दिनांक:- '+fmtMr(dt),'Date:- '+fmtEn(dt)),
@@ -6302,7 +6307,7 @@ function genNoDue(){
   var certNo=peekNoDueCertNo(),officer=g('s-officer','');
   var ndVerify=g('s-url','https://gp.mahaegram.co.in/GeneralPages/Home.aspx');
   document.getElementById('nd-doc').innerHTML=ncBuild({
-    gap:true,c:'#134f5c',mr:'थकबाकी नसल्याचे प्रमाणपत्र',en:'NO DUES CERTIFICATE',
+    withPhoto:true,photo:gv('nd-photo'),gap:true,c:'#134f5c',mr:'थकबाकी नसल्याचे प्रमाणपत्र',en:'NO DUES CERTIFICATE',
     gpNm:gpNm,gpNmE:gpNmE,tal:tal,talE:talE,dist:dist,distE:distE,verifyUrl:ndVerify,
     certMr:certNoMr('nodue',certNo),certEn:certNo,
     meta:ncCertRow('','','दिनांक:- '+fmtMr(dt),'Date:- '+fmtEn(dt)),
@@ -6374,7 +6379,7 @@ function genNiradhar(){
   }
   var certNo=certNoMr('niradhar',certNoE);
   // "जतन करा" वेगळं बटण नाही — दाखला तयार करतानाच आपोआप यादीत साठवला जातो
-  saveData('niradhar',String(certSeq),{seq:certSeq,certNo:certNoE,name:name,nameE:gv('nr-name-e'),age:age,date:dt});
+  saveData('niradhar',String(certSeq),{seq:certSeq,certNo:certNoE,name:name,nameE:gv('nr-name-e'),age:age,date:dt,photo:gv('nr-photo')});
   window._niradharLastGen={seq:certSeq,name:name};
   window._nrEditSeq=null;
   sv('nr-id',String(counters.niradhar||1)); // फॉर्मवरील "अ.क्र." — साधा पुढचा क्रमांक (दाखल्यावरचा एकत्रित क्रमांक वेगळा, तसाच)
@@ -6382,7 +6387,7 @@ function genNiradhar(){
   var nrBtn=document.getElementById('nr-gen-btn');if(nrBtn)nrBtn.textContent='👴 दाखला तयार करा';
   loadNiradharList();loadAllStats();
   document.getElementById('nr-doc').innerHTML=ncBuild({
-    gap:true,c:'#38761d',mr:'निराधार योजनेसाठी वयाचा दाखला',en:'OLD AGE CERTIFICATE FOR NIRADHAR',
+    withPhoto:true,photo:gv('nr-photo'),gap:true,c:'#38761d',mr:'निराधार योजनेसाठी वयाचा दाखला',en:'OLD AGE CERTIFICATE FOR NIRADHAR',
     gpNm:gpNm,gpNmE:gpNmE,tal:tal,talE:talE,dist:dist,distE:distE,verifyUrl:verifyUrl,
     certMr:certNo,certEn:certNoE,
     meta:ncCertRow('','','दिनांक : '+toMrDigits(fmtMr(dt)),'Date : '+fmtEn(dt)),
@@ -6447,6 +6452,7 @@ function loadNiradharList(){
 function nrFillForm(rec){
   sv('nr-name',rec.name||'');sv('nr-name-e',rec.nameE||'');sv('nr-age',rec.age||'');sv('nr-dt',rec.date||'');
   sv('nr-id',toMrDigits(rec.certNo||rec.seq));
+  sv('nr-photo',rec.photo||'');certPhotoShow('nr-photo');
 }
 // Edit — नोंद फॉर्ममध्ये भरते; "दाखला तयार करा" दाबल्यावर तोच क्रमांक कायम ठेवून बदल जतन होतात
 function editNiradhar(seq){
@@ -6478,7 +6484,7 @@ function deleteNiradharRec(seq){
 function nrResetEdit(){
   if(!window._nrEditSeq)return;
   window._nrEditSeq=null;
-  ['nr-name','nr-name-e','nr-age'].forEach(function(id){sv(id,'');});sv('nr-dt',today());
+  ['nr-name','nr-name-e','nr-age'].forEach(function(id){sv(id,'');});certPhotoClear('nr-photo');sv('nr-dt',today());
   sv('nr-id',dakhlaFormat(dakhlaLgd(),counters.dakhla||1));
   var btn=document.getElementById('nr-gen-btn');if(btn)btn.textContent='👴 दाखला तयार करा';
 }
@@ -6786,6 +6792,8 @@ function clearCert(type){
   var pg=document.getElementById('pg-'+type);
   if(!pg)return;
   pg.querySelectorAll('input:not([readonly]):not(.ro),select').forEach(function(el){if(el.type!=='date')el.value='';});
+  pg.querySelectorAll('img[id$="-photo-preview"]').forEach(function(im){im.removeAttribute('src');im.style.display='none';});
+  pg.querySelectorAll('a[id$="-photo-del"]').forEach(function(a){a.style.display='none';});
   setTodayDates();sv('bpl-period',gp_val('s-bpl','2002 - 2007'));refreshIds();
 }
 
@@ -7698,7 +7706,37 @@ function printDeath(){
 }
 
 // ── BPL: birth/death प्रमाणेच पूर्ण फॉर्म सेव्ह + यादीतून Edit/Delete/दाखला ──
-var BPL_FIELDS=['bpl-name','bpl-name-e','bpl-no','bpl-period','bpl-dt'];
+// ── लाभार्थी फोटो (BPL / येणे बाकी नाही / निराधार दाखला) ──
+// निवडलेला फोटो लहान (जास्तीत जास्त ४०० px, JPEG) करून नोंदीसोबत जतन होतो; दाखल्यावर बारकोडच्या खाली छापला जातो.
+function certPhotoShow(hid){
+  var v=gv(hid),pv=document.getElementById(hid+'-preview'),dl=document.getElementById(hid+'-del');
+  if(pv){if(v){pv.src=v;pv.style.display='inline-block';}else{pv.removeAttribute('src');pv.style.display='none';}}
+  if(dl)dl.style.display=v?'inline':'none';
+}
+function certPhotoClear(hid){
+  sv(hid,'');var f=document.getElementById(hid+'-file');if(f)f.value='';certPhotoShow(hid);
+}
+function certPhotoPick(inp,hid){
+  var file=inp.files&&inp.files[0];if(!file)return;
+  var rd=new FileReader();
+  rd.onerror=function(){showToast('⚠️ फोटो वाचता आला नाही');};
+  rd.onload=function(e){
+    var im=new Image();
+    im.onload=function(){
+      try{
+        var mx=400,w=im.width,h=im.height,k=Math.min(1,mx/Math.max(w,h));
+        var c=document.createElement('canvas');c.width=Math.max(1,Math.round(w*k));c.height=Math.max(1,Math.round(h*k));
+        var cx=c.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,c.width,c.height);cx.drawImage(im,0,0,c.width,c.height);
+        sv(hid,c.toDataURL('image/jpeg',0.85));
+      }catch(err){sv(hid,e.target.result);}
+      certPhotoShow(hid);
+    };
+    im.onerror=function(){showToast('⚠️ हा फोटो उघडता आला नाही');};
+    im.src=e.target.result;
+  };
+  rd.readAsDataURL(file);
+}
+var BPL_FIELDS=['bpl-name','bpl-name-e','bpl-no','bpl-period','bpl-dt','bpl-photo'];
 function saveBPL(){
   var name=gv('bpl-name');if(!name){showToast('⚠️ नाव टाका');return;}
   var id=gv('bpl-id')||String(counters.bpl);
@@ -7734,7 +7772,7 @@ function editBPL(key){
   var rec=loadData('bpl')[key];
   if(!rec){showToast('⚠️ रेकॉर्ड सापडला नाही');return;}
   sv('bpl-id',rec.id||key);
-  BPL_FIELDS.forEach(function(f){sv(f,rec[f]||'');});
+  BPL_FIELDS.forEach(function(f){sv(f,rec[f]||'');});certPhotoShow('bpl-photo');
   bplSkipNextClear=true;
   document.querySelector('#pg-bpl .card .tab:nth-child(1)').click();
 }
@@ -7754,12 +7792,12 @@ function viewBPLCert(key){
   var rec=loadData('bpl')[key];
   if(!rec){showToast('⚠️ रेकॉर्ड सापडला नाही');return;}
   sv('bpl-id',rec.id||key);
-  BPL_FIELDS.forEach(function(f){sv(f,rec[f]||'');});
+  BPL_FIELDS.forEach(function(f){sv(f,rec[f]||'');});certPhotoShow('bpl-photo');
   genBPL();
 }
 
 // ── थकबाकी नसल्याचे प्रमाणपत्र (No Dues) — BPL सारखीच रचना ──
-var ND_FIELDS=['nd-name','nd-name-e','nd-dt'];
+var ND_FIELDS=['nd-name','nd-name-e','nd-dt','nd-photo'];
 function saveNoDue(){
   var name=gv('nd-name');if(!name){showToast('⚠️ नाव टाका');return;}
   var id=gv('nd-id')||String(counters.nodue);
@@ -7795,7 +7833,7 @@ function editNoDue(key){
   var rec=loadData('nodue')[key];
   if(!rec){showToast('⚠️ रेकॉर्ड सापडला नाही');return;}
   sv('nd-id',rec.id||key);
-  ND_FIELDS.forEach(function(f){sv(f,rec[f]||'');});
+  ND_FIELDS.forEach(function(f){sv(f,rec[f]||'');});certPhotoShow('nd-photo');
   ndSkipNextClear=true;
   document.querySelector('#pg-nodue .card .tab:nth-child(1)').click();
 }
@@ -7815,7 +7853,7 @@ function viewNoDueCert(key){
   var rec=loadData('nodue')[key];
   if(!rec){showToast('⚠️ रेकॉर्ड सापडला नाही');return;}
   sv('nd-id',rec.id||key);
-  ND_FIELDS.forEach(function(f){sv(f,rec[f]||'');});
+  ND_FIELDS.forEach(function(f){sv(f,rec[f]||'');});certPhotoShow('nd-photo');
   genNoDue();
 }
 
@@ -8488,6 +8526,102 @@ function dirImport(file){
     }catch(err){msg.textContent='❌ आयात अयशस्वी: '+(err&&err.message||err);}
   };
   if(/\.json$/i.test(file.name))rd.readAsText(file);else rd.readAsArrayBuffer(file);
+}
+/* ============================================================
+   🏘️ पहिल्या सुरुवातीला गाव निवड (सक्तीची) — नागरिक ॲपचीच गाव-डिरेक्टरी (जिल्हा → तालुका → गाव, LGD कोडसह).
+   गाव निवडल्यानंतरच पुढचे सॉफ्टवेअर वापरता येते. निवडलेली नावे + LGD कोड Masters मध्ये आपोआप भरतात;
+   वेबसाईटवरील अर्जातही हीच डिरेक्टरी असल्याने नावे सर्वत्र तंतोतंत जुळतात.
+   ============================================================ */
+function gpGateNorm(x){ return String(x||'').replace(/ग्राम\s*पंचायत|ग्रामपंचायत/g,'').replace(/[\s.\-,()\/]+/g,'').toLowerCase(); }
+function gpGateSave(o){
+  var all={};try{all=JSON.parse(localStorage.getItem('GP_MASTERS')||'{}');}catch(e){}
+  all['s-dir-s']=o.s;all['s-dir-d']=o.d;all['s-dir-t']=o.t;all['s-dir-v']=o.v;all['s-lgd']=String(o.code||'');
+  if(!all['s-gp'])all['s-gp']=o.v;if(!all['s-tal'])all['s-tal']=o.t;if(!all['s-dist'])all['s-dist']=o.d;
+  if(o.vEn&&!all['s-gp-e'])all['s-gp-e']=o.vEn;if(o.tEn&&!all['s-tal-e'])all['s-tal-e']=o.tEn;if(o.dEn&&!all['s-dist-e'])all['s-dist-e']=o.dEn;
+  localStorage.setItem('GP_MASTERS',JSON.stringify(all));
+  GP=all;
+  try{MK.forEach(function(k){if(all[k]!=null&&all[k]!=='')sv(k,all[k]);});}catch(e){}
+  try{dirPopulate(all);}catch(e){}
+  try{lgdPanelRefresh();}catch(e){}
+  try{updateHeader();}catch(e){}
+}
+function gpVillageGate(){
+  try{
+    if(document.getElementById('gp-vgate'))return;
+    var code='';try{code=dirVCode();}catch(e){}
+    if(code){ // गाव आधीच निवडलेले — LGD कोड रिकामा/वेगळा असेल तर डिरेक्टरीप्रमाणे जुळवतो
+      if(String(GP['s-lgd']||'')!==String(code))gpGateSave({s:gv('s-dir-s'),d:gv('s-dir-d'),t:gv('s-dir-t'),v:gv('s-dir-v'),code:code});
+      return;
+    }
+    gpGateShow();
+  }catch(e){ try{console.log('village gate:',e);}catch(e2){} }
+}
+function gpGateShow(){
+  var D=dirGet(),S=Object.keys(D),st=S[0];
+  if(!st)return;
+  var ov=document.createElement('div');ov.id='gp-vgate';
+  ov.style.cssText='position:fixed;left:0;top:0;right:0;bottom:0;z-index:2147483000;background:linear-gradient(135deg,#0D2B5E,#1a3d7c 50%,#1a5c2a);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto';
+  var sel='width:100%;padding:10px 12px;border:2px solid #d5dbe6;border-radius:8px;font:inherit;font-size:14px;background:#fff;color:#111;margin-bottom:10px';
+  var lab='display:block;font-size:12px;font-weight:700;color:#0D2B5E;margin:0 0 4px';
+  ov.innerHTML='<div style="background:#fff;border-radius:16px;max-width:540px;width:100%;padding:26px 28px;box-shadow:0 20px 60px rgba(0,0,0,.4)">'+
+    '<div style="font-size:40px;text-align:center">🏘️</div>'+
+    '<h2 style="text-align:center;color:#0D2B5E;font-size:21px;margin:4px 0 6px">आपले गाव निवडा</h2>'+
+    '<p style="text-align:center;color:#666;font-size:12.5px;line-height:1.6;margin:0 0 16px">शासकीय (LGD) गाव-यादीतून आपली ग्रामपंचायत निवडा. गाव निवडल्यानंतरच सॉफ्टवेअर सुरू होईल. (नंतर Masters मध्ये बदलता येईल.)</p>'+
+    '<label style="'+lab+'">जिल्हा</label><select id="gg-d" style="'+sel+'"></select>'+
+    '<label style="'+lab+'">तालुका</label><select id="gg-t" style="'+sel+'"></select>'+
+    '<label style="'+lab+'">ग्रामपंचायत / गाव</label>'+
+    '<input id="gg-q" placeholder="🔎 गावाचे नाव शोधा (मराठी / English)" style="'+sel+';margin-bottom:6px">'+
+    '<select id="gg-v" size="7" style="'+sel+'"></select>'+
+    '<div id="gg-sum" style="font-size:13px;color:#1a5c2a;font-weight:700;min-height:20px;margin-bottom:10px"></div>'+
+    '<button id="gg-ok" disabled style="width:100%;padding:13px;border:none;border-radius:8px;font:inherit;font-size:15px;font-weight:700;color:#fff;background:#9aa5b8;cursor:not-allowed">पुढे चला ➜</button>'+
+    '</div>';
+  document.body.appendChild(ov);
+  var q=function(i){return document.getElementById(i);},esc=function(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');};
+  var cur=[],pick=null;
+  // जुन्या (आधी हाताने भरलेल्या) नावांवरून आधीच निवडून ठेवण्याचा प्रयत्न
+  var pre={d:'',t:'',v:''};
+  try{
+    var pd=gpGateNorm(GP['s-dist']),pt=gpGateNorm(GP['s-tal']),pv=gpGateNorm(GP['s-gp']);
+    Object.keys(D[st]||{}).forEach(function(dn){if(pd&&gpGateNorm(dn)===pd){pre.d=dn;
+      Object.keys(D[st][dn]).forEach(function(tn){if(pt&&gpGateNorm(tn)===pt){pre.t=tn;
+        (D[st][dn][tn]||[]).forEach(function(v){if(pv&&gpGateNorm(v[0])===pv)pre.v=v[0];});}});}});
+  }catch(e){}
+  dirFill('gg-d',Object.keys(D[st]||{}),pre.d);
+  function fillT(sel){ var dn=q('gg-d').value; dirFill('gg-t',Object.keys((D[st]||{})[dn]||{}),sel); }
+  function fillV(sel){
+    var dn=q('gg-d').value,tn=q('gg-t').value,f=q('gg-q').value.trim().toLowerCase();
+    cur=(((D[st]||{})[dn]||{})[tn]||[]).slice().sort(function(a,b){return String(a[1]||a[0]).toLowerCase()<String(b[1]||b[0]).toLowerCase()?-1:1;});
+    var h='',n=0;
+    cur.forEach(function(v,i){
+      if(f&&(String(v[0]).toLowerCase().indexOf(f)<0&&String(v[1]||'').toLowerCase().indexOf(f)<0))return;
+      n++;h+='<option value="'+i+'"'+(sel&&v[0]===sel?' selected':'')+'>'+esc(v[0]+(v[1]&&v[1]!==v[0]?' — '+v[1]:''))+'</option>';
+    });
+    q('gg-v').innerHTML=h||'<option value="" disabled>— गाव सापडले नाही —</option>';
+    chosen();
+  }
+  function chosen(){
+    var i=q('gg-v').value,btn=q('gg-ok');pick=null;
+    if(i!==''&&cur[+i]){
+      var v=cur[+i];pick={s:st,d:q('gg-d').value,t:q('gg-t').value,v:v[0],vEn:v[1]||'',code:v[2]||''};
+      q('gg-sum').textContent='✔ '+pick.v+' · '+pick.t+' · '+pick.d+(pick.code?'  (LGD '+pick.code+')':'');
+    } else q('gg-sum').textContent='';
+    var on=!!(pick&&pick.code);
+    btn.disabled=!on;btn.style.background=on?'linear-gradient(135deg,#FF6B00,#e65100)':'#9aa5b8';btn.style.cursor=on?'pointer':'not-allowed';
+  }
+  q('gg-d').onchange=function(){fillT('');fillV('');};
+  q('gg-t').onchange=function(){q('gg-q').value='';fillV('');};
+  q('gg-q').oninput=function(){fillV('');};
+  q('gg-v').onchange=chosen;
+  q('gg-v').ondblclick=function(){if(pick&&pick.code)q('gg-ok').click();};
+  q('gg-ok').onclick=function(){
+    if(!pick||!pick.code)return;
+    pick.dEn=(typeof APP_DIR_EN!=='undefined'&&APP_DIR_EN[pick.d])||'';pick.tEn=(typeof APP_DIR_EN!=='undefined'&&APP_DIR_EN[pick.t])||'';
+    gpGateSave(pick);
+    if(ov.parentNode)ov.parentNode.removeChild(ov);
+    // Demo software: गाव कळल्यावर "software सुरू केल्याची" तारीख मालकाला कळवायला सांगतो (Masters फाईलवर उतरायला थोडा वेळ दिला)
+    setTimeout(function(){try{require('electron').ipcRenderer.send('demo-report-now');}catch(e){}},2500);
+  };
+  fillT(pre.t);fillV(pre.v);
 }
 function appFeesRender(){
   var box=document.getElementById('app-fee-box');if(!box||box.firstChild)return;
