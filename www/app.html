@@ -2018,8 +2018,6 @@ window.addEventListener('load',function(){
   if(!ou){window.location.href='login.html';return;}
   try{var u=JSON.parse(ou);document.getElementById('hdrUser').textContent=u.em||'user';}catch(e){}
   init();
-
-  gpVillageGate(); // गाव निवडल्याशिवाय पुढे जाता येत नाही
 });
 function doLogout(){if(confirm('Logout करायचे का?'))window.location.href='login.html';}
 
@@ -4467,7 +4465,7 @@ function genN8Cert(ano){
   // मालकाचे नाव (idx4) आणि मालमत्तेचे वर्णन (idx6) हे स्तंभ थोडे मोठे केले आहेत (नाव/वर्णन
   // जास्त जागेत नीट दिसावेत म्हणून), आणि रकाना ११ (रेडीरेकनर दरामधील "इमारत" — जो नेहमी रिकामाच
   // असतो, फक्त "जमीन" व "बांधकाम" दर वापरले जातात) ऐवजी ती जागा वापरण्यासाठी ekदम लहान केला आहे.
-  var colWidths=['3.2','4','3.1','3.1','8.2','5.7','9.4','4.2','5.5','3.5','1.2','3.4','2.0','3.6','6.5','2.6','3.8','2.4','2.4','3.8','5.2','1.3','1.3','1.3','1.8','1.8','5.6'];
+  var colWidths=['3.2','4','3.1','3.1','7.4','5.7','8.4','4.2','5.5','3.5','1.2','4.0','2.6','3.6','6.5','3.2','3.8','2.4','2.4','3.8','5.2','1.3','1.3','1.3','1.8','1.8','5.6'];
   // (उतारा) रकाना १ मोठा (२.२→३.२), ८ वाढवला (३→४.२), ११ लहान (२.४→१.२), १३ कमी (२.६→२.०); १०० चे संतुलन रकाना ७ मधून
   // ⚠️ रकाना ११ (रेडीरेकनर दरामधील "इमारत") आधी 0.3% इतका अति-अरुंद होता, त्यामुळे "इमारत" हे उभं हेडिंग व
   // रकाना-क्रमांक दिसत नव्हते; आता 2.4% दिला आहे. तसेच रकाना १८ (दिवाबत्ती) व १९ (आरोग्य) 1.5% वरून 3% केले आहेत.
@@ -8526,102 +8524,6 @@ function dirImport(file){
     }catch(err){msg.textContent='❌ आयात अयशस्वी: '+(err&&err.message||err);}
   };
   if(/\.json$/i.test(file.name))rd.readAsText(file);else rd.readAsArrayBuffer(file);
-}
-/* ============================================================
-   🏘️ पहिल्या सुरुवातीला गाव निवड (सक्तीची) — नागरिक ॲपचीच गाव-डिरेक्टरी (जिल्हा → तालुका → गाव, LGD कोडसह).
-   गाव निवडल्यानंतरच पुढचे सॉफ्टवेअर वापरता येते. निवडलेली नावे + LGD कोड Masters मध्ये आपोआप भरतात;
-   वेबसाईटवरील अर्जातही हीच डिरेक्टरी असल्याने नावे सर्वत्र तंतोतंत जुळतात.
-   ============================================================ */
-function gpGateNorm(x){ return String(x||'').replace(/ग्राम\s*पंचायत|ग्रामपंचायत/g,'').replace(/[\s.\-,()\/]+/g,'').toLowerCase(); }
-function gpGateSave(o){
-  var all={};try{all=JSON.parse(localStorage.getItem('GP_MASTERS')||'{}');}catch(e){}
-  all['s-dir-s']=o.s;all['s-dir-d']=o.d;all['s-dir-t']=o.t;all['s-dir-v']=o.v;all['s-lgd']=String(o.code||'');
-  if(!all['s-gp'])all['s-gp']=o.v;if(!all['s-tal'])all['s-tal']=o.t;if(!all['s-dist'])all['s-dist']=o.d;
-  if(o.vEn&&!all['s-gp-e'])all['s-gp-e']=o.vEn;if(o.tEn&&!all['s-tal-e'])all['s-tal-e']=o.tEn;if(o.dEn&&!all['s-dist-e'])all['s-dist-e']=o.dEn;
-  localStorage.setItem('GP_MASTERS',JSON.stringify(all));
-  GP=all;
-  try{MK.forEach(function(k){if(all[k]!=null&&all[k]!=='')sv(k,all[k]);});}catch(e){}
-  try{dirPopulate(all);}catch(e){}
-  try{lgdPanelRefresh();}catch(e){}
-  try{updateHeader();}catch(e){}
-}
-function gpVillageGate(){
-  try{
-    if(document.getElementById('gp-vgate'))return;
-    var code='';try{code=dirVCode();}catch(e){}
-    if(code){ // गाव आधीच निवडलेले — LGD कोड रिकामा/वेगळा असेल तर डिरेक्टरीप्रमाणे जुळवतो
-      if(String(GP['s-lgd']||'')!==String(code))gpGateSave({s:gv('s-dir-s'),d:gv('s-dir-d'),t:gv('s-dir-t'),v:gv('s-dir-v'),code:code});
-      return;
-    }
-    gpGateShow();
-  }catch(e){ try{console.log('village gate:',e);}catch(e2){} }
-}
-function gpGateShow(){
-  var D=dirGet(),S=Object.keys(D),st=S[0];
-  if(!st)return;
-  var ov=document.createElement('div');ov.id='gp-vgate';
-  ov.style.cssText='position:fixed;left:0;top:0;right:0;bottom:0;z-index:2147483000;background:linear-gradient(135deg,#0D2B5E,#1a3d7c 50%,#1a5c2a);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto';
-  var sel='width:100%;padding:10px 12px;border:2px solid #d5dbe6;border-radius:8px;font:inherit;font-size:14px;background:#fff;color:#111;margin-bottom:10px';
-  var lab='display:block;font-size:12px;font-weight:700;color:#0D2B5E;margin:0 0 4px';
-  ov.innerHTML='<div style="background:#fff;border-radius:16px;max-width:540px;width:100%;padding:26px 28px;box-shadow:0 20px 60px rgba(0,0,0,.4)">'+
-    '<div style="font-size:40px;text-align:center">🏘️</div>'+
-    '<h2 style="text-align:center;color:#0D2B5E;font-size:21px;margin:4px 0 6px">आपले गाव निवडा</h2>'+
-    '<p style="text-align:center;color:#666;font-size:12.5px;line-height:1.6;margin:0 0 16px">शासकीय (LGD) गाव-यादीतून आपली ग्रामपंचायत निवडा. गाव निवडल्यानंतरच सॉफ्टवेअर सुरू होईल. (नंतर Masters मध्ये बदलता येईल.)</p>'+
-    '<label style="'+lab+'">जिल्हा</label><select id="gg-d" style="'+sel+'"></select>'+
-    '<label style="'+lab+'">तालुका</label><select id="gg-t" style="'+sel+'"></select>'+
-    '<label style="'+lab+'">ग्रामपंचायत / गाव</label>'+
-    '<input id="gg-q" placeholder="🔎 गावाचे नाव शोधा (मराठी / English)" style="'+sel+';margin-bottom:6px">'+
-    '<select id="gg-v" size="7" style="'+sel+'"></select>'+
-    '<div id="gg-sum" style="font-size:13px;color:#1a5c2a;font-weight:700;min-height:20px;margin-bottom:10px"></div>'+
-    '<button id="gg-ok" disabled style="width:100%;padding:13px;border:none;border-radius:8px;font:inherit;font-size:15px;font-weight:700;color:#fff;background:#9aa5b8;cursor:not-allowed">पुढे चला ➜</button>'+
-    '</div>';
-  document.body.appendChild(ov);
-  var q=function(i){return document.getElementById(i);},esc=function(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');};
-  var cur=[],pick=null;
-  // जुन्या (आधी हाताने भरलेल्या) नावांवरून आधीच निवडून ठेवण्याचा प्रयत्न
-  var pre={d:'',t:'',v:''};
-  try{
-    var pd=gpGateNorm(GP['s-dist']),pt=gpGateNorm(GP['s-tal']),pv=gpGateNorm(GP['s-gp']);
-    Object.keys(D[st]||{}).forEach(function(dn){if(pd&&gpGateNorm(dn)===pd){pre.d=dn;
-      Object.keys(D[st][dn]).forEach(function(tn){if(pt&&gpGateNorm(tn)===pt){pre.t=tn;
-        (D[st][dn][tn]||[]).forEach(function(v){if(pv&&gpGateNorm(v[0])===pv)pre.v=v[0];});}});}});
-  }catch(e){}
-  dirFill('gg-d',Object.keys(D[st]||{}),pre.d);
-  function fillT(sel){ var dn=q('gg-d').value; dirFill('gg-t',Object.keys((D[st]||{})[dn]||{}),sel); }
-  function fillV(sel){
-    var dn=q('gg-d').value,tn=q('gg-t').value,f=q('gg-q').value.trim().toLowerCase();
-    cur=(((D[st]||{})[dn]||{})[tn]||[]).slice().sort(function(a,b){return String(a[1]||a[0]).toLowerCase()<String(b[1]||b[0]).toLowerCase()?-1:1;});
-    var h='',n=0;
-    cur.forEach(function(v,i){
-      if(f&&(String(v[0]).toLowerCase().indexOf(f)<0&&String(v[1]||'').toLowerCase().indexOf(f)<0))return;
-      n++;h+='<option value="'+i+'"'+(sel&&v[0]===sel?' selected':'')+'>'+esc(v[0]+(v[1]&&v[1]!==v[0]?' — '+v[1]:''))+'</option>';
-    });
-    q('gg-v').innerHTML=h||'<option value="" disabled>— गाव सापडले नाही —</option>';
-    chosen();
-  }
-  function chosen(){
-    var i=q('gg-v').value,btn=q('gg-ok');pick=null;
-    if(i!==''&&cur[+i]){
-      var v=cur[+i];pick={s:st,d:q('gg-d').value,t:q('gg-t').value,v:v[0],vEn:v[1]||'',code:v[2]||''};
-      q('gg-sum').textContent='✔ '+pick.v+' · '+pick.t+' · '+pick.d+(pick.code?'  (LGD '+pick.code+')':'');
-    } else q('gg-sum').textContent='';
-    var on=!!(pick&&pick.code);
-    btn.disabled=!on;btn.style.background=on?'linear-gradient(135deg,#FF6B00,#e65100)':'#9aa5b8';btn.style.cursor=on?'pointer':'not-allowed';
-  }
-  q('gg-d').onchange=function(){fillT('');fillV('');};
-  q('gg-t').onchange=function(){q('gg-q').value='';fillV('');};
-  q('gg-q').oninput=function(){fillV('');};
-  q('gg-v').onchange=chosen;
-  q('gg-v').ondblclick=function(){if(pick&&pick.code)q('gg-ok').click();};
-  q('gg-ok').onclick=function(){
-    if(!pick||!pick.code)return;
-    pick.dEn=(typeof APP_DIR_EN!=='undefined'&&APP_DIR_EN[pick.d])||'';pick.tEn=(typeof APP_DIR_EN!=='undefined'&&APP_DIR_EN[pick.t])||'';
-    gpGateSave(pick);
-    if(ov.parentNode)ov.parentNode.removeChild(ov);
-    // Demo software: गाव कळल्यावर "software सुरू केल्याची" तारीख मालकाला कळवायला सांगतो (Masters फाईलवर उतरायला थोडा वेळ दिला)
-    setTimeout(function(){try{require('electron').ipcRenderer.send('demo-report-now');}catch(e){}},2500);
-  };
-  fillT(pre.t);fillV(pre.v);
 }
 function appFeesRender(){
   var box=document.getElementById('app-fee-box');if(!box||box.firstChild)return;

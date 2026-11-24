@@ -193,7 +193,7 @@
 
   /* ---------- push ---------- */
   function schedulePush() { clearTimeout(pushTimer); pushTimer = setTimeout(uploadSafe, 1500); }   // नेट नसेल तर शांतपणे थांबतो
-  function docWrites(e, dk) {
+  function docWrites(e, dk, force) {
     var val = readLocal(e.k, e.i), t = meta.t[dk] || Date.now(), name = parent() + '/rec/' + b64u(dk);
     var del = val == null, v = del ? '' : val, parts = [];
     for (var p = 0; p < v.length; p += CHUNK) parts.push(v.slice(p, p + CHUNK));
@@ -201,18 +201,18 @@
     var f = { dk: { stringValue: dk }, k: { stringValue: e.k }, i: { stringValue: e.i }, t: { integerValue: String(t) },
               d: { booleanValue: del }, n: { integerValue: String(parts.length) }, v: { stringValue: parts[0] } };
     var ws = [{ update: { name: name, fields: f }, updateTransforms: [{ fieldPath: 'st', setToServerValue: 'REQUEST_TIME' }],
-                currentDocument: meta.rv[dk] ? { updateTime: meta.rv[dk] } : { exists: false } }];   // दुसऱ्या डिव्हाइसने मधेच बदल केला असेल तर लिहू नको
+                currentDocument: force ? undefined : (meta.rv[dk] ? { updateTime: meta.rv[dk] } : { exists: false }) }];   // दुसऱ्या डिव्हाइसने मधेच बदल केला असेल तर लिहू नको (force = पहिल्या कॉम्प्युटरचे "इथला डेटा क्लाउडवर पाठवा" — क्लाउडवरची जुनी/अर्धवट प्रत ओव्हरराईट)
     for (var j = 1; j < parts.length; j++) ws.push({ update: { name: name + '.c' + j, fields: { v: { stringValue: parts[j] } } } });
     return ws;
   }
-  function push(attempt) {
+  function push(attempt, force) {
     attempt = attempt || 0;
     var dks = Object.keys(meta.out); if (!dks.length) return Promise.resolve(0);
     // एका commit मध्ये जास्तीत जास्त ~३०० writes आणि ~५MB (Firestore मर्यादा: ५०० writes, १०MB) — मोठे फोटो/PDF असलेल्या नोंदींसाठी
     var batch = [], writes = [], sent = {}, heads = [], bytes = 0, i;
     rlCache = {};
     for (i = 0; i < dks.length && batch.length < COMMIT_MAX; i++) {
-      var dk = dks[i], e = meta.out[dk], ws = docWrites(e, dk), sz = 0;
+      var dk = dks[i], e = meta.out[dk], ws = docWrites(e, dk, force), sz = 0;
       ws.forEach(function (w) { sz += JSON.stringify(w).length; });
       if (batch.length && (writes.length + ws.length > 300 || bytes + sz > 5000000)) break;
       batch.push(dk); sent[dk] = e.r; heads.push({ dk: dk, idx: writes.length }); writes = writes.concat(ws); bytes += sz;
@@ -225,11 +225,14 @@
       saveMeta();
       var left = Object.keys(meta.out).length;
       if (left) setStatus('wait', 'Sync चालू… ' + left + ' नोंदी पाठवायच्या बाकी');   // आकडा प्रत्यक्ष कमी होताना दिसावा
-      return Object.keys(meta.out).length ? push(0).then(function (n) { return n + batch.length; }) : batch.length;
+      return Object.keys(meta.out).length ? push(0, force).then(function (n) { return n + batch.length; }) : batch.length;
     }, function (e) {
       var clash = e.http === 409 || /FAILED_PRECONDITION|ALREADY_EXISTS|ABORTED/.test(String(e.code));
-      if (!clash || attempt >= 4) throw e;
-      return refreshHeads(batch).then(function () { return push(attempt + 1); });   // आधी क्लाउडची सध्याची आवृत्ती घेऊन निर्णय, मग पुन्हा पाठव
+      if (!clash) throw e;
+      // ४ वेळा क्लाउडची आवृत्ती घेऊनही "Document already exists" येत राहिले (क्लाउडवर अर्धवट/जुनी प्रत राहिली आहे) —
+      // आणि हे "पहिले कॉम्प्युटर (इथला डेटा क्लाउडवर पाठवा)" असेल तर इथली प्रत निर्णायक मानून थेट ओव्हरराईट करतो.
+      if (attempt >= 4) { if (!force && cfg.first === 'up') return push(0, true); throw e; }
+      return refreshHeads(batch).then(function () { return push(attempt + 1, force); });   // आधी क्लाउडची सध्याची आवृत्ती घेऊन निर्णय, मग पुन्हा पाठव
     });
   }
   function refreshHeads(dks) {
